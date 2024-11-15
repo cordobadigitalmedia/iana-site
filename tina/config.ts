@@ -432,6 +432,13 @@ export default defineConfig({
             delete: false,
           },
         },
+        defaultItem: () => {
+          return {
+            logoWidth: 50,
+            logoHeight: 50,
+            headerHeight: 64,
+          }
+        },
         fields: [
           {
             name: "logo",
@@ -455,12 +462,6 @@ export default defineConfig({
             label: "Logo Height",
             description: "Minimum Logo Height",
             type: "number",
-          },
-          {
-            name: "logoSize",
-            label: "Use logo height or width",
-            description: "On - use logo height; Off - use logo width",
-            type: "boolean",
           },
           {
             name: "headerHeight",

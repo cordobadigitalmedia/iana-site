@@ -38,10 +38,10 @@ export function SiteHeader({
   if (header.headerHeight) {
     headerHeight = `${header.headerHeight}px`
   }
-  if (header.logoHeight) {
+  if (header.logoHeight && header.logoHeight > 0) {
     logoHeight = `${header.logoHeight}px`
   }
-  if (header.logoWidth) {
+  if (header.logoWidth && header.logoWidth > 0) {
     logoWidth = `${header.logoWidth}px`
   }
   return (
