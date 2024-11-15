@@ -28,62 +28,84 @@ export function SiteHeader({
   nav: PageAndNavQuery["nav"]
   header: PageAndNavQuery["header"]
 }) {
+  let bgStyle = ""
+  let headerHeight = "64px"
+  let logoHeight = "50px"
+  let logoWidth = "50px"
+  if (header.backgroundColor) {
+    bgStyle = `bg-${header.backgroundColor}`
+  }
+  if (header.headerHeight) {
+    headerHeight = `${header.headerHeight}px`
+  }
+  if (header.logoHeight) {
+    logoHeight = `${header.logoHeight}px`
+  }
+  if (header.logoWidth) {
+    logoWidth = `${header.logoWidth}px`
+  }
   return (
-    <header className="bg-background sticky top-0 z-40 w-full border-b">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="flex items-center gap-2 md:gap-3">
-          <Link href="/">
-            <div
-              style={{ position: "relative", width: "50px", height: "50px" }}
-              className="hover:bg-gray-100"
-              data-tina-field={header.logo && tinaField(header, "logo")}
-            >
-              <Image
-                src={header.logo || ""}
-                alt={header.siteTitle || ""}
-                sizes="50px"
-                fill
-                style={{
-                  objectFit: "contain",
-                }}
-              />
-            </div>
-          </Link>
-          <div className="hidden md:block">
-            <ul className="flex items-center gap-3 p-6">
-              {nav.links?.map((link) => {
-                let navLink = ""
-                let isExternal = false
-                if (link?.linkType === "page") {
-                  navLink = link.linkedPage?._sys.breadcrumbs.join("/") || ""
-                }
-                if (link?.linkType === "relative") {
-                  navLink = link.link || ""
-                }
-                if (link?.linkType === "external") {
-                  navLink = link.link || ""
-                  isExternal = true
-                }
-                return (
-                  <li
-                    data-tina-field={link && tinaField(link, "label")}
-                    key={link?.link}
-                    className="row-span-3"
-                  >
-                    <Link
-                      href={navLink}
-                      target={isExternal ? "_blank" : "_self"}
-                    >
-                      <Button variant="ghost">{link?.label}</Button>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
+    <header className={`${bgStyle} sticky top-0 z-40 w-full border-b`}>
+      <div
+        className={`container flex items-center`}
+        style={{ minHeight: headerHeight }}
+      >
+        <Link href="/">
+          <div
+            style={{
+              position: "relative",
+              width: logoWidth,
+              height: logoHeight,
+            }}
+            className="hover:bg-gray-100"
+            data-tina-field={header.logo && tinaField(header, "logo")}
+          >
+            <Image
+              src={header.logo || ""}
+              alt={header.siteTitle || ""}
+              sizes="50px"
+              fill
+              style={{
+                objectFit: "contain",
+              }}
+            />
           </div>
+        </Link>
+        <div
+          className={`hidden grow ${
+            Boolean(header.navAlignment) && `justify-end`
+          } md:flex`}
+        >
+          <ul className="flex items-center gap-3 p-6">
+            {nav.links?.map((link) => {
+              let navLink = ""
+              let isExternal = false
+              if (link?.linkType === "page") {
+                navLink = link.linkedPage?._sys.breadcrumbs.join("/") || ""
+              }
+              if (link?.linkType === "relative") {
+                navLink = link.link || ""
+              }
+              if (link?.linkType === "external") {
+                navLink = link.link || ""
+                isExternal = true
+              }
+              return (
+                <li
+                  data-tina-field={link && tinaField(link, "label")}
+                  key={link?.link}
+                  className="row-span-3"
+                >
+                  <Link href={navLink} target={isExternal ? "_blank" : "_self"}>
+                    <Button variant="ghost">{link?.label}</Button>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
         </div>
 
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-4 md:hidden">
           <Dialog>
             <DialogTrigger asChild className="block md:hidden">
               <Button

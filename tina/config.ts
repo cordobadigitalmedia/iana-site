@@ -445,6 +445,30 @@ export default defineConfig({
             type: "string",
           },
           {
+            name: "logoWidth",
+            label: "Logo Width",
+            description: "Minimum Logo Width",
+            type: "number",
+          },
+          {
+            name: "logoHeight",
+            label: "Logo Height",
+            description: "Minimum Logo Height",
+            type: "number",
+          },
+          {
+            name: "logoSize",
+            label: "Use logo height or width",
+            description: "On - use logo height; Off - use logo width",
+            type: "boolean",
+          },
+          {
+            name: "headerHeight",
+            label: "Header Height",
+            description: "Minimum Header Height",
+            type: "number",
+          },
+          {
             name: "siteTitle",
             label: "Site Title",
             type: "string",
@@ -461,6 +485,12 @@ export default defineConfig({
             label: "Right align navigation",
             description: "Left align when off, Right align when on",
             type: "boolean",
+          },
+          {
+            type: "string",
+            name: "backgroundColor",
+            label: "Background color type",
+            options: backgroundColorOptions,
           },
           {
             name: "darkmode",
