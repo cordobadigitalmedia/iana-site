@@ -1,8 +1,16 @@
 import "@/styles/globals.css"
 import "@/styles/styles.css"
+import type { Viewport } from "next"
 import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif } from "next/font/google"
 
 import { ThemeProvider } from "@/components/theme-provider"
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 interface RootLayoutProps {
   children: React.ReactNode

@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/classnames-order */
 "use client"
 
 import {
@@ -34,10 +35,18 @@ export function PageComponent(props: {
                 return <WelcomeHero key={i} {...block} />
               }
               case "PageBlocksCardgrid": {
-                return <CardGrid key={i} cols={3} props={block} />
+                return (
+                  <div className="container mx-auto grid gap-8 p-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                    <CardGrid key={i} {...block} />
+                  </div>
+                )
               }
               case "PageBlocksCardgrid2Col": {
-                return <CardGrid key={i} cols={2} props={block} />
+                return (
+                  <div className="container mx-auto grid gap-8 p-4 grid-cols-1 sm:grid-cols-2">
+                    <CardGrid key={i} {...block} />
+                  </div>
+                )
               }
               case "PageBlocksGallery": {
                 return <ImageGallery key={i} {...block} />
