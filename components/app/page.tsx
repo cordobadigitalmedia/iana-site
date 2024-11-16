@@ -34,7 +34,10 @@ export function PageComponent(props: {
                 return <WelcomeHero key={i} {...block} />
               }
               case "PageBlocksCardgrid": {
-                return <CardGrid key={i} {...block} />
+                return <CardGrid key={i} cols={3} props={block} />
+              }
+              case "PageBlocksCardgrid2Col": {
+                return <CardGrid key={i} cols={2} props={block} />
               }
               case "PageBlocksGallery": {
                 return <ImageGallery key={i} {...block} />

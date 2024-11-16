@@ -35,14 +35,17 @@ export function WelcomeHero(props: PageBlocksWelcomeHero) {
             />
           </div>
         )}
-        <div className="z-5 relative max-w-3xl px-4 text-center text-white">
+        <div className="z-5 relative max-w-3xl px-4 text-center">
           <h1
-            className="mb-4 text-5xl font-bold"
+            className="text-primary-foreground mb-4 text-5xl font-bold "
             data-tina-field={tinaField(props, "title")}
           >
             {props.title}
           </h1>
-          <div className="prose" data-tina-field={tinaField(props, "message")}>
+          <div
+            className="prose text-primary-foreground [&_h3]:text-primary-foreground max-w-none"
+            data-tina-field={tinaField(props, "message")}
+          >
             <TinaMarkdown content={props.message} />
           </div>
           <div className="flex items-center justify-center gap-5 py-12">

@@ -1,7 +1,9 @@
 {
   "social": {
-    "facebook": "iana-financial",
-    "github": ""
+    "facebook": "",
+    "github": "",
+    "email": "support-iana@ianafinancial.org"
   },
-  "copyright": "IANA Financial"
+  "copyright": "IANA Financial",
+  "backgroundColor": "muted"
 }

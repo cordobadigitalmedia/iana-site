@@ -1,35 +1,55 @@
+/* eslint-disable tailwindcss/classnames-order */
 import Image from "next/image"
 import Link from "next/link"
-import { PageBlocksCardgrid } from "@/tina/__generated__/types"
-import { Card } from "flowbite-react"
+import {
+  PageBlocksCardgrid,
+  PageBlocksCardgrid2Col,
+} from "@/tina/__generated__/types"
 import { tinaField } from "tinacms/dist/react"
 import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import { Button } from "@/components/ui/button"
 
-export function CardGrid(props: PageBlocksCardgrid): JSX.Element {
+export function CardGrid({
+  props,
+  cols,
+}: {
+  props: PageBlocksCardgrid | PageBlocksCardgrid2Col
+  cols: number
+}): JSX.Element {
   const { cardblock } = props
+  const gridClasses = `container mx-auto grid gap-8 p-4 grid-cols-1 sm:grid-cols-${cols}`
   return (
     <>
       {cardblock && cardblock?.length > 0 && (
-        <div className="container m-4 mx-auto">
-          <div className="grid w-full grid-cols-2 justify-center gap-5">
-            {cardblock.map((item, i) => {
-              const backgroundImage = item?.coverimage
-                ? `${item?.coverimage}`
-                : "none"
-              const imagePos = item?.coverPosition
-                ? `${item?.coverPosition}`
-                : "top"
-              return (
-                <Card
-                  data-tina-field={tinaField(item, "coverimage")}
-                  imgSrc={backgroundImage}
-                  horizontal={imagePos === "left"}
-                  style={{ maxWidth: "none", width: "100%" }}
-                >
+        <div className={gridClasses}>
+          {cardblock.map((item, i) => {
+            const backgroundImage = item?.coverimage
+              ? `${item?.coverimage}`
+              : "none"
+            return (
+              <div
+                className="overflow-hidden rounded-lg bg-white shadow-md"
+                key={item?.headline}
+              >
+                {backgroundImage !== "none" && (
+                  <Image
+                    alt={item?.headline as string}
+                    className="h-[150px] w-full object-cover sm:h-[200px]"
+                    height={300}
+                    src={backgroundImage}
+                    data-tina-field={tinaField(item, "coverimage")}
+                    style={{
+                      aspectRatio: "400/300",
+                      objectFit: "cover",
+                    }}
+                    width={400}
+                  />
+                )}
+
+                <div className="p-4">
                   <h3
-                    className="mb-2 w-full text-xl font-bold"
+                    className="mb-2 text-xl font-bold"
                     data-tina-field={tinaField(item, "headline")}
                   >
                     {item?.headline as string}
@@ -64,10 +84,10 @@ export function CardGrid(props: PageBlocksCardgrid): JSX.Element {
                       ))}
                     </div>
                   )}
-                </Card>
-              )
-            })}
-          </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </>

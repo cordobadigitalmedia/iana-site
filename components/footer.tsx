@@ -5,6 +5,7 @@ import {
   FacebookIcon,
   GithubIcon,
   InstagramIcon,
+  Mail,
   TwitterIcon,
   YoutubeIcon,
 } from "lucide-react"
@@ -31,11 +32,12 @@ type PlatformLinks = {
 }
 
 const platformLinks = {
-  github: "https://github.com",
-  twitter: "https://twitter.com",
-  facebook: "https://facebook.com",
-  youtube: "https://youtube.com",
-  instagram: "https://instagram.com",
+  github: "https://github.com/",
+  twitter: "https://twitter.com/",
+  facebook: "https://facebook.com/",
+  youtube: "https://youtube.com/",
+  instagram: "https://instagram.com/",
+  email: "mailto:",
 }
 
 type PlatformKey = keyof typeof platformLinks
@@ -52,7 +54,7 @@ type SocialIconProps = {
 function SocialIcon({ platform, size = 24 }: SocialIconProps) {
   const iconProps = {
     size: size,
-    className: "text-gray-600 hover:text-gray-800 transition-colors",
+    className: "text-primary hover:text-gray-800 transition-colors",
   }
 
   switch (platform.toLowerCase()) {
@@ -66,6 +68,8 @@ function SocialIcon({ platform, size = 24 }: SocialIconProps) {
       return <GithubIcon {...iconProps} />
     case "youtube":
       return <YoutubeIcon {...iconProps} />
+    case "email":
+      return <Mail {...iconProps} />
     default:
       return <FacebookIcon {...iconProps} />
   }
@@ -90,13 +94,16 @@ export function Footer({ footer }: { footer: PageAndNavQuery["footer"] }) {
           </p>
         </div>
         <div className="flex justify-center md:justify-start">
-          <nav className={`items-center space-x-1`}>
+          <nav className="flex items-center space-x-1">
+            <div className="text-primary flex h-full items-center text-sm">
+              Contact us:
+            </div>
             {social &&
               social.map((item) => {
                 const platformLink = getLink(item.platform as PlatformKey)
                 return (
                   <Link
-                    href={`${platformLink}/${item?.handle}`}
+                    href={`${platformLink}${item?.handle}`}
                     key={platformLink}
                     target="_blank"
                     rel="noreferrer"
