@@ -230,6 +230,15 @@ export default defineConfig({
                         type: "image",
                       },
                       {
+                        type: "string",
+                        name: "coverPosition",
+                        label: "Cover Image Position",
+                        options: [
+                          { label: "top", value: "top" },
+                          { label: "left", value: "left" },
+                        ],
+                      },
+                      {
                         name: "content",
                         label: "Content",
                         type: "rich-text",
@@ -415,6 +424,12 @@ export default defineConfig({
                 name: "linkType",
                 label: "Link type",
                 options: ["relative", "page", "external"],
+              },
+              {
+                type: "string",
+                name: "buttonStyle",
+                label: "Button type",
+                options: ["ghost", "default", "secondary"],
               },
             ],
           },

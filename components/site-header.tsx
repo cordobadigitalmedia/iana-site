@@ -7,7 +7,7 @@ import { PageAndNavQuery } from "@/tina/__generated__/types"
 import { Menu } from "lucide-react"
 import { tinaField } from "tinacms/dist/react"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -80,6 +80,7 @@ export function SiteHeader({
             {nav.links?.map((link) => {
               let navLink = ""
               let isExternal = false
+              let buttonStyle = "ghost"
               if (link?.linkType === "page") {
                 navLink = link.linkedPage?._sys.breadcrumbs.join("/") || ""
               }
@@ -90,6 +91,9 @@ export function SiteHeader({
                 navLink = link.link || ""
                 isExternal = true
               }
+              if (link?.buttonStyle) {
+                buttonStyle = link?.buttonStyle
+              }
               return (
                 <li
                   data-tina-field={link && tinaField(link, "label")}
@@ -97,7 +101,7 @@ export function SiteHeader({
                   className="row-span-3"
                 >
                   <Link href={navLink} target={isExternal ? "_blank" : "_self"}>
-                    <Button variant="ghost">{link?.label}</Button>
+                    <Button variant={buttonStyle}>{link?.label}</Button>
                   </Link>
                 </li>
               )

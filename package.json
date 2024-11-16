@@ -23,6 +23,7 @@
     "@tinacms/cli": "latest",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
+    "flowbite-react": "^0.10.2",
     "lucide-react": "latest",
     "next": "^15.0.2",
     "next-themes": "latest",
