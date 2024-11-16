@@ -2,12 +2,12 @@
   "logoSize": false,
   "logo": "/images/logo.png",
   "logoTitle": "",
-  "logoWidth": 172,
-  "logoHeight": 57,
-  "headerHeight": 94,
+  "logoWidth": 195,
+  "logoHeight": 80,
+  "headerHeight": 90,
   "siteTitle": "IANA Financial",
   "siteDescription": "Towards God-centred community financial services, for the common good.",
   "navAlignment": true,
-  "backgroundColor": "primary",
+  "backgroundColor": "secondary",
   "darkmode": false
 }

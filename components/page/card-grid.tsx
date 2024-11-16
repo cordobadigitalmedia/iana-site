@@ -1,17 +1,28 @@
+/* eslint-disable tailwindcss/classnames-order */
 import Image from "next/image"
 import Link from "next/link"
-import { PageBlocksCardgrid } from "@/tina/__generated__/types"
+import {
+  PageBlocksCardgrid,
+  PageBlocksCardgrid2Col,
+} from "@/tina/__generated__/types"
 import { tinaField } from "tinacms/dist/react"
 import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import { Button } from "@/components/ui/button"
 
-export function CardGrid(props: PageBlocksCardgrid): JSX.Element {
+export function CardGrid({
+  props,
+  cols,
+}: {
+  props: PageBlocksCardgrid | PageBlocksCardgrid2Col
+  cols: number
+}): JSX.Element {
   const { cardblock } = props
+  const gridClasses = `container mx-auto grid gap-8 p-4 grid-cols-1 sm:grid-cols-${cols}`
   return (
     <>
       {cardblock && cardblock?.length > 0 && (
-        <div className="container mx-auto grid grid-cols-1 gap-8 p-4 sm:grid-cols-2">
+        <div className={gridClasses}>
           {cardblock.map((item, i) => {
             const backgroundImage = item?.coverimage
               ? `${item?.coverimage}`
@@ -24,7 +35,7 @@ export function CardGrid(props: PageBlocksCardgrid): JSX.Element {
                 {backgroundImage !== "none" && (
                   <Image
                     alt={item?.headline as string}
-                    className="h-[250px] w-full object-cover sm:h-[400px]"
+                    className="h-[150px] w-full object-cover sm:h-[200px]"
                     height={300}
                     src={backgroundImage}
                     data-tina-field={tinaField(item, "coverimage")}

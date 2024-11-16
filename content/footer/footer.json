@@ -1,7 +1,9 @@
 {
   "social": {
-    "facebook": "myaccount",
-    "github": "ismaelrumzan"
+    "facebook": "",
+    "github": "",
+    "email": "support-iana@ianafinancial.org"
   },
-  "copyright": "Your Org Name"
+  "copyright": "IANA Financial",
+  "backgroundColor": "muted"
 }
