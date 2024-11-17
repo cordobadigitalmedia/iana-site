@@ -3,17 +3,13 @@ import { GoogleMap } from "@/components/ui/iframe-googlemap"
 import { VideoPlayer } from "@/components/ui/iframe-video"
 
 export const components = {
-  Youtube: (props: { id: string }) => {
+  Youtube: (props) => {
     return <VideoPlayer url={`https://www.youtube.com/embed/${props.id}`} />
   },
-  Googlemap: (props: { src: string }) => {
+  Googlemap: (props) => {
     return <GoogleMap url={props.src} />
   },
-  Alert: (props: {
-    title: string
-    description: string
-    type: "info" | "error"
-  }) => {
+  Alert: (props) => {
     return (
       <Alert variant={props.type === "info" ? "default" : "destructive"}>
         <AlertTitle>{props.title}</AlertTitle>
@@ -21,22 +17,27 @@ export const components = {
       </Alert>
     )
   },
-  a: ({
-    children,
-    url,
-    ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { url: string }) => {
-    if (url && (url.startsWith("https") || url.startsWith("mailto:"))) {
+  a: (props) => {
+    if (
+      props.url &&
+      (props.url.startsWith("https") || props.url.startsWith("mailto:"))
+    ) {
       return (
-        <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+        <a
+          href={props.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...props}
+        >
+          {props.children}
+        </a>
+      )
+    } else {
+      return (
+        <a href={url} {...props}>
           {children}
         </a>
       )
     }
-    return (
-      <a href={url} {...props}>
-        {children}
-      </a>
-    )
   },
 }
