@@ -36,7 +36,6 @@ export function ResourceComponent(props: {
   query: string
 }) {
   const { data } = useTina(props)
-  console.log(data.resources)
   return (
     <>
       <SiteHeader nav={data.nav} header={data.header} />
