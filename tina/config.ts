@@ -390,6 +390,108 @@ export default defineConfig({
                   },
                 ],
               },
+              {
+                name: "collapsibleSection",
+                label: "Collapsible Blocks",
+                ui: {
+                  itemProps: (item) => {
+                    return { label: item.collapsibleTitle }
+                  },
+                },
+                fields: [
+                  {
+                    name: "accordionBlock",
+                    label: "Collapsible Block",
+                    type: "object",
+                    list: true,
+                    ui: {
+                      itemProps: (item) => {
+                        return { label: item.headline }
+                      },
+                    },
+                    fields: [
+                      {
+                        name: "headline",
+                        label: "Headline",
+                        type: "string",
+                      },
+                      {
+                        name: "content",
+                        label: "Content",
+                        type: "rich-text",
+                        description: "content for the collapsible block",
+                        templates: RichTextTemplates,
+                      },
+                    ],
+                  },
+                  {
+                    name: "collapsibleTitle",
+                    label: "Collapsible Elements Title",
+                    type: "string",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "orgs",
+        label: "Relief Organizations",
+        path: "content/relief-org",
+        format: "md",
+        ui: {
+          global: true,
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            name: "title",
+            label: "Page title",
+            description: "For SEO purposes",
+            type: "string",
+          },
+          {
+            name: "content",
+            label: "Page Content",
+            type: "rich-text",
+          },
+          {
+            name: "organizations",
+            label: "Organization Links",
+            type: "object",
+            list: true,
+            ui: {
+              itemProps: (item) => {
+                // Field values are accessed by item?.<Field name>
+                return { label: `${item?.region}: ${item?.orgname}` }
+              },
+            },
+            fields: [
+              {
+                type: "string",
+                name: "link",
+                label: "Absolute URL",
+              },
+              {
+                type: "string",
+                name: "orgname",
+                label: "Organization Name",
+              },
+              {
+                type: "string",
+                name: "region",
+                label: "Region category",
+                options: [
+                  { value: "canada", label: "Canada" },
+                  { value: "usa", label: "United States" },
+                  { value: "international", label: "International" },
+                  { value: "local-provincial", label: "Local & Provincial" },
+                ],
+              },
             ],
           },
         ],

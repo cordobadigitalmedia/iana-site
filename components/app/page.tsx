@@ -10,6 +10,7 @@ import { useTina } from "tinacms/dist/react"
 import { ImageGallery } from "@/components//page/image-gallery"
 import { Footer } from "@/components/footer"
 import { CardGrid } from "@/components/page/card-grid"
+import { CollapsibleSection } from "@/components/page/collapsible-section"
 import { CoverSection } from "@/components/page/cover-section"
 import { FeaturedPosts } from "@/components/page/featured-posts"
 import { PageContent } from "@/components/page/page-content"
@@ -64,6 +65,9 @@ export function PageComponent(props: {
               }
               case "PageBlocksPageContent": {
                 return <PageContent key={i} {...block} />
+              }
+              case "PageBlocksCollapsibleSection": {
+                return <CollapsibleSection key={i} {...block} />
               }
             }
           })}
