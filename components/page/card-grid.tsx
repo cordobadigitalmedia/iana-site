@@ -1,4 +1,5 @@
 /* eslint-disable tailwindcss/classnames-order */
+
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -9,6 +10,7 @@ import { tinaField } from "tinacms/dist/react"
 import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import { Button } from "@/components/ui/button"
+import { isAbsoluteLink } from "@/components/utils/parsers"
 
 export function CardGrid(
   props: PageBlocksCardgrid | PageBlocksCardgrid2Col
@@ -58,6 +60,11 @@ export function CardGrid(
                       href={linkItem?.link || ""}
                       data-tina-field={tinaField(linkItem, "link")}
                       key={linkItem?.link}
+                      target={
+                        isAbsoluteLink(linkItem?.link as string)
+                          ? "_blank"
+                          : "_self"
+                      }
                     >
                       {linkItem?.style === "button" ? (
                         <Button

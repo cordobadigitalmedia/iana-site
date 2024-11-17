@@ -9,5 +9,10 @@
   "siteDescription": "Towards God-centred community financial services, for the common good.",
   "navAlignment": true,
   "backgroundColor": "secondary",
+  "ctaButton": {
+    "title": "Apply for a loan",
+    "link": "/applications",
+    "type": "relative"
+  },
   "darkmode": false
 }

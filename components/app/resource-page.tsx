@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { ResourcesAndNavQuery } from "@/tina/__generated__/types"
 import { tinaField, useTina } from "tinacms/dist/react"
@@ -36,6 +37,18 @@ export function ResourceComponent(props: {
   query: string
 }) {
   const { data } = useTina(props)
+
+  const categories = Array.from(
+    new Set(data.resources.resources?.map((item) => item?.category))
+  ).sort()
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    categories[0] as string
+  )
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value)
+  }
+  console.log(categories)
   return (
     <>
       <SiteHeader nav={data.nav} header={data.header} />
@@ -53,10 +66,7 @@ export function ResourceComponent(props: {
               </div>
               <div
                 className={`prose max-w-none`}
-                data-tina-field={tinaField(
-                  data.resources.description,
-                  "description"
-                )}
+                data-tina-field={tinaField(data.resources, "description")}
               >
                 <TinaMarkdown
                   content={data.resources.description}
@@ -69,13 +79,19 @@ export function ResourceComponent(props: {
                     <div className="prose my-2">
                       <h2>Resources:</h2>
                     </div>
-                    <Select>
+                    <Select
+                      onValueChange={handleCategoryChange}
+                      value={selectedCategory}
+                    >
                       <SelectTrigger className="w-min">
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="canada">Canada</SelectItem>
-                        <SelectItem value="usa">United States</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category as string}>
+                            {category}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <Table>
@@ -86,21 +102,33 @@ export function ResourceComponent(props: {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {data.resources.resources?.map((item) => (
-                          <TableRow key={item?.resourcename}>
-                            <TableCell className="font-medium">
-                              {item?.resourcename}
-                            </TableCell>
-                            <TableCell>
-                              <Link
-                                href={item?.link as string}
-                                className="underline hover:no-underline"
+                        {data.resources.resources
+                          ?.filter(
+                            (item) => item?.category === selectedCategory
+                          )
+                          .map((item) => (
+                            <TableRow key={item?.resourcename}>
+                              <TableCell
+                                className="font-medium"
+                                data-tina-field={tinaField(
+                                  item,
+                                  "resourcename"
+                                )}
                               >
-                                {item?.link}
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                                {item?.resourcename}
+                              </TableCell>
+                              <TableCell>
+                                <Link
+                                  href={item?.link || ""}
+                                  className="underline hover:no-underline"
+                                  target="_blank"
+                                  data-tina-field={tinaField(item, "link")}
+                                >
+                                  {item?.link}
+                                </Link>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </TableBody>
                     </Table>
                   </>

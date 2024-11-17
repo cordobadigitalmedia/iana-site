@@ -21,4 +21,22 @@ export const components = {
       </Alert>
     )
   },
+  a: ({
+    children,
+    url,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { url: string }) => {
+    if (url && (url.startsWith("https") || url.startsWith("mailto:"))) {
+      return (
+        <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+          {children}
+        </a>
+      )
+    }
+    return (
+      <a href={url} {...props}>
+        {children}
+      </a>
+    )
+  },
 }

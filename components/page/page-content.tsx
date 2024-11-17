@@ -16,7 +16,7 @@ export function PageContent(props: PageBlocksPageContent) {
   const isCenter =
     props.textAlign && props.textAlign === "center" ? true : false
   return (
-    <section className={`w-full px-4 ${bgStyle} ${textAlign}`}>
+    <section className={`w-full px-4 py-3 ${bgStyle} ${textAlign}`}>
       <div className="container mx-auto">
         <div
           className={`prose max-w-none ${

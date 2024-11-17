@@ -677,6 +677,20 @@ export default defineConfig({
             options: backgroundColorOptions,
           },
           {
+            type: "object",
+            name: "ctaButton",
+            label: "Call to action button",
+            fields: [
+              { name: "title", type: "string" },
+              { name: "link", type: "string" },
+              {
+                name: "type",
+                type: "string",
+                options: ["relative", "absolute"],
+              },
+            ],
+          },
+          {
             name: "darkmode",
             label: "Show Dark/Light Mode Switcher",
             description: "Placed on the top right. Light/Dark mode switcher",
