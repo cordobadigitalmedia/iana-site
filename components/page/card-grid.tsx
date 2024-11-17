@@ -26,7 +26,7 @@ export function CardGrid(
             {item?.coverimage && (
               <Image
                 alt={item?.headline as string}
-                className="h-[250px] w-full object-cover sm:h-[400px]"
+                className="h-[150px] w-full object-cover sm:h-[200px]"
                 height={300}
                 src={item?.coverimage}
                 data-tina-field={tinaField(item, "coverimage")}

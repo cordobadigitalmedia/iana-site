@@ -84,7 +84,7 @@ export function Footer({ footer }: { footer: PageAndNavQuery["footer"] }) {
   }
   return (
     <footer className={bgStyle}>
-      <div className="mx-auto max-w-7xl px-2 py-4 md:flex md:items-center md:justify-between lg:px-4">
+      <div className="container mx-auto px-2 py-4 md:flex md:items-center md:justify-between lg:px-4">
         <div className="mt-8 md:mt-0">
           <p
             className="text-primary text-sm leading-5"

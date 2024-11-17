@@ -115,8 +115,8 @@ query postAndNav($relativePath: String!) {
   }
 }
 
-query orgsAndNav($relativePath: String!) {
-  orgs(relativePath: $relativePath) {
+query ResourcesAndNav($relativePath: String!) {
+  resources(relativePath: $relativePath) {
     ... on Document {
       _sys {
         filename
@@ -128,7 +128,7 @@ query orgsAndNav($relativePath: String!) {
       }
       id
     }
-    ...OrgsParts
+    ...ResourcesParts
   }
   nav(relativePath: "nav.md") {
     ... on Document {

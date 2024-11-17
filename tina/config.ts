@@ -436,38 +436,37 @@ export default defineConfig({
         ],
       },
       {
-        name: "orgs",
-        label: "Relief Organizations",
-        path: "content/relief-org",
-        format: "md",
+        name: "resources",
+        label: "Resources",
+        path: "content/resources",
+        format: "mdx",
         ui: {
-          global: true,
-          allowedActions: {
-            create: false,
-            delete: false,
+          router: (props) => {
+            return `/resources/${props.document._sys.filename}`
           },
         },
         fields: [
           {
             name: "title",
-            label: "Page title",
+            label: "Resource title",
             description: "For SEO purposes",
             type: "string",
           },
           {
-            name: "content",
-            label: "Page Content",
+            name: "description",
+            label: "Resource Description",
             type: "rich-text",
+            templates: RichTextTemplates,
           },
           {
-            name: "organizations",
-            label: "Organization Links",
+            name: "resources",
+            label: "Resource Links",
             type: "object",
             list: true,
             ui: {
               itemProps: (item) => {
                 // Field values are accessed by item?.<Field name>
-                return { label: `${item?.region}: ${item?.orgname}` }
+                return { label: `${item?.category}: ${item?.resourcename}` }
               },
             },
             fields: [
@@ -478,18 +477,18 @@ export default defineConfig({
               },
               {
                 type: "string",
-                name: "orgname",
-                label: "Organization Name",
+                name: "resourcename",
+                label: "Resource Name",
               },
               {
                 type: "string",
-                name: "region",
+                name: "category",
                 label: "Region category",
                 options: [
-                  { value: "canada", label: "Canada" },
-                  { value: "usa", label: "United States" },
-                  { value: "international", label: "International" },
-                  { value: "local-provincial", label: "Local & Provincial" },
+                  "Canada",
+                  "United States",
+                  "International",
+                  "Local & Provincial",
                 ],
               },
             ],

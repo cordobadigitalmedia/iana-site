@@ -1,8 +1,9 @@
 ---
 links:
   - label: Apply for a loan
-    linkedPage: ''
-    linkType: relative
+    link: ''
+    linkedPage: content/pages/applications.mdx
+    linkType: page
     buttonStyle: default
 ---
 

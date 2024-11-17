@@ -25,7 +25,7 @@ export const RichTextTemplates: Template[] = [
         name: "type",
         label: "Alert Type",
         type: "string",
-        options: ["info", "error", "success", "warning"],
+        options: ["info", "error"],
       },
     ],
   },
