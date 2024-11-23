@@ -18,26 +18,25 @@ export const components = {
     )
   },
   a: (props) => {
-    if (
-      props.url &&
-      (props.url.startsWith("https") || props.url.startsWith("mailto:"))
-    ) {
-      return (
-        <a
-          href={props.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          {...props}
-        >
-          {props.children}
-        </a>
-      )
-    } else {
-      return (
-        <a href={url} {...props}>
-          {children}
-        </a>
-      )
+    if (props.url) {
+      if (props.url.startsWith("https") || props.url.startsWith("mailto:")) {
+        return (
+          <a
+            href={props.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+          >
+            {props.children}
+          </a>
+        )
+      } else {
+        return (
+          <a href={props.url} {...props}>
+            {props.children}
+          </a>
+        )
+      }
     }
   },
 }
