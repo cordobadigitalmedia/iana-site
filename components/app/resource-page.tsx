@@ -48,7 +48,6 @@ export function ResourceComponent(props: {
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value)
   }
-  console.log(categories)
   return (
     <>
       <SiteHeader nav={data.nav} header={data.header} />

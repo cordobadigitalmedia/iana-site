@@ -37,6 +37,8 @@ export const components = {
           </a>
         )
       }
+    } else {
+      return <></>
     }
   },
 }
