@@ -230,6 +230,15 @@ export default defineConfig({
                         type: "image",
                       },
                       {
+                        name: "imageFit",
+                        label: "Cover Image Fit",
+                        type: "string",
+                        options: [
+                          { label: "Cover area with image", value: "cover" },
+                          { label: "Fit image in area", value: "contain" },
+                        ],
+                      },
+                      {
                         name: "content",
                         label: "Content",
                         type: "rich-text",
@@ -304,6 +313,15 @@ export default defineConfig({
                         name: "coverimage",
                         label: "Cover Image",
                         type: "image",
+                      },
+                      {
+                        name: "imageFit",
+                        label: "Cover Image Fit",
+                        type: "string",
+                        options: [
+                          { label: "Cover area with image", value: "cover" },
+                          { label: "Fit image in area", value: "contain" },
+                        ],
                       },
                       {
                         name: "content",

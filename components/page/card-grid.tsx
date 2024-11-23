@@ -1,5 +1,4 @@
 /* eslint-disable tailwindcss/classnames-order */
-
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -11,6 +10,8 @@ import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import { Button } from "@/components/ui/button"
 import { isAbsoluteLink } from "@/components/utils/parsers"
+
+type ObjectFitValue = "fill" | "contain" | "cover" | "none" | "scale-down"
 
 export function CardGrid(
   props: PageBlocksCardgrid | PageBlocksCardgrid2Col
@@ -34,7 +35,9 @@ export function CardGrid(
                 data-tina-field={tinaField(item, "coverimage")}
                 style={{
                   aspectRatio: "400/300",
-                  objectFit: "cover",
+                  objectFit: item.imageFit
+                    ? (item.imageFit as ObjectFitValue)
+                    : "contain",
                 }}
                 width={400}
               />
