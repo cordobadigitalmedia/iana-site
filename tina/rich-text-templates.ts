@@ -29,4 +29,28 @@ export const RichTextTemplates: Template[] = [
       },
     ],
   },
+  {
+    name: "Button",
+    label: "Button",
+    fields: [
+      { name: "title", label: "Button Title", type: "string" },
+      {
+        name: "link",
+        label: "Button link (relative or absolute)",
+        type: "string",
+      },
+      {
+        name: "alignment",
+        label: "Button Alignment",
+        type: "string",
+        options: ["left", "center", "right"],
+      },
+      {
+        name: "type",
+        label: "Button background color",
+        type: "string",
+        options: ["primary", "secondary"],
+      },
+    ],
+  },
 ]
