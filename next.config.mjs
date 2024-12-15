@@ -17,6 +17,20 @@ const nextConfig = {
       },
     ]
   },
+  env: {
+    KINDE_SITE_URL:
+      process.env.VERCEL_ENV === "preview"
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.KINDE_SITE_URL,
+    KINDE_POST_LOGIN_REDIRECT_URL:
+      process.env.VERCEL_ENV === "preview"
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.KINDE_SITE_URL,
+    KINDE_POST_LOGOUT_REDIRECT_URL:
+      process.env.VERCEL_ENV === "preview"
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.KINDE_SITE_URL,
+  },
 }
 
 export default nextConfig
