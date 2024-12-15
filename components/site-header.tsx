@@ -69,22 +69,6 @@ export function SiteHeader({
             </div>
           )}
         </Link>
-        {header.ctaButton && (
-          <div
-            data-tina-field={
-              header.ctaButton && tinaField(header.ctaButton, "title")
-            }
-            key={header.ctaButton.link}
-            className="flex grow justify-end"
-          >
-            <Link
-              href={header.ctaButton.link as string}
-              target={header.ctaButton.type === "relative" ? "_self" : "_blank"}
-            >
-              <Button variant="default">{header.ctaButton.title}</Button>
-            </Link>
-          </div>
-        )}
         {Array.isArray(nav.links) && nav.links?.length > 0 && (
           <div
             className={`hidden grow ${
@@ -124,6 +108,22 @@ export function SiteHeader({
                 )
               })}
             </ul>
+          </div>
+        )}
+        {header.ctaButton && (
+          <div
+            data-tina-field={
+              header.ctaButton && tinaField(header.ctaButton, "title")
+            }
+            key={header.ctaButton.link}
+            className="flex grow justify-end md:grow-0"
+          >
+            <Link
+              href={header.ctaButton.link as string}
+              target={header.ctaButton.type === "relative" ? "_self" : "_blank"}
+            >
+              <Button variant="default">{header.ctaButton.title}</Button>
+            </Link>
           </div>
         )}
         {Array.isArray(nav.links) && nav.links?.length > 0 && (

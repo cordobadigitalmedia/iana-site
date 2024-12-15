@@ -4,11 +4,13 @@
 import { useEffect, useState } from "react"
 import { PageAndNavQuery } from "@/tina/__generated__/types"
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components"
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components"
+import { DollarSign } from "lucide-react"
 import { useTina } from "tinacms/dist/react"
 
 import { getTransactionsByUserEmail } from "@/lib/airtable/queries"
 import type { TransactionType } from "@/lib/airtable/types"
+import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/DataTable"
 import { columns } from "@/components/columns"
 import { Footer } from "@/components/footer"
@@ -36,27 +38,51 @@ export function Dashboard(props: {
 
   if (isLoading) return <div>Loading...</div>
 
-  //Add username
   //Add sitebar login logout instead of apply for load
-  //title
   //Filter by transaction type
-  //Total for balance
 
   return (
     <>
       <SiteHeader nav={data.nav} header={data.header} />
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         {isAuthenticated && user ? (
-          <main className="container mx-auto py-8 space-y-8">
+          <main className="container mx-auto py-4 space-y-4">
+            <div className="flex">
+              Assalamu-alaikum {user.given_name}{" "}
+              <div className="grow flex justify-end">
+                <LogoutLink>
+                  <Button>Logout</Button>
+                </LogoutLink>
+              </div>
+            </div>
             {transactions && transactions.length > 0 && (
-              <DataTable columns={columns} data={transactions} />
+              <>
+                <div className="flex items-center gap-4">
+                  <div className="prose flex items-center p-4 rounded border border-gray-300 w-fit">
+                    Current Balance: <DollarSign className="size-5" />
+                    <div className="text-lg">
+                      {transactions
+                        .map((item) => item.balance)
+                        .reduce((a, b) => a + b, 0)}
+                    </div>
+                  </div>
+                  <Button>Send transaction request</Button>
+                </div>
+                <div className="prose max-w-none">
+                  <h2>Transactions History</h2>
+                </div>
+                <DataTable columns={columns} data={transactions} />
+              </>
             )}
           </main>
         ) : (
-          <div>
-            You have to <LoginLink orgCode="org_e7b807671990">Login</LoginLink>{" "}
+          <main className="container mx-auto py-4 space-y-4">
+            Please{" "}
+            <LoginLink orgCode="org_e7b807671990">
+              <Button>Login</Button>
+            </LoginLink>{" "}
             to see this page
-          </div>
+          </main>
         )}
         <Footer footer={data.footer} />
       </div>

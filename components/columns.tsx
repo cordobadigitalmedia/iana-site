@@ -5,6 +5,7 @@ import { ArrowUpDown } from "lucide-react"
 
 import { TransactionType } from "@/lib/airtable/types"
 
+import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 
 export const columns: ColumnDef<TransactionType>[] = [
@@ -25,17 +26,33 @@ export const columns: ColumnDef<TransactionType>[] = [
   {
     accessorKey: "amount",
     header: "Amount",
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"))
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "CAD",
+      }).format(amount)
+
+      return <div>{formatted}</div>
+    },
   },
   {
     accessorKey: "type",
     header: "Transaction Type",
+    cell: ({ row }) => {
+      return (
+        <Badge
+          variant={
+            row.getValue("type") === "deposit" ? "default" : "destructive"
+          }
+        >
+          {row.getValue("type")}
+        </Badge>
+      )
+    },
   },
   {
     accessorKey: "method",
     header: "Transaction Method",
-  },
-  {
-    accessorKey: "balance",
-    header: "Balance",
   },
 ]
