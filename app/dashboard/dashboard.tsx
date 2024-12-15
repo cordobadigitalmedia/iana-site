@@ -2,6 +2,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { PageAndNavQuery } from "@/tina/__generated__/types"
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components"
@@ -11,6 +12,7 @@ import { useTina } from "tinacms/dist/react"
 import { getTransactionsByUserEmail } from "@/lib/airtable/queries"
 import type { TransactionType } from "@/lib/airtable/types"
 import { Button } from "@/components/ui/button"
+import { Loading } from "@/components/ui/loading"
 import { DataTable } from "@/components/DataTable"
 import { columns } from "@/components/columns"
 import { Footer } from "@/components/footer"
@@ -24,22 +26,20 @@ export function Dashboard(props: {
   query: string
 }) {
   const { data } = useTina(props)
+  const [loadingData, setLoadingData] = useState(false)
   const [transactions, setTransactions] = useState<TransactionType[] | []>([])
   const { isAuthenticated, isLoading, user } = useKindeBrowserClient()
   useEffect(() => {
     const updateData = async () => {
+      setLoadingData(true)
       if (user?.email) {
         const transactionData = await getTransactionsByUserEmail(user.email)
         setTransactions(transactionData)
       }
+      setLoadingData(false)
     }
     updateData()
   }, [user?.email])
-
-  if (isLoading) return <div>Loading...</div>
-
-  //Add sitebar login logout instead of apply for load
-  //Filter by transaction type
 
   return (
     <>
@@ -47,6 +47,7 @@ export function Dashboard(props: {
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         {isAuthenticated && user ? (
           <main className="container mx-auto py-4 space-y-4">
+            {isLoading || loadingData ? <Loading /> : null}
             <div className="flex">
               Assalamu-alaikum {user.given_name}{" "}
               <div className="grow flex justify-end">
@@ -66,7 +67,12 @@ export function Dashboard(props: {
                         .reduce((a, b) => a + b, 0)}
                     </div>
                   </div>
-                  <Button>Send transaction request</Button>
+                  <Link
+                    href="mailto:support-iana@ianafinancial.org"
+                    target="_blank"
+                  >
+                    <Button>Send transaction request</Button>
+                  </Link>
                 </div>
                 <div className="prose max-w-none">
                   <h2>Transactions History</h2>
