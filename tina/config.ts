@@ -39,6 +39,40 @@ export default defineConfig({
             type: "string",
           },
           {
+            type: "object",
+            name: "seo",
+            label: "SEO Metadata",
+            fields: [
+              {
+                type: "string",
+                name: "title",
+                label: "SEO Title",
+                description: "Overrides the default page title for SEO",
+              },
+              {
+                type: "string",
+                name: "description",
+                label: "Description",
+                description: "Page description for search engines",
+                ui: {
+                  component: "textarea",
+                },
+              },
+              {
+                type: "image",
+                name: "ogImage",
+                label: "Social Share Image",
+                description: "Image displayed when shared on social media",
+              },
+              {
+                type: "string",
+                name: "keywords",
+                label: "Keywords",
+                description: "Comma-separated keywords for search engines",
+              },
+            ],
+          },
+          {
             name: "blocks",
             label: "Content Blocks",
             description:

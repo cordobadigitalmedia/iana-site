@@ -1,9 +1,21 @@
 import "@/styles/globals.css"
 import "@/styles/styles.css"
-import type { Viewport } from "next"
+import type { Metadata, Viewport } from "next"
 import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif } from "next/font/google"
 
 import { ThemeProvider } from "@/components/theme-provider"
+
+// Default metadata
+export const metadata: Metadata = {
+  title: {
+    default: "IANA Financial",
+    template: "%s | IANA Financial",
+  },
+  description: "Interest Free Financial Services",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
+}
 
 export const viewport: Viewport = {
   width: "device-width",
