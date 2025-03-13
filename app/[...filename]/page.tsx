@@ -5,17 +5,17 @@ import client from "@/tina/__generated__/client"
 import { SEOProps, generateMetadata as generateSeoMetadata } from "@/lib/seo"
 import { PageComponent } from "@/components/app/page"
 
+type Props = {
+  params: Promise<{ filename: string }>
+}
+
 // Generate metadata for the page
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
-  const { slug } = params
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { filename } = await params
 
   try {
     const pageResponse = await client.queries.page({
-      relativePath: `${slug}.mdx`,
+      relativePath: `${filename}.mdx`,
     })
     const page = pageResponse.data.page
 

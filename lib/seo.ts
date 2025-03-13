@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-type SEOProps = {
+export type SEOProps = {
   title?: string
   description?: string
   ogImage?: string
