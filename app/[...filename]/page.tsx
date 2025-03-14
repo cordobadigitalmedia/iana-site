@@ -4,6 +4,8 @@ import client from "@/tina/__generated__/client"
 
 import { SEOProps, generateMetadata as generateSeoMetadata } from "@/lib/seo"
 import { PageComponent } from "@/components/app/page"
+import { DebugTina } from "@/components/debug-tina"
+import { MetaChecker } from "@/components/meta-checker"
 
 type Props = {
   params: Promise<{ filename: string }>
@@ -44,6 +46,23 @@ export default async function Page({
   const result = await client.queries.pageAndNav({
     relativePath: `${(await params).filename}.mdx`,
   })
+
+  if (process.env.NODE_ENV === "development") {
+    const pageResponse = await client.queries.page({
+      relativePath: `${(await params).filename}.mdx`,
+    })
+    const page = pageResponse.data.page
+
+    if (!page) {
+      return <div>Page not found</div>
+    }
+    return (
+      <div className="mb-8 space-y-6">
+        <DebugTina data={page} title="Page Data" />
+        <MetaChecker />
+      </div>
+    )
+  }
   return <PageComponent {...result} />
 }
 
