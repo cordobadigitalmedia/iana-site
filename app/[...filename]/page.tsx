@@ -7,6 +7,9 @@ import { PageComponent } from "@/components/app/page"
 import { DebugTina } from "@/components/debug-tina"
 import { MetaChecker } from "@/components/meta-checker"
 
+export const dynamic = "force-static"
+export const dynamicParams = true
+
 type Props = {
   params: Promise<{ filename: string }>
 }
