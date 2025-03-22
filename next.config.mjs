@@ -9,6 +9,43 @@ const nextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow",
+          },
+        ],
+      },
+    ]
+  },
+  async redirect() {
+    return [
+      {
+        source: "/faq",
+        destination: "/faqs",
+        permanent: true,
+      },
+      {
+        source: "/award-philosophy/apply",
+        destination: "/award-philosophy",
+        permanent: true,
+      },
+      {
+        source: "/relief-organizations",
+        destination: "/resources/relief-orgs",
+        permanent: true,
+      },
+      {
+        source: "/relief-organizations/:path",
+        destination: "/resources/relief-orgs",
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
