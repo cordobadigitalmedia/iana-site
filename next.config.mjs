@@ -22,32 +22,6 @@ const nextConfig = {
       },
     ]
   },
-  async redirect() {
-    return {
-      beforeFiles: [
-        {
-          source: "/faq",
-          destination: "/faqs",
-          permanent: true,
-        },
-        {
-          source: "/award-philosophy/apply",
-          destination: "/award-philosophy",
-          permanent: true,
-        },
-        {
-          source: "/relief-organizations",
-          destination: "/resources/relief-orgs",
-          permanent: true,
-        },
-        {
-          source: "/relief-organizations/:path",
-          destination: "/resources/relief-orgs",
-          permanent: true,
-        },
-      ],
-    }
-  },
   async rewrites() {
     return [
       {
