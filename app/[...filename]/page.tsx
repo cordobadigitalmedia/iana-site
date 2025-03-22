@@ -1,5 +1,6 @@
 import React from "react"
 import type { Metadata } from "next"
+import { notFound } from "next/navigation"
 import client from "@/tina/__generated__/client"
 
 import { SEOProps, generateMetadata as generateSeoMetadata } from "@/lib/seo"
@@ -46,9 +47,13 @@ export default async function Page({
 }: {
   params: Promise<{ filename: string[] }>
 }) {
-  const result = await client.queries.pageAndNav({
-    relativePath: `${(await params).filename}.mdx`,
-  })
+  try {
+    const result = await client.queries.pageAndNav({
+      relativePath: `${(await params).filename}.mdx`,
+    })
+  } catch (error) {
+    notFound()
+  }
 
   if (process.env.NODE_ENV === "development") {
     const pageResponse = await client.queries.page({
