@@ -1,6 +1,5 @@
 import React from "react"
 import Link from "next/link"
-import { PageAndNavQuery } from "@/tina/__generated__/types"
 import {
   FacebookIcon,
   GithubIcon,
@@ -9,7 +8,6 @@ import {
   TwitterIcon,
   YoutubeIcon,
 } from "lucide-react"
-import { tinaField } from "tinacms/dist/react"
 
 import { buttonVariants } from "@/components/ui/button"
 
@@ -75,21 +73,28 @@ function SocialIcon({ platform, size = 24 }: SocialIconProps) {
   }
 }
 
-export function Footer({ footer }: { footer: PageAndNavQuery["footer"] }) {
+export interface FooterData {
+  copyright?: string
+  backgroundColor?: string
+  social?: {
+    facebook?: string
+    github?: string
+    twitter?: string
+    youtube?: string
+    instagram?: string
+    email?: string
+  }
+}
+
+export function Footer({ footer }: { footer: FooterData }) {
   const year = React.useMemo(() => new Date().getFullYear(), [])
   const social = footer.social ? objectEntriesFilter(footer.social) : null
-  let bgStyle = ""
-  if (footer.backgroundColor) {
-    bgStyle = `bg-${footer.backgroundColor}`
-  }
+  const bgStyle = footer.backgroundColor ? `bg-${footer.backgroundColor}` : ""
   return (
     <footer className={`${bgStyle} mt-10`}>
       <div className="container mx-auto px-2 py-4 md:flex md:items-center md:justify-between lg:px-4">
         <div className="mt-8 md:mt-0">
-          <p
-            className="text-primary text-sm leading-5"
-            data-tina-field={tinaField(footer, "copyright")}
-          >
+          <p className="text-primary text-sm leading-5">
             &copy; {year} {footer.copyright}
           </p>
         </div>
@@ -107,7 +112,6 @@ export function Footer({ footer }: { footer: PageAndNavQuery["footer"] }) {
                     key={platformLink}
                     target="_blank"
                     rel="noreferrer"
-                    data-tina-field={tinaField(footer, "social")}
                   >
                     <div
                       className={buttonVariants({

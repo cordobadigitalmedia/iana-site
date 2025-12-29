@@ -3,8 +3,8 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "dev": "tinacms dev -c \"next dev\"",
-    "build": "tinacms build && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -21,19 +21,19 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@tailwindcss/typography": "^0.5.9",
-    "@tinacms/cli": "latest",
     "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
+    "gray-matter": "^4.0.3",
     "lucide-react": "latest",
     "next": "15.0.7",
     "next-themes": "latest",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7",
-    "tinacms": "latest"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",

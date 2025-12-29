@@ -1,0 +1,8 @@
+<Alert description="If you are applying for a loan from Iana, you must confirm whether or not you have approached these or similar organizations for scholarships, interest-free loans, aid, or zakat." title="Zakat" type="info" />
+
+
+Iana is not linked, directly or indirectly, to any other community organization, mosque, or corporation. Iana stands independent and welcomes collaboration and cooperation with any who share similar values and vision. Any reference to other organizations is based on their commitment to doing good work as well as the people behind them. We advise each individual to do their own independent research and to consult before making decisions related to such organizations or people. Similarly, wherever we recommend specific books, articles, or websites, we still suggest each person consults qualified scholarship and conducts independent research. We pray for the guidance to make educated decisions regarding what knowledge to take and from whom, and the success to implement righteous action based on that knowledge.
+
+
+Iana in no way endorses any person or idea that contradict the sacred teachings of Islam embodied in the Holy Qur'an, the sunnah (traditions) of the Prophet ﷺ and the unanimous teachings of the scholars over the centuries who were and are the inheritors of his way. Iana does recognize that there are healthy and normative differences within our beautiful community, and that this is a mercy from our Lord ﷻ to be celebrated not censured. Iana also looks to take pearls of wisdom from anyone, including people of other faith traditions.
+

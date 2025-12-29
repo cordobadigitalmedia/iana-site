@@ -1,0 +1,87 @@
+<Button title="Back to Application Home" link="/applications" />
+
+
+### Are there any fees?
+
+
+No, there are no hidden fees. There are no administrative fees, no late fees, or any other fees. Borrowers are given loans in good faith and required to pay back only what they borrow, not a penny more. Borrowers may pay fees to third parties in order to transfer funds back to Iana (e.g., to mail cheques or to send wire transfers). Iana does not make ANY profit. Any donations or gifts given to Iana go to help advance Iana's work and to providing more interest-free loans – no strings attached. By the grace of God, Iana is a community service that is entirely run by volunteers who cover all administrative fees.
+
+
+### Are international applicants eligible?
+
+
+Yes, international applicants are eligible and have been awarded loans. However, preference goes to those from Edmonton, Alberta, Canada, then other applicants from Canada, the United States, and Europe, then other countries. What is more important than geographic considerations is giving a loan to the right person for the right reasons. See our [Award Philosophy](http://ianafinancial.org/award-philosophy/) for more information. You can also explore the many other organizations that provide support on page for [Relief Organizations](http://ianafinancial.org/relief-organizations).
+
+
+### What types of loans are available?
+
+
+1. Educational loans for tuition, and other expenses related to pursuing studies or to paying off existing student loans.
+
+2. Personal loans for emergency or short-term loans for those who have urgent needs or unanticipated expenses (e.g. dental, medical, auto, etc.) as well as important vehicle purchases, or home renovations.
+
+3. Rarely, Iana may give loans for small businesses or to non-profit organizations.
+
+
+### How do applicants apply?
+
+
+1. First, email us the answers to the preliminary application questions. You may not receive an answer at all or for an extended period of time due to the volume of emails we receive. If pre-approved, you will, insha'Allah (God-willing) be asked to proceed to the following step.
+
+2. Second, submit the final application forms and all required documentation. Loans are given directly to the applicant (not to parents, schools or outside agencies). All additional information must be supplied for the committee to consider your application.
+
+3. Third, a personal interview will be required as well as reference checks and a guarantor.
+
+4. Finally, if any requirements are not satisfied or documentation is missing, the application may be denied.
+
+
+### How are applicants assessed?
+
+
+Applications are reviewed through a rigorous process devised by Islamic and Western finance experts. The process is a combination of a thorough application review, documentation, reference checks, an interview, potentially a credit check, [praying for guidance or istikhara](http://seekershub.org/ans-blog/2015/07/03/istikhara-the-prayer-of-seeking-guidance/) and more; all to try to ensure the applicants are responsible, trustworthy, prudent, competent and will inshaAllah (God-willing) successfully repay their loans so that others may in turn be given loans.
+
+
+### What are some reasons a loan application may be rejected?
+
+
+There are many reasons why an application may be denied but the most common reason stems from basic logistics of cash-flow needs, depending on the loan amount requested and its duration. This must be measured against the needs of the community members who have entrusted Iana by lending their savings (e.g. for Hajj, a home, children's education, retirement, etc.). In addition to this, it is very difficult to weigh various applications while also considering things like: the strength and merit of the application, the perceived individual needs along with societal benefit, and the character of the applicant (e.g., honesty and competence). Other factors also play a role. For instance, when an application lacks information or does not list a guarantor, it is highly unlikely to be approved. We hope you understand and ask you to pray that Allah enables us to give and withhold in accordance with His Pleasure.
+
+
+The funds Iana has are a trust from those who have donated or loaned money to Iana, as such, we are fully accountable for the responsible management of these funds. We take our role seriously and have both a right and responsibility to deny an application at our discretion.
+
+
+### When is the deadline for applications and how long does the process take?
+
+
+Applications are accepted year-round - there is no deadline for submitting an application. Once an application is submitted, the response will, inshā'Allah, be given as soon as possible. Please plan accordingly and submit your request early, while continuing to explore and pursue other options.
+
+
+Loans may be given within days, weeks, or months depending on many factors. We ask you to keep in mind that Iana is a volunteer team with no paid staff. We do our best to process applications as best we can.
+
+
+### How does loan repayment work?
+
+
+Iana Financial highly depends upon the repayment of loans in order to continue to help people meet their needs. It is important that applicants recognize there is a moral obligation as well as a legal obligation to repay any loan that he or she may receive. As such, signing the loan agreement is required to ensure the terms are clear to both parties. For accountability and practicality, a loan repayment plan is set on a case-by-case basis.
+
+
+### What if the borrower fails to make a payment for repaying their loan?
+
+
+Delays in repayment place a burden on Iana and delay much-needed help to others who are applying for loans. As such, we strongly emphasize the need for borrowers to honourably fulfill their contractual repayment plans. However, as long as notice is given and an exceptional situation is explained, a late payment would simply be deferred. There are never any late fees.
+
+
+Repeatedly missing payments may result in the loan defaulting. In this case, guarantors will be contacted to resume payments and if this is unsuccessful, Iana may take the case to arbitration. If the borrower is uncooperative, Iana may make the case public in order to help recover funds, or may take legal action to recover Iana Financial's (i.e. the community's) assets.
+
+
+However, we try to mitigate this as much as possible by being careful in how we select borrowers in the first place. The front-end work — a thorough application and vetting process — will, inshā'Allah, protect against this eventuality. By the grace of God, we do our utmost and rely on Him all the while.
+
+
+### What is the role of the guarantor?
+
+
+The guarantor is fully liable to repay the entire loan or whatever balance remains in case the borrower is unable to fulfill their contractual obligations or if the borrower is unwilling to renegotiate their loan repayment plan in the case of default. The guarantor should have a high level of confidence that the borrower is an upright, honest, and competent person who will do everything they can to honour their word.
+
+
+<Button title="Next: Start Applying" link="/start-applying" />
+

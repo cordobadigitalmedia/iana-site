@@ -1,0 +1,17 @@
+In the Name of Allah, All-Compassionate, All-Merciful, All Praise and Thanks are due to Allah, and all Blessings and Peace upon His Prophet, Muhammad, the one through whom we are all helped.
+
+
+> Whoever relieves a believer from a worldly burden, Allah will relieve him from a burden of the Hereafter. Whoever alleviates the situation of a person in difficulty, Allah will alleviate his situation in this world and in the Hereafter. Whoever conceals the faults of a Muslim, Allah will conceal his faults in this world and in the Hereafter. Allah will be at the aid of His servant so long as that servant is at the aid of his brother….\[Authentic hadith compiled by Imam Muslim, Allah have mercy on him]
+
+
+Iana Financial is an interest-free lending program inspired by a good deed: a few people in Edmonton loaned money to help a sister who was struggling with her student debt and did not want to fall into interest/usury. After lending, they did not want the money back! Once her loan was paid back, that money was to go to help someone else. From this spirit of help, Iana Financial was born. Since ~2009, Allah, Most High, has blessed Iana to support a number of people.
+
+
+Based on Qur'anic and Prophetic teachings, Iana takes donations and loans from community and gives loans to community.  Interest-free.
+
+
+Iana is a non-profit organization whose vision is to be at the heart of a fair, balanced, and merciful, modern economic system, in line with the principles and teachings of Islam.  Iana is an Arabic word meaning "help" or "assistance". 
+
+
+Kindly pray that God accepts these efforts and brings about much benefit and goodness through them.
+

@@ -1,0 +1,13 @@
+### The example of those who spend their wealth in the way of Allah is like a seed \[of grain] which grows seven spikes; in each spike is a hundred grains. And Allah multiplies \[His reward] for whom He wills. And Allah is all-Encompassing and Knowing.
+
+
+Holy Qur'an (2:261)
+
+
+1. Directly to Iana's Servus Credit Union Account – Walk into any Servus Credit Union and donate directly to Iana Financial under the account number: 5176250. Please leave a note with your donation indicating your name.
+
+2. By e-transfer – Email the transfer to [support-iana@ianafinancial.org](mailto:support-iana@ianafinancial.org).
+
+
+<Alert description="You will notice that we have no online donation feature. If we are serious about grassroots economic reform to get us out of this modern financial catastrophe, we need to take the inconvenient steps that such a principled approach demands. Each year the Muslim community, and the broader community, of North America literally throw away millions of dollars to credit card companies and banks rather than to the good causes they intend to help simply for the convenience of paying by credit. Our entire society suffers as a result. Let us take the extra effort and discipline to save our money and pay by cash, cheque, debit or direct deposit. Not only is this the better thing to do financially but, more importantly, God will appreciate our efforts to avoid supporting a corrupt system that impoverishes countless people around the world. The blessings of such actions will more than compensate for the inconvenience, God-willing." type="info" title="Note on credit card donations" />
+
