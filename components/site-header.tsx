@@ -3,9 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { PageAndNavQuery } from "@/tina/__generated__/types"
 import { Menu } from "lucide-react"
-import { tinaField } from "tinacms/dist/react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -26,99 +24,123 @@ type ButtonVariants =
   | null
   | undefined
 
+export interface NavLink {
+  label?: string
+  link?: string
+  linkType?: "relative" | "page" | "external"
+  linkedPage?: {
+    _sys?: {
+      breadcrumbs?: string[]
+    }
+  }
+  buttonStyle?: ButtonVariants
+}
+
+export interface Nav {
+  links?: NavLink[]
+}
+
+export interface Header {
+  logo?: string
+  logoTitle?: string
+  logoWidth?: number
+  logoHeight?: number
+  headerHeight?: number
+  siteTitle?: string
+  backgroundColor?: string
+  navAlignment?: boolean
+  ctaButton?: {
+    title?: string
+    link?: string
+    type?: "relative" | "external"
+  }
+  darkmode?: boolean
+}
+
 export function SiteHeader({
   nav,
   header,
 }: {
-  nav: PageAndNavQuery["nav"]
-  header: PageAndNavQuery["header"]
+  nav: Nav
+  header: Header
 }) {
-  const headerHeight = header.headerHeight ? header.headerHeight : "64px"
-  const logoHeight = header.logoHeight ? header.logoHeight : "50px"
-  const logoWidth = header.logoWidth ? header.logoWidth : "50px"
+  const headerHeight = header.headerHeight ? `${header.headerHeight}px` : "64px"
+  const logoHeight = header.logoHeight || 50
+  const logoWidth = header.logoWidth || 50
   const backgroundCol = header.backgroundColor
     ? `bg-${header.backgroundColor}`
     : `bg-primary`
   return (
     <header className={`${backgroundCol} sticky top-0 z-40 w-full border-b`}>
-      <div className={`container flex ${headerHeight} items-center`}>
+      <div className="container flex items-center" style={{ height: headerHeight }}>
         <Link href="/" className="flex items-center gap-1">
-          <div
-            style={{
-              position: "relative",
-              width: logoWidth,
-              height: logoHeight,
-            }}
-            data-tina-field={header.logo && tinaField(header, "logo")}
-          >
-            <Image
-              src={header.logo || ""}
-              alt={header.siteTitle || ""}
-              fill
-              style={{
-                objectFit: "contain",
-              }}
-            />
-          </div>
-          {header.logoTitle && (
+          {header.logo && (
             <div
-              className="font-crimson"
-              data-tina-field={header.logo && tinaField(header, "logoTitle")}
+              style={{
+                position: "relative",
+                width: logoWidth,
+                height: logoHeight,
+              }}
             >
-              {header.logoTitle}
+              <Image
+                src={header.logo}
+                alt={header.siteTitle || ""}
+                fill
+                style={{
+                  objectFit: "contain",
+                }}
+              />
             </div>
+          )}
+          {header.logoTitle && (
+            <div className="font-crimson">{header.logoTitle}</div>
           )}
         </Link>
         {header.ctaButton && (
           <div
-            data-tina-field={
-              header.ctaButton && tinaField(header.ctaButton, "title")
-            }
             key={header.ctaButton.link}
             className="flex grow justify-end"
           >
             <Link
-              href={header.ctaButton.link as string}
+              href={header.ctaButton.link || ""}
               target={header.ctaButton.type === "relative" ? "_self" : "_blank"}
             >
               <Button variant="default">{header.ctaButton.title}</Button>
             </Link>
           </div>
         )}
-        {Array.isArray(nav.links) && nav.links?.length > 0 && (
+        {Array.isArray(nav.links) && nav.links.length > 0 && (
           <div
             className={`hidden grow ${
               Boolean(header.navAlignment) && `justify-end`
             } md:flex`}
           >
             <ul className="flex items-center gap-3 p-6">
-              {nav.links?.map((link) => {
+              {nav.links.map((link, index) => {
                 let navLink = ""
                 let isExternal = false
-                if (link?.linkType === "page") {
-                  navLink = link.linkedPage?._sys.breadcrumbs.join("/") || ""
-                }
-                if (link?.linkType === "relative") {
+                if (link.linkType === "page") {
+                  // For page type, use breadcrumbs if available, otherwise use link
+                  navLink =
+                    link.linkedPage?._sys?.breadcrumbs?.join("/") ||
+                    link.link ||
+                    ""
+                } else if (link.linkType === "relative") {
                   navLink = link.link || ""
-                }
-                if (link?.linkType === "external") {
+                } else if (link.linkType === "external") {
                   navLink = link.link || ""
                   isExternal = true
+                } else {
+                  // Fallback: use link if available
+                  navLink = link.link || ""
                 }
-                const buttonStyle = link?.buttonStyle
-                  ? (link?.buttonStyle as ButtonVariants)
-                  : ("default" as ButtonVariants)
+                const buttonStyle = link.buttonStyle || "default"
                 return (
-                  <li
-                    data-tina-field={link && tinaField(link, "label")}
-                    key={link?.link}
-                    className="row-span-3"
-                  >
-                    <Link
-                      href={navLink}
-                      target={isExternal ? "_blank" : "_self"}
-                    >
-                      <Button variant={buttonStyle}>{link?.label}</Button>
+                  <li key={link.link || index} className="row-span-3">
+                    <Link href={navLink} target={isExternal ? "_blank" : "_self"}>
+                      <Button variant={buttonStyle as ButtonVariants}>
+                        {link.label}
+                      </Button>
                     </Link>
                   </li>
                 )
@@ -126,7 +148,7 @@ export function SiteHeader({
             </ul>
           </div>
         )}
-        {Array.isArray(nav.links) && nav.links?.length > 0 && (
+        {Array.isArray(nav.links) && nav.links.length > 0 && (
           <div className="flex flex-1 items-center justify-end space-x-4 md:hidden">
             <Dialog>
               <DialogTrigger asChild className="block md:hidden">
@@ -139,31 +161,31 @@ export function SiteHeader({
                 </Button>
               </DialogTrigger>
               <DialogContent className="flex flex-col justify-center py-12 sm:max-w-[425px]">
-                {nav.links?.map((link) => {
+                {nav.links.map((link, index) => {
                   let navLink = ""
                   let isExternal = false
-                  if (link?.linkType === "page") {
-                    navLink = link.linkedPage?._sys.breadcrumbs.join("/") || ""
-                  }
-                  if (link?.linkType === "relative") {
+                  if (link.linkType === "page") {
+                    navLink =
+                      link.linkedPage?._sys?.breadcrumbs?.join("/") ||
+                      link.link ||
+                      ""
+                  } else if (link.linkType === "relative") {
                     navLink = link.link || ""
-                  }
-                  if (link?.linkType === "external") {
+                  } else if (link.linkType === "external") {
                     navLink = link.link || ""
                     isExternal = true
+                  } else {
+                    navLink = link.link || ""
                   }
-                  const buttonStyle = link?.buttonStyle
-                    ? (link?.buttonStyle as ButtonVariants)
-                    : ("default" as ButtonVariants)
+                  const buttonStyle = link.buttonStyle || "default"
                   return (
                     <Link
-                      key={link?.link}
+                      key={link.link || index}
                       href={navLink}
                       target={isExternal ? "_blank" : "_self"}
-                      data-tina-field={link && tinaField(link, "label")}
                     >
-                      <Button variant={buttonStyle} className="w-full text-lg">
-                        {link?.label}
+                      <Button variant={buttonStyle as ButtonVariants} className="w-full text-lg">
+                        {link.label}
                       </Button>
                     </Link>
                   )

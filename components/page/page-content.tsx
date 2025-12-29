@@ -1,30 +1,37 @@
-import { PageBlocksPageContent } from "@/tina/__generated__/types"
-import { tinaField } from "tinacms/dist/react"
-import { TinaMarkdown } from "tinacms/dist/rich-text"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 
-import { components } from "./components"
+interface PageContentProps {
+  children?: React.ReactNode
+  content?: string
+  backgroundColor?: string
+  textAlign?: "left" | "center" | "right"
+}
 
-export function PageContent(props: PageBlocksPageContent) {
-  let bgStyle = ""
-  if (props.backgroundColor) {
-    bgStyle = `bg-${props.backgroundColor}`
-  }
-  let textAlign = "text-left"
-  if (props.textAlign) {
-    textAlign = `text-${props.textAlign}`
-  }
-  const isCenter =
-    props.textAlign && props.textAlign === "center" ? true : false
+export function PageContent({
+  children,
+  content,
+  backgroundColor,
+  textAlign = "left",
+}: PageContentProps) {
+  const bgStyle = backgroundColor ? `bg-${backgroundColor}` : ""
+  const textAlignClass = `text-${textAlign}`
+  const isCenter = textAlign === "center"
+
+  const markdownContent = content || (typeof children === "string" ? children : "")
+
   return (
-    <section className={`w-full px-4 py-3 ${bgStyle} ${textAlign}`}>
+    <section className={`w-full px-4 py-3 ${bgStyle} ${textAlignClass}`}>
       <div className="container mx-auto">
         <div
           className={`prose max-w-none ${
             isCenter && `[&_img]:mx-auto [&_img]:block`
           }`}
-          data-tina-field={tinaField(props, "content")}
         >
-          <TinaMarkdown content={props.content} components={components} />
+          {markdownContent ? (
+            <MarkdownRenderer content={markdownContent} />
+          ) : (
+            children
+          )}
         </div>
       </div>
     </section>

@@ -1,93 +1,86 @@
 /* eslint-disable tailwindcss/classnames-order */
 import Image from "next/image"
 import Link from "next/link"
-import {
-  PageBlocksCardgrid,
-  PageBlocksCardgrid2Col,
-} from "@/tina/__generated__/types"
-import { tinaField } from "tinacms/dist/react"
-import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import { Button } from "@/components/ui/button"
 import { isAbsoluteLink } from "@/components/utils/parsers"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 type ObjectFitValue = "fill" | "contain" | "cover" | "none" | "scale-down"
 
-export function CardGrid(
-  props: PageBlocksCardgrid | PageBlocksCardgrid2Col
-): JSX.Element {
-  const { cardblock } = props
+interface CardLink {
+  link: string
+  label: string
+  style?: "button" | "simple"
+}
+
+interface CardItem {
+  headline: string
+  coverimage?: string
+  imageFit?: ObjectFitValue
+  content: string
+  links?: CardLink[]
+}
+
+interface CardGridProps {
+  cardblock?: CardItem[]
+}
+
+export function CardGrid({ cardblock }: CardGridProps): JSX.Element {
+  if (!cardblock || cardblock.length === 0) {
+    return <></>
+  }
+
   return (
     <>
-      {cardblock &&
-        cardblock?.length > 0 &&
-        cardblock.map((item, i) => (
-          <div
-            className="overflow-hidden rounded-lg bg-white shadow-md"
-            key={item?.headline}
-          >
-            {item?.coverimage && (
-              <Image
-                alt={item?.headline as string}
-                className="h-[150px] w-full object-cover sm:h-[200px]"
-                height={300}
-                src={item?.coverimage}
-                data-tina-field={tinaField(item, "coverimage")}
-                style={{
-                  aspectRatio: "400/300",
-                  objectFit: item.imageFit
-                    ? (item.imageFit as ObjectFitValue)
-                    : "contain",
-                }}
-                width={400}
-              />
-            )}
+      {cardblock.map((item, i) => (
+        <div
+          className="overflow-hidden rounded-lg bg-white shadow-md"
+          key={item.headline || i}
+        >
+          {item.coverimage && (
+            <Image
+              alt={item.headline}
+              className="h-[150px] w-full object-cover sm:h-[200px]"
+              height={300}
+              src={item.coverimage}
+              style={{
+                aspectRatio: "400/300",
+                objectFit: item.imageFit || "contain",
+              }}
+              width={400}
+            />
+          )}
 
-            <div className="p-4">
-              <h3
-                className="mb-2 text-xl font-bold"
-                data-tina-field={tinaField(item, "headline")}
-              >
-                {item?.headline as string}
-              </h3>
-              <div
-                className="prose mb-4 text-gray-600"
-                data-tina-field={tinaField(item, "content")}
-              >
-                <TinaMarkdown content={item?.content} />
+          <div className="p-4">
+            <h3 className="mb-2 text-xl font-bold">{item.headline}</h3>
+            {item.content && (
+              <div className="prose mb-4 text-gray-600">
+                <MarkdownRenderer content={item.content} />
               </div>
-              {item?.links && item?.links.length > 0 && (
-                <div className="flex items-center justify-end gap-2">
-                  {item?.links.map((linkItem) => (
-                    <Link
-                      href={linkItem?.link || ""}
-                      data-tina-field={tinaField(linkItem, "link")}
-                      key={linkItem?.link}
-                      target={
-                        isAbsoluteLink(linkItem?.link as string)
-                          ? "_blank"
-                          : "_self"
-                      }
-                    >
-                      {linkItem?.style === "button" ? (
-                        <Button
-                          variant="secondary"
-                          data-tina-field={tinaField(linkItem, "label")}
-                        >
-                          {linkItem?.label}
-                        </Button>
-                      ) : (
-                        <div data-tina-field={tinaField(linkItem, "label")}>
-                          {linkItem?.label}
-                        </div>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
+            {item.links && item.links.length > 0 && (
+              <div className="flex items-center justify-end gap-2">
+                {item.links.map((linkItem, linkIndex) => (
+                  <Link
+                    href={linkItem.link || ""}
+                    key={linkItem.link || linkIndex}
+                    target={
+                      isAbsoluteLink(linkItem.link) ? "_blank" : "_self"
+                    }
+                  >
+                    {linkItem.style === "button" ? (
+                      <Button variant="secondary">{linkItem.label}</Button>
+                    ) : (
+                      <div>{linkItem.label}</div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
-        ))}
+        </div>
+      ))}
     </>
   )
 }

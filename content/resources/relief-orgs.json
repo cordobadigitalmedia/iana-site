@@ -1,0 +1,40 @@
+{
+  "resources": [
+    {
+      "link": "https://www.ifssa.ca/",
+      "resourcename": "IFSSA (Edmonton, AB)",
+      "category": "Local & Provincial"
+    },
+    {
+      "link": "https://isnacanada.com/",
+      "resourcename": "Islamic Society of North America",
+      "category": "Canada"
+    },
+    {
+      "link": "https://icnareliefcanada.ca/",
+      "resourcename": "Islamic Circle of North America (ICNA)",
+      "category": "Canada"
+    },
+    {
+      "link": "https://nzfcanada.com/",
+      "resourcename": "National Zakat Foundation",
+      "category": "Canada"
+    },
+    {
+      "link": "https://www.islamicreliefcanada.org",
+      "resourcename": "Islamic Relief Canada",
+      "category": "Canada"
+    },
+    {
+      "link": "https://emaan.ca",
+      "resourcename": "EMAAN Scholarships",
+      "category": "Canada"
+    },
+    {
+      "link": "https://onemax.org",
+      "resourcename": "MAX Gala Scholarships",
+      "category": "Canada"
+    }
+  ]
+}
+

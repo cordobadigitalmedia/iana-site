@@ -1,0 +1,46 @@
+<Button title="Back to Applications Home" link="/applications" alignment="left" />
+
+
+## Before applying for an interest-free loan, we kindly advise you to:
+
+
+**1.Renew Your Intentions:**\
+
+Renew your intentions and make sincere prayers (dua') in your daily ritual prayers and other blessed times for help and guidance from God. Pray the prayer of [guidance (istikhaara](http://seekershub.org/ans-blog/2015/07/03/istikhara-the-prayer-of-seeking-guidance/) and be content with the path God facilitates for you – He wants better for you than you want for yourself.
+
+
+**2. Reflect:**\
+
+For educational loans, a number of applicants jump into post-secondary schooling without thinking things through. Countless people graduate with degrees annually and do not use them due to many factors – they are then left with much debt and no work. Before spending tens of thousands of dollars on a post-secondary program, reflect on these questions: why am I pursuing this degree or certificate? What are the societal needs I am trying to fulfill? What other options do I have? Can I achieve my goals otherwise? How can I pay for schooling without falling into interest? Is this the right time for it or should I put it off for now?
+
+
+There are many resources online that help people tap into their own potential without needing to rely on accreditation or degrees, where possible. We are not suggesting that post-secondary school is "wrong," but that one should know very well what they are getting into and what their education will actually provide and not provide. Many others have great reflections about the modern post-secondary system such as John Taylor Gatto (author of [Weapons of Mass Instruction](https://www.newsociety.com/Books/W/Weapons-of-Mass-Instruction) and [this short letter](https://www.johntaylorgatto.com/all/i-have-no-degree-how-do-i-get-others-to-value-me-ask-john-11/)), Chris Hedges, Noam Chomsky, and others.\
+
+For **personal loans**, reflect on the root causes of the need or emergency. Sometimes it is just a normal downturn in life, other times it can be misuse or mismanagement of funds, or wronging other people. If so, work hard to right those wrongs and seek forgiveness and repent. If you are considering buying a vehicle, sometimes more affordable vehicles have more blessings than more expensive ones.\
+
+For **small business loans**, we would do best to take our time and not rush. Haste is from the devil and we will get our portion of wealth that is destined for us whether we hurry or not. Instead of loans you may consider investments or partnerships.\
+
+For **institutional loans**, sometimes major capital projects are not needed nor are they wise when there is a better use of funds for projects of greater priority. Very often, funds used directly to support people and beneficial programs are of far greater value than those used to purchase or build physical buildings of brick and stone.If you have thought long and hard about this decision and exhausted other avenues (see the FAQ below), and after weighing the benefits against the harms still believe it is best to get a loan then…
+
+
+1. **Seek Advice:**\
+   Reach out to those you trust. There are many truly God-fearing scholars, elders, and mentors in our communities who have tremendous knowledge and wisdom and experience. Talk to a few of them who you trust and whose opinions you value. Ask for their sincere counsel and for their prayers; God may send His guidance on their tongues.
+2. **Consider Other Avenues:**\
+   Approach other organizations for financial aid (see the [Relief Organizations](/resources/relief-orgs) page) and check the [Frequently Asked Questions (FAQ)](https://web.archive.org/web/20210301203412/http://ianafinancial.org/faq/) page for answers to common questions.
+3. **Trust in God:**\
+   Rest assured that no matter what happens, God will facilitate the path that is best for you. Remember that God sees the big picture and He knows what is best in the long run. Your particular desire for a field of study or a business endeavour may not be what is in your best interest at this moment, or perhaps it is but as God's will unfolds, a better path to it will be uncovered. What is certain is that He knows, and we do not. Trust in Him and He will reward your trust by taking care of you in ways you could not imagine. Let go and let God.
+
+### It may be that you hate a thing though it be good for you, and it may be that you love a thing though it be evil for you. God knows, and you know not.
+
+
+Holy Qur'an (2:216)
+
+
+All blessings and peace upon our beloved Prophet Muhammad.
+
+
+All thanks are due to God, Lord of the worlds.
+
+
+<Button title="Next: Award Philosophy" link="/award-philosophy" />
+

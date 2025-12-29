@@ -2,78 +2,69 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ResourcesAndNavQuery } from "@/tina/__generated__/types"
-import { tinaField, useTina } from "tinacms/dist/react"
-import { TinaMarkdown } from "tinacms/dist/rich-text"
 
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Footer } from "@/components/footer"
-import { components } from "@/components/page/components"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { SiteHeader } from "@/components/site-header"
+import type { Resource } from "@/lib/content/resources"
+import type { Nav } from "@/components/site-header"
+import type { Header } from "@/components/site-header"
+import type { FooterData } from "@/components/footer"
 
-export function ResourceComponent(props: {
-  data: ResourcesAndNavQuery
-  variables: {
-    relativePath: string
-  }
-  query: string
-}) {
-  const { data } = useTina(props)
+interface ResourceComponentProps {
+  resource: Resource
+  nav: Nav
+  header: Header
+  footer: FooterData
+}
 
+export function ResourceComponent({
+  resource,
+  nav,
+  header,
+  footer,
+}: ResourceComponentProps) {
   const categories = Array.from(
-    new Set(data.resources.resources?.map((item) => item?.category))
+    new Set(resource.resources?.map((item) => item.category))
   ).sort()
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0] as string
+    categories[0] || ""
   )
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value)
   }
+
   return (
     <>
-      <SiteHeader nav={data.nav} header={data.header} />
+      <SiteHeader nav={nav} header={header} />
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         <div className="grow">
           <section className="w-full px-4">
             <div className="container mx-auto">
               <div className="prose">
-                <h1
-                  className="text-primary py-4"
-                  data-tina-field={tinaField(data.resources, "title")}
-                >
-                  {data.resources.title || ""}
-                </h1>
+                <h1 className="text-primary py-4">{resource.title || ""}</h1>
               </div>
-              <div
-                className={`prose max-w-none`}
-                data-tina-field={tinaField(data.resources, "description")}
-              >
-                <TinaMarkdown
-                  content={data.resources.description}
-                  components={components}
-                />
+              <div className="prose max-w-none">
+                <MarkdownRenderer content={resource.description} />
               </div>
-              {Array.isArray(data.resources.resources) &&
-                data.resources.resources?.length > 0 && (
+              {Array.isArray(resource.resources) &&
+                resource.resources.length > 0 && (
                   <>
                     <div className="prose my-2">
                       <h2>Resources:</h2>
@@ -87,7 +78,7 @@ export function ResourceComponent(props: {
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => (
-                          <SelectItem key={category} value={category as string}>
+                          <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
                         ))}
@@ -101,29 +92,20 @@ export function ResourceComponent(props: {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {data.resources.resources
-                          ?.filter(
-                            (item) => item?.category === selectedCategory
-                          )
-                          .map((item) => (
-                            <TableRow key={item?.resourcename}>
-                              <TableCell
-                                className="font-medium"
-                                data-tina-field={tinaField(
-                                  item,
-                                  "resourcename"
-                                )}
-                              >
-                                {item?.resourcename}
+                        {resource.resources
+                          .filter((item) => item.category === selectedCategory)
+                          .map((item, index) => (
+                            <TableRow key={item.resourcename || index}>
+                              <TableCell className="font-medium">
+                                {item.resourcename}
                               </TableCell>
                               <TableCell>
                                 <Link
-                                  href={item?.link || ""}
+                                  href={item.link}
                                   className="underline hover:no-underline"
                                   target="_blank"
-                                  data-tina-field={tinaField(item, "link")}
                                 >
-                                  {item?.link}
+                                  {item.link}
                                 </Link>
                               </TableCell>
                             </TableRow>
@@ -135,7 +117,7 @@ export function ResourceComponent(props: {
             </div>
           </section>
         </div>
-        <Footer footer={data.footer} />
+        <Footer footer={footer} />
       </div>
     </>
   )
