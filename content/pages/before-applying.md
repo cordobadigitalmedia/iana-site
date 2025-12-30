@@ -1,4 +1,4 @@
-<Button title="Back to Applications Home" link="/applications" alignment="left" />
+<Button title="Back to Applications Home" link="/start-applying" alignment="left" />
 
 
 ## Before applying for an interest-free loan, we kindly advise you to:

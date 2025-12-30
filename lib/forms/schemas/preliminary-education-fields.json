@@ -1,0 +1,322 @@
+{
+  "formName": "Iana-Preliminary-Application-Education",
+  "formType": "preliminary-education",
+  "sections": [
+    "1. Personal Information",
+    "2. Loan Request",
+    "3. Financial Status",
+    "4. Information"
+  ],
+  "fields": [
+    {
+      "name": "legal_name",
+      "label": "Legal Name",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "address",
+      "label": "Address",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "province_state",
+      "label": "Province/State",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "postal_zip_code",
+      "label": "Postal/Zip Code",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "phone",
+      "label": "Phone",
+      "type": "tel",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "cell",
+      "label": "Cell",
+      "type": "tel",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "type": "email",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "amount_requested",
+      "label": "Amount Requested",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "proposed_start_date",
+      "label": "Proposed Start Date for Loan",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "expected_repayment_start_date",
+      "label": "Expected Date to Start Repayment",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "expected_monthly_payment",
+      "label": "Expected Monthly Payment",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "expected_repayment_finish_date",
+      "label": "Expected Date to Finish Repayment",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "current_or_planned_institution",
+      "label": "Current or Planned Institution",
+      "type": "text",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "area_of_study",
+      "label": "Area of Study",
+      "type": "text",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "date_of_graduation",
+      "label": "Date of Graduation",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "current_student_loan_amount",
+      "label": "Current Student Loan Amount",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "student_loans_expected_upon_graduation",
+      "label": "Amount of Student Loans Expected upon Graduation",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "loan_purpose",
+      "label": "What is the purpose of this loan? Please provide details on how the loan would be used.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "how_loan_will_benefit_you",
+      "label": "How will this loan benefit you?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "loan_will_benefit_others",
+      "label": "Will this loan benefit others? If so, who (family, community, society, etc.) and how?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "why_not_conventional_student_loans",
+      "label": "Why have you chosen not to use conventional student loans?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "minimum_amount_needed",
+      "label": "Is the amount you've requested the minimum amount that you need? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "explored_other_options",
+      "label": "Have you explored other options, such as those listed on lana's website, before submitting this application? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "repayment_plan_determination",
+      "label": "How did you determine your repayment plan? Does it take into account potential life changes (marriage, children, travel, etc.), or other activities that may jeopardize your ability to repay this loan? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "unable_to_meet_repayment",
+      "label": "What would you do if you were unable to meet the terms of your repayment plan, or were late in making a payment?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "communication_responsiveness",
+      "label": "How well do you communicate? How responsive are you to email and phone? Would you be able to promptly keep lana updated about your situation or respond to inquiries from lana? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "guarantor_name",
+      "label": "Do you have a guarantor willing to sign with you? If so, please provide their name.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "collateral_description",
+      "label": "Do you have collateral for this loan? If so, please describe.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "credit_check_consent",
+      "label": "Do you consent to a credit check? If not, please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "completed_steps_info",
+      "label": "Have you completed Steps A through E listed on lana's website? Please share more about your situation, what led you to seek out a loan, and any other relevant information.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "decide_to_pursue_program",
+      "label": "How and why did you decide to pursue this program of study? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "ethical_challenges_field_of_study",
+      "label": "Every field of study poses ethical challenges on both an individual and systemic level. What are some of these ethical challenges in your preferred field of study, and how would you respond to them?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "vision_for_accomplishment",
+      "label": "What is your vision for what you will accomplish through your field of study?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "books_enjoy_reading",
+      "label": "What types of books (e.g. genre, titles, authors) do you enjoy reading, and why?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "previously_tried_avoid_loans",
+      "label": "Have you previously tried to avoid taking loans? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "community_involvement",
+      "label": "Iana aims to offer God-centred community financial services, for the common good. Are you involved in your local community? Do you volunteer? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "views_on_economic_system",
+      "label": "Grassroots, holistic economic reform is some of the most important work on Earth, and has the potential to positively affect every other aspect of our lives and our world. Please share your views on the modern economic system (e.g. interest/usury, debt, credit cards, banks etc.). Have you considered switching from a bank to a credit union? Have you considered canceling or minimizing credit card use?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "studied_islamic_law",
+      "label": "Have you ever studied Islamic Law (Fiqh)? Please explain.",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "financial_literacy_training",
+      "label": "Have you completed any financial literacy training? If so, please describe.",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "interested_in_learning_economics",
+      "label": "Are you interested in learning more about Islamic and modern economics?",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "how_found_out_about_lana",
+      "label": "How did you hear about lana?",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    }
+  ]
+}

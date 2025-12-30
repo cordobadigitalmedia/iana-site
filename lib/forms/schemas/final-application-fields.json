@@ -1,0 +1,1054 @@
+{
+  "formName": "Iana-Final-Application",
+  "formType": "final",
+  "sections": [
+    "Personal Information",
+    "Confirmation of Loan Terms",
+    "Education",
+    "Employment",
+    "Financial Status",
+    "Assets",
+    "Total Liabilities",
+    "Monthly Living Expenses",
+    "Volunteerism and Extracurricular Activities",
+    "Future Plans",
+    "Guarantor and References",
+    "Required Documents"
+  ],
+  "fields": [
+    {
+      "name": "legal_name",
+      "label": "Legal Name",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "permanent_address",
+      "label": "Permanent Address",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "province_state",
+      "label": "Province/State",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "postal_zip_code",
+      "label": "Postal/Zip Code",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "phone",
+      "label": "Phone",
+      "type": "tel",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "cell",
+      "label": "Cell",
+      "type": "tel",
+      "required": true,
+      "section": "Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "email",
+      "label": "Email Address",
+      "type": "email",
+      "required": true,
+      "section": "Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "sin",
+      "label": "Social Insurance Number (SIN)",
+      "type": "text",
+      "required": true,
+      "section": "Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "canadian_legal_status",
+      "label": "Canadian Legal Status",
+      "type": "checkbox",
+      "required": true,
+      "section": "Personal Information",
+      "options": [
+        "Canadian Citizen",
+        "Permanent Resident",
+        "Temporary Resident",
+        "Refugee Claimant",
+        "No status in Canada"
+      ]
+    },
+    {
+      "name": "marital_status_living_situation",
+      "label": "Marital Status and Living Situation (please check all that apply)",
+      "type": "checkbox",
+      "required": true,
+      "section": "Personal Information",
+      "options": [
+        "Married",
+        "Separated",
+        "Divorced",
+        "Single (never married)",
+        "Living with spouse/dependents",
+        "Living with parents",
+        "Living alone/with roommate"
+      ]
+    },
+    {
+      "name": "amount_requested",
+      "label": "Amount requested",
+      "type": "number",
+      "required": true,
+      "section": "Confirmation of Loan Terms"
+    },
+    {
+      "name": "proposed_start_date",
+      "label": "Proposed start date",
+      "type": "date",
+      "required": true,
+      "section": "Confirmation of Loan Terms"
+    },
+    {
+      "name": "expected_repayment_start_date",
+      "label": "Expected date to start repayment",
+      "type": "date",
+      "required": true,
+      "section": "Confirmation of Loan Terms"
+    },
+    {
+      "name": "expected_monthly_payment",
+      "label": "Expected monthly payment",
+      "type": "number",
+      "required": true,
+      "section": "Confirmation of Loan Terms"
+    },
+    {
+      "name": "expected_repayment_finish_date",
+      "label": "Expected date to finish repayment",
+      "type": "date",
+      "required": true,
+      "section": "Confirmation of Loan Terms"
+    },
+    {
+      "name": "loan_type",
+      "label": "Type of loan",
+      "type": "select",
+      "required": true,
+      "section": "Confirmation of Loan Terms",
+      "options": [
+        "Personal",
+        "Education",
+        "Business/Institutional"
+      ]
+    },
+    {
+      "name": "education_institution_1",
+      "label": "Institution",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "full"
+    },
+    {
+      "name": "education_program_1",
+      "label": "Program",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_year_1",
+      "label": "Year",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_institution_2",
+      "label": "Institution",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "full"
+    },
+    {
+      "name": "education_program_2",
+      "label": "Program",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_year_2",
+      "label": "Year",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_institution_3",
+      "label": "Institution",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "full"
+    },
+    {
+      "name": "education_program_3",
+      "label": "Program",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_year_3",
+      "label": "Year",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_institution_4",
+      "label": "Institution",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "full"
+    },
+    {
+      "name": "education_program_4",
+      "label": "Program",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_year_4",
+      "label": "Year",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_institution_5",
+      "label": "Institution",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "full"
+    },
+    {
+      "name": "education_program_5",
+      "label": "Program",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "education_year_5",
+      "label": "Year",
+      "type": "text",
+      "required": false,
+      "section": "Education",
+      "width": "half"
+    },
+    {
+      "name": "currently_employed",
+      "label": "Are you currently employed?",
+      "type": "radio",
+      "required": true,
+      "section": "Employment",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "name": "employment_explanation",
+      "label": "If no, please explain:",
+      "type": "textarea",
+      "required": false,
+      "section": "Employment"
+    },
+    {
+      "name": "annual_gross_income",
+      "label": "What is your annual gross income?",
+      "type": "number",
+      "required": true,
+      "section": "Financial Status"
+    },
+    {
+      "name": "monthly_net_income",
+      "label": "What is your monthly net income?",
+      "type": "number",
+      "required": true,
+      "section": "Financial Status"
+    },
+    {
+      "name": "investments_rrsp_amount",
+      "label": "Amount",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Investments/RRSPs:"
+    },
+    {
+      "name": "investments_rrsp_type",
+      "label": "Type",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "chequing_amount",
+      "label": "Amount",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Chequing account:"
+    },
+    {
+      "name": "chequing_financial_institution",
+      "label": "Financial Institution",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "savings_amount",
+      "label": "Amount",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Savings account:"
+    },
+    {
+      "name": "savings_financial_institution",
+      "label": "Financial Institution",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "vehicles_estimated_value",
+      "label": "Estimated Value",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Vehicle(s) owned:"
+    },
+    {
+      "name": "vehicles_make_model_year",
+      "label": "Make/Model/Year",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "homes_estimated_value",
+      "label": "Estimated Value",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Home(s) owned:"
+    },
+    {
+      "name": "homes_year_built",
+      "label": "Year built",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "other_assets_estimated_value",
+      "label": "Estimated Value",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Other assets:"
+    },
+    {
+      "name": "other_assets_description",
+      "label": "Description",
+      "type": "text",
+      "required": false,
+      "section": "Assets",
+      "width": "half"
+    },
+    {
+      "name": "assets_total",
+      "label": "Total",
+      "type": "number",
+      "required": false,
+      "section": "Assets",
+      "width": "half",
+      "rowLabel": "Total:",
+      "isTotal": true
+    },
+    {
+      "name": "mortgage_amount_owing",
+      "label": "Amount owing",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "rowLabel": "Mortgage(s):"
+    },
+    {
+      "name": "mortgage_monthly_payment",
+      "label": "Monthly payment",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half"
+    },
+    {
+      "name": "outstanding_loans_amount_owing",
+      "label": "Amount owing",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "rowLabel": "Outstanding Loan(s):"
+    },
+    {
+      "name": "outstanding_loans_monthly_payment",
+      "label": "Monthly payment",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half"
+    },
+    {
+      "name": "personal_line_of_credit_amount_owing",
+      "label": "Amount owing",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "rowLabel": "Personal Line of Credit(s):"
+    },
+    {
+      "name": "personal_line_of_credit_monthly_payment",
+      "label": "Monthly payment",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half"
+    },
+    {
+      "name": "credit_cards_amount_owing",
+      "label": "Amount owing",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "rowLabel": "Credit Card(s):"
+    },
+    {
+      "name": "credit_cards_monthly_payment",
+      "label": "Monthly payment",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half"
+    },
+    {
+      "name": "liabilities_total_amount_owing",
+      "label": "Amount owing",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "rowLabel": "Total:",
+      "isTotal": true
+    },
+    {
+      "name": "liabilities_total_monthly_payment",
+      "label": "Monthly payment",
+      "type": "number",
+      "required": false,
+      "section": "Total Liabilities",
+      "width": "half",
+      "isTotal": true
+    },
+    {
+      "name": "mortgage_payment_or_rent",
+      "label": "Mortgage Payment or Rent",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "home_insurance",
+      "label": "Home Insurance",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "property_taxes",
+      "label": "Property Taxes",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "condo_fees",
+      "label": "Condo Fees",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "utilities",
+      "label": "Utilities",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "cable_satellite_tv_subscriptions",
+      "label": "Cable, Satellite, TV and/or Subscriptions",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "telephone",
+      "label": "Telephone (Landline and Cell)",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "internet",
+      "label": "Internet",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "vehicle_maintenance_fuel_insurance",
+      "label": "Vehicle Maintenance, Fuel and Insurance",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "groceries_food",
+      "label": "Groceries/Food",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "other_expenses",
+      "label": "Other",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses"
+    },
+    {
+      "name": "monthly_expenses_total",
+      "label": "Total",
+      "type": "number",
+      "required": false,
+      "section": "Monthly Living Expenses",
+      "isTotal": true
+    },
+    {
+      "name": "volunteer_role_1",
+      "label": "Volunteer role",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_organization_1",
+      "label": "Organization",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_start_date_1",
+      "label": "Position start date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_end_date_1",
+      "label": "Position end date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_duties_1",
+      "label": "Duties and achievements",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_role_2",
+      "label": "Volunteer role",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_organization_2",
+      "label": "Organization",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_start_date_2",
+      "label": "Position start date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_end_date_2",
+      "label": "Position end date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_duties_2",
+      "label": "Duties and achievements",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_role_3",
+      "label": "Volunteer role",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_organization_3",
+      "label": "Organization",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_start_date_3",
+      "label": "Position start date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_end_date_3",
+      "label": "Position end date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_duties_3",
+      "label": "Duties and achievements",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_role_4",
+      "label": "Volunteer role",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_organization_4",
+      "label": "Organization",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_start_date_4",
+      "label": "Position start date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_end_date_4",
+      "label": "Position end date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_duties_4",
+      "label": "Duties and achievements",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_role_5",
+      "label": "Volunteer role",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_organization_5",
+      "label": "Organization",
+      "type": "text",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_start_date_5",
+      "label": "Position start date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_end_date_5",
+      "label": "Position end date",
+      "type": "date",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "volunteer_duties_5",
+      "label": "Duties and achievements",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "extracurricular_activities",
+      "label": "Please describe any extracurricular activities or hobbies you may have.",
+      "type": "textarea",
+      "required": false,
+      "section": "Volunteerism and Extracurricular Activities"
+    },
+    {
+      "name": "future_plans",
+      "label": "Please describe your future plans, God willing (education, career, volunteering, other life plans).",
+      "type": "textarea",
+      "required": false,
+      "section": "Future Plans"
+    },
+    {
+      "name": "guarantor_full_name",
+      "label": "Full name",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "guarantor_relationship",
+      "label": "Relationship to applicant",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "guarantor_email",
+      "label": "Email address",
+      "type": "email",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "guarantor_phone",
+      "label": "Phone number",
+      "type": "tel",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference1_full_name",
+      "label": "Full name",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference1_relationship",
+      "label": "Relationship to applicant (ex. supervisor, teacher, friend)",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference1_organization",
+      "label": "Organization (if applicable)",
+      "type": "text",
+      "required": false,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference1_email",
+      "label": "Email address",
+      "type": "email",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference1_phone",
+      "label": "Phone number",
+      "type": "tel",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference2_full_name",
+      "label": "Full name",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference2_relationship",
+      "label": "Relationship to applicant (ex. supervisor, teacher, friend)",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference2_organization",
+      "label": "Organization (if applicable)",
+      "type": "text",
+      "required": false,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference2_email",
+      "label": "Email address",
+      "type": "email",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference2_phone",
+      "label": "Phone number",
+      "type": "tel",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference3_full_name",
+      "label": "Full name",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference3_relationship",
+      "label": "Relationship to applicant (ex. supervisor, teacher, friend)",
+      "type": "text",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference3_organization",
+      "label": "Organization (if applicable)",
+      "type": "text",
+      "required": false,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference3_email",
+      "label": "Email address",
+      "type": "email",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "reference3_phone",
+      "label": "Phone number",
+      "type": "tel",
+      "required": true,
+      "section": "Guarantor and References"
+    },
+    {
+      "name": "government_id",
+      "label": "Government-issued photo identification",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "credit_check",
+      "label": "Credit check",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "letters_of_reference",
+      "label": "Letters of reference",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "bank_statements",
+      "label": "Bank/credit union statements",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "credit_card_statements",
+      "label": "Credit card statements",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "outstanding_loan_statements",
+      "label": "Outstanding loan statements",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "income_tax_statement",
+      "label": "Income tax statement or Notice of Assessment (most recent)",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "pay_stubs",
+      "label": "Pay stubs (from the last 3 months of employment)",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "resume",
+      "label": "Résumé",
+      "type": "file",
+      "required": true,
+      "section": "Required Documents"
+    },
+    {
+      "name": "transcripts",
+      "label": "Transcripts (if applying for an educational loan)",
+      "type": "file",
+      "required": false,
+      "section": "Required Documents",
+      "conditionalRequired": {
+        "field": "loan_type",
+        "value": "Education"
+      }
+    },
+    {
+      "name": "financial_statements",
+      "label": "Financial statements for the past three (3) years",
+      "type": "file",
+      "required": false,
+      "section": "Required Documents",
+      "conditionalRequired": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      },
+      "conditionalShow": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      }
+    },
+    {
+      "name": "business_plan",
+      "label": "Business plan or forecast for the next two (2) years",
+      "type": "file",
+      "required": false,
+      "section": "Required Documents",
+      "conditionalRequired": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      },
+      "conditionalShow": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      }
+    },
+    {
+      "name": "bank_letter",
+      "label": "Recent bank statement and letter from your bank",
+      "type": "file",
+      "required": false,
+      "section": "Required Documents",
+      "conditionalRequired": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      },
+      "conditionalShow": {
+        "field": "loan_type",
+        "value": "Business/Institutional"
+      }
+    }
+  ]
+}

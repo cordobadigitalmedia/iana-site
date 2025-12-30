@@ -9,12 +9,12 @@ import { PageContent } from "@/components/page/page-content"
 import { SiteHeader } from "@/components/site-header"
 import { Footer } from "@/components/footer"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: "Start Applying | IANA Financial",
+  title: "Apply for an Interest-Free Loan – Iana Financial",
   description:
-    "Download and submit your preliminary and final interest-free loan applications to IANA Financial.",
+    "Apply for an interest-free loan with Iana Financial. Review guidelines, award philosophy, and FAQs before applying. Ethical, Sharia-compliant financial assistance.",
 }
 
 export default async function StartApplyingPage() {
@@ -31,10 +31,10 @@ export default async function StartApplyingPage() {
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         <div className="grow">
           <CoverSection
-            headline="Start Applying"
-            backgroundImage="/images/step-04.png"
+            headline="Apply for an Interest-Free Loan"
+            backgroundImage="/images/leon-dewiwje-ldDmTgf89gU-unsplash.jpg"
           />
-          <PageContent>{content}</PageContent>
+          <PageContent textAlign="center">{content}</PageContent>
         </div>
         <Footer footer={footer as any} />
       </div>

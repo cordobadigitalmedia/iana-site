@@ -31,7 +31,7 @@ export default async function HomePage() {
 ### Ethically save while helping your brothers and sisters with interest-free loans.`,
     links: [
       { link: "/support-iana", label: "Lend or Donate", style: "button" as const },
-      { link: "/applications", label: "Apply", style: "button" as const },
+      { link: "/start-applying", label: "Apply", style: "button" as const },
     ],
     backgroundType: "image" as const,
     backgroundImage: "/images/img-Sa4G3VcXvmIRoyfzcok6l.jpeg",
@@ -49,7 +49,7 @@ export default async function HomePage() {
 4. Submit an Application`,
       links: [
         {
-          link: "/applications",
+          link: "/start-applying",
           label: "Apply for a Loan",
           style: "button" as const,
         },

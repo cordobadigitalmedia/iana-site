@@ -1,4 +1,4 @@
-<Button title="Back to Applications Home" link="/applications" />
+<Button title="Back to Applications Home" link="/start-applying" />
 
 #### Special consideration and priority is given to specific people in an attempt to be true to the Objectives of the Sacred Law or Maqasid Al-Sharia; a useful essay in this regard is the one by the esteemed scholar Dr. Umar Faruq Abd-Allah, [Living Islam with Purpose](https://www.theoasisinitiative.org/publications/)
 

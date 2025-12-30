@@ -22,6 +22,11 @@ const redirects = [
     destination: "/resources/relief-orgs",
     permanent: true,
   },
+  {
+    source: "/applications",
+    destination: "/start-applying",
+    permanent: true,
+  },
   // Add more redirects as needed
 ]
 
