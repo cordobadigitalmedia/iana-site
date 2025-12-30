@@ -42,7 +42,7 @@ export function GuarantorReferencesSection({ formData, onChange, errors }: Guara
       {/* Guarantor Section */}
       <div>
         <p className="text-sm italic text-gray-600 mb-4">
-          Please provide your guarantor's contact information.
+          Please provide your guarantor&apos;s contact information.
         </p>
         <div className="border border-gray-300 rounded-md overflow-hidden">
           {renderTableRow('Full name', 'guarantor_full_name', 'text', true)}

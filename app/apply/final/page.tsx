@@ -9,6 +9,27 @@ import { submitFinalApplication } from "./actions";
 import fieldDefinitions from "@/lib/forms/schemas/final-application-fields.json";
 import { Card, CardContent } from "@/components/ui/card";
 
+type FieldDefinition = {
+  name: string;
+  label: string;
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'number' | 'email' | 'tel' | 'file';
+  required: boolean;
+  section?: string;
+  options?: string[];
+  placeholder?: string;
+  width?: 'full' | 'half';
+  rowLabel?: string;
+  isTotal?: boolean;
+  conditionalRequired?: {
+    field: string;
+    value: string;
+  };
+  conditionalShow?: {
+    field: string;
+    value: string;
+  };
+};
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -36,7 +57,7 @@ export default async function FinalApplicationPage() {
                   Please fill out all required fields. Your information will be saved automatically as you type.
                 </p>
                 <ApplicationForm
-                  fields={fieldDefinitions.fields}
+                  fields={fieldDefinitions.fields as FieldDefinition[]}
                   sections={fieldDefinitions.sections}
                   formKey="final"
                   onSubmit={submitFinalApplication}

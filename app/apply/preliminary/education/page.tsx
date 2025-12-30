@@ -11,16 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function PreliminaryEducationPage() {
-  return (
-    <PreliminaryApplicationPage
-      title="Preliminary Application - Educational Loan"
-      description="Submit your preliminary application for an educational loan."
-      fields={fieldDefinitions.fields}
-      sections={fieldDefinitions.sections}
-      formKey="preliminary-education"
-      onSubmit={submitEducationApplication}
-    />
-  );
+  return await PreliminaryApplicationPage({
+    title: "Preliminary Application - Educational Loan",
+    description: "Submit your preliminary application for an educational loan.",
+    fields: fieldDefinitions.fields as any,
+    sections: fieldDefinitions.sections,
+    formKey: "preliminary-education",
+    onSubmit: submitEducationApplication,
+  });
 }
 
 

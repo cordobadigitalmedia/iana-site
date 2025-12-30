@@ -87,7 +87,7 @@ export function ApplicationIntro({ stepContents }: ApplicationIntroProps) {
   };
 
   const stepContent = openStep ? getStepContent(openStep) : null;
-  const processed = stepContent 
+  const processed = stepContent && openStep !== null
     ? processContent(stepContent.content, openStep)
     : { content: '', hasNextButton: false, nextStepTitle: '' };
 

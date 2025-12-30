@@ -10,16 +10,10 @@ export async function submitEducationApplication(formData: Record<string, any>) 
     const validatedData = preliminaryEducationSchema.parse(formData);
     const applicationId = uuidv4();
     
-    await sql(
-      `INSERT INTO applications (id, application_type, form_data, applicant_email)
-       VALUES ($1, $2, $3, $4)`,
-      [
-        applicationId,
-        'preliminary-education',
-        JSON.stringify(validatedData),
-        validatedData.email || null
-      ]
-    );
+    await sql`
+      INSERT INTO applications (id, application_type, form_data, applicant_email)
+      VALUES (${applicationId}, ${'preliminary-education'}, ${JSON.stringify(validatedData)}, ${validatedData.email || null})
+    `;
     
     await sendApplicationEmail({
       applicationId,
@@ -27,10 +21,9 @@ export async function submitEducationApplication(formData: Record<string, any>) 
       formData: validatedData
     });
     
-    await sql(
-      `UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = $1`,
-      [applicationId]
-    );
+    await sql`
+      UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = ${applicationId}
+    `;
     
     return { success: true, applicationId };
   } catch (error: any) {

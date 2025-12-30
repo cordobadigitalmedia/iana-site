@@ -11,16 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function PreliminaryPersonalPage() {
-  return (
-    <PreliminaryApplicationPage
-      title="Preliminary Application - Personal/Emergency Loan"
-      description="Submit your preliminary application for a personal or emergency loan."
-      fields={fieldDefinitions.fields}
-      sections={fieldDefinitions.sections}
-      formKey="preliminary-personal"
-      onSubmit={submitPersonalApplication}
-    />
-  );
+  return await PreliminaryApplicationPage({
+    title: "Preliminary Application - Personal/Emergency Loan",
+    description: "Submit your preliminary application for a personal or emergency loan.",
+    fields: fieldDefinitions.fields as any,
+    sections: fieldDefinitions.sections,
+    formKey: "preliminary-personal",
+    onSubmit: submitPersonalApplication,
+  });
 }
 
 

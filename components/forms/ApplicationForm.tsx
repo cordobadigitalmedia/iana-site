@@ -284,30 +284,10 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                                     {field.rowLabel}
                                   </label>
                                 )}
-                                <FormField
-                                  name={field.name}
-                                  label={field.label}
-                                  type={field.type}
-                                  required={field.required}
-                                  value={formData[field.name] || (field.type === 'checkbox' ? [] : '')}
-                                  onChange={(value) => handleFieldChange(field.name, value)}
-                                  error={errors[field.name]}
-                                  options={field.options}
-                                  placeholder={field.placeholder}
-                                />
+                                {renderField(field)}
                               </div>
                               <div className="p-4">
-                                <FormField
-                                  name={nextField.name}
-                                  label={nextField.label}
-                                  type={nextField.type}
-                                  required={nextField.required}
-                                  value={formData[nextField.name] || ''}
-                                  onChange={(value) => handleFieldChange(nextField.name, value)}
-                                  error={errors[nextField.name]}
-                                  options={nextField.options}
-                                  placeholder={nextField.placeholder}
-                                />
+                                {renderField(nextField)}
                               </div>
                             </div>
                           </div>
@@ -325,17 +305,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               </label>
                             </div>
                             <div className="p-4">
-                              <FormField
-                                name={field.name}
-                                label=""
-                                type={field.type}
-                                required={field.required}
-                                value={formData[field.name] || ''}
-                                onChange={(value) => handleFieldChange(field.name, value)}
-                                error={errors[field.name]}
-                                options={field.options}
-                                placeholder={field.placeholder}
-                              />
+                              {renderField(field)}
                             </div>
                           </div>
                         </div>
@@ -360,17 +330,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               )}
                             </div>
                             <div className="p-4">
-                              <FormField
-                                name={totalField.name}
-                                label={totalField.label}
-                                type={totalField.type}
-                                required={totalField.required}
-                                value={formData[totalField.name] || ''}
-                                onChange={(value) => handleFieldChange(totalField.name, value)}
-                                error={errors[totalField.name]}
-                                options={totalField.options}
-                                placeholder={totalField.placeholder}
-                              />
+                              {renderField(totalField)}
                             </div>
                             <div className="p-4"></div>
                           </div>
@@ -389,34 +349,10 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                                   {totalAmountField.rowLabel}
                                 </label>
                               )}
-                              {totalAmountField && (
-                                <FormField
-                                  name={totalAmountField.name}
-                                  label={totalAmountField.label}
-                                  type={totalAmountField.type}
-                                  required={totalAmountField.required}
-                                  value={formData[totalAmountField.name] || ''}
-                                  onChange={(value) => handleFieldChange(totalAmountField.name, value)}
-                                  error={errors[totalAmountField.name]}
-                                  options={totalAmountField.options}
-                                  placeholder={totalAmountField.placeholder}
-                                />
-                              )}
+                              {totalAmountField && renderField(totalAmountField)}
                             </div>
                             <div className="p-4">
-                              {totalPaymentField && (
-                                <FormField
-                                  name={totalPaymentField.name}
-                                  label={totalPaymentField.label}
-                                  type={totalPaymentField.type}
-                                  required={totalPaymentField.required}
-                                  value={formData[totalPaymentField.name] || ''}
-                                  onChange={(value) => handleFieldChange(totalPaymentField.name, value)}
-                                  error={errors[totalPaymentField.name]}
-                                  options={totalPaymentField.options}
-                                  placeholder={totalPaymentField.placeholder}
-                                />
-                              )}
+                              {totalPaymentField && renderField(totalPaymentField)}
                             </div>
                           </div>
                         </div>
@@ -433,17 +369,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               </label>
                             </div>
                             <div className="p-4">
-                              <FormField
-                                name={totalField.name}
-                                label=""
-                                type={totalField.type}
-                                required={totalField.required}
-                                value={formData[totalField.name] || ''}
-                                onChange={(value) => handleFieldChange(totalField.name, value)}
-                                error={errors[totalField.name]}
-                                options={totalField.options}
-                                placeholder={totalField.placeholder}
-                              />
+                              {renderField(totalField)}
                             </div>
                           </div>
                         </div>

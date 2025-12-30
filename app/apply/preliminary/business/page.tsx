@@ -11,16 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function PreliminaryBusinessPage() {
-  return (
-    <PreliminaryApplicationPage
-      title="Preliminary Application - Business/Institutional Loan"
-      description="Submit your preliminary application for a business or institutional loan."
-      fields={fieldDefinitions.fields}
-      sections={fieldDefinitions.sections}
-      formKey="preliminary-business"
-      onSubmit={submitBusinessApplication}
-    />
-  );
+  return await PreliminaryApplicationPage({
+    title: "Preliminary Application - Business/Institutional Loan",
+    description: "Submit your preliminary application for a business or institutional loan.",
+    fields: fieldDefinitions.fields as any,
+    sections: fieldDefinitions.sections,
+    formKey: "preliminary-business",
+    onSubmit: submitBusinessApplication,
+  });
 }
 
 
