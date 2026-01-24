@@ -1,7 +1,7 @@
 import "@/styles/globals.css"
 import "@/styles/styles.css"
 import type { Metadata, Viewport } from "next"
-import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif } from "next/font/google"
+import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif, Scheherazade_New, Reem_Kufi } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 
 import { ThemeProvider } from "@/components/theme-provider"
@@ -44,6 +44,20 @@ const noto_serif = Noto_Serif({
   variable: "--font-noto-serif",
 })
 
+const scheherazade_new = Scheherazade_New({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  variable: "--font-scheherazade-new",
+})
+
+const reem_kufi = Reem_Kufi({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-reem-kufi",
+})
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
@@ -55,7 +69,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
             " " +
             noto_Naskh.variable +
             " " +
-            noto_serif.variable
+            noto_serif.variable +
+            " " +
+            scheherazade_new.variable +
+            " " +
+            reem_kufi.variable
           }
         >
           <ThemeProvider

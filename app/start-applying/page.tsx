@@ -32,7 +32,7 @@ export default async function StartApplyingPage() {
         <div className="grow">
           <CoverSection
             headline="Apply for an Interest-Free Loan"
-            backgroundImage="/images/leon-dewiwje-ldDmTgf89gU-unsplash.jpg"
+            backgroundImage="/images/online-application.png"
           />
           <PageContent textAlign="center">{content}</PageContent>
         </div>
