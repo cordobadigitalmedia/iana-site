@@ -168,7 +168,7 @@ export function SiteHeader({
               </ul>
             </div>
           )}
-          {header.ctaButton && (
+          {header.ctaButton && !isApplicationPage && (
             <div key={header.ctaButton.link} className="flex-shrink-0">
               <Link
                 href={header.ctaButton.link || ""}

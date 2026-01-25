@@ -3,6 +3,7 @@ import "@/styles/styles.css"
 import type { Metadata, Viewport } from "next"
 import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif, Scheherazade_New, Reem_Kufi } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
+import { BotIdClient } from "botid/client"
 
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -58,11 +59,24 @@ const reem_kufi = Reem_Kufi({
   variable: "--font-reem-kufi",
 })
 
+const protectedRoutes = [
+  {
+    path: '/apply/preliminary',
+    method: 'POST',
+  },
+  {
+    path: '/apply/final',
+    method: 'POST',
+  },
+];
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <head />
+        <head>
+          <BotIdClient protect={protectedRoutes} />
+        </head>
         <body
           className={
             noto_sans.variable +

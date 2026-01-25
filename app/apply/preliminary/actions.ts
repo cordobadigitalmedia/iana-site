@@ -3,10 +3,10 @@
 import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { checkBotId } from 'botid/server';
-import { finalApplicationSchema } from '@/lib/forms/schemas/final-application-schema';
+import { preliminaryUnifiedSchema } from '@/lib/forms/schemas/preliminary-unified-schema';
 import { sendApplicationEmail } from '@/lib/email';
 
-export async function submitFinalApplication(formData: Record<string, any>) {
+export async function submitPreliminaryApplication(formData: Record<string, any>) {
   try {
     // Check if the request is from a bot
     const verification = await checkBotId();
@@ -15,20 +15,30 @@ export async function submitFinalApplication(formData: Record<string, any>) {
       return { success: false, error: 'Bot detected. Access denied.' };
     }
     
-    const validatedData = finalApplicationSchema.parse(formData);
+    // Validate form data (schema will map user-friendly labels to database values)
+    const validatedData = preliminaryUnifiedSchema.parse(formData);
+    
+    // Determine the application type for database storage
+    const applicationType = validatedData.application_type;
+    const dbApplicationType = `preliminary-${applicationType}`;
+    
+    // Generate unique ID
     const applicationId = uuidv4();
     
+    // Insert into database
     await sql`
       INSERT INTO applications (id, application_type, form_data, applicant_email)
-      VALUES (${applicationId}, ${'final'}, ${JSON.stringify(validatedData)}, ${validatedData.email || null})
+      VALUES (${applicationId}, ${dbApplicationType}, ${JSON.stringify(validatedData)}, ${validatedData.email || null})
     `;
     
+    // Send email
     await sendApplicationEmail({
       applicationId,
-      applicationType: 'final',
+      applicationType: dbApplicationType,
       formData: validatedData
     });
     
+    // Update email_sent status
     await sql`
       UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = ${applicationId}
     `;
@@ -42,5 +52,3 @@ export async function submitFinalApplication(formData: Record<string, any>) {
     return { success: false, error: 'An error occurred while submitting your application.' };
   }
 }
-
-

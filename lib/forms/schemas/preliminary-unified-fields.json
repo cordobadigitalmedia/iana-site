@@ -1,0 +1,498 @@
+{
+  "formName": "Iana-Preliminary-Application-Unified",
+  "formType": "preliminary",
+  "sections": [
+    "0. Application Type",
+    "1. Personal Information",
+    "2. Loan Request",
+    "3. Financial Status",
+    "4. Information"
+  ],
+  "fields": [
+    {
+      "name": "application_type",
+      "label": "Application Type",
+      "type": "radio",
+      "required": true,
+      "section": "0. Application Type",
+      "width": "full",
+      "options": [
+        "Preliminary Application for a small, short-term, Personal/Emergency loan",
+        "Preliminary Application for an Educational loan via Iana",
+        "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      ]
+    },
+    {
+      "name": "legal_name",
+      "label": "Legal Name",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "full"
+    },
+    {
+      "name": "address",
+      "label": "Address",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half"
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "province_state",
+      "label": "Province/State",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "postal_zip_code",
+      "label": "Postal/Zip Code",
+      "type": "text",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "phone",
+      "label": "Phone",
+      "type": "tel",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "cell",
+      "label": "Cell",
+      "type": "tel",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter"
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "type": "email",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "half",
+      "note": "After you submit, a copy of your application will be sent to your email."
+    },
+    {
+      "name": "amount_requested",
+      "label": "Amount Requested",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request",
+      "width": "half"
+    },
+    {
+      "name": "expected_monthly_payment",
+      "label": "Expected Monthly Payment",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request",
+      "width": "half"
+    },
+    {
+      "name": "proposed_start_date",
+      "label": "Proposed Start Date for Loan",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request",
+      "width": "third"
+    },
+    {
+      "name": "expected_repayment_start_date",
+      "label": "Expected Date to Start Repayment",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request",
+      "width": "third"
+    },
+    {
+      "name": "expected_repayment_finish_date",
+      "label": "Expected Date to Finish Repayment",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request",
+      "width": "third"
+    },
+    {
+      "name": "loan_required_reason",
+      "label": "Why is this loan required? Please provide details on why the loan is needed, and include details about your situation.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a small, short-term, Personal/Emergency loan"
+      }
+    },
+    {
+      "name": "loan_purpose",
+      "label": "What is the purpose of this loan? Please provide details on how the loan would be used.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "loan_purpose_business",
+      "label": "What is the purpose of this loan? Please provide details on how the loan would be used.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      }
+    },
+    {
+      "name": "underlying_circumstances",
+      "label": "What do you feel are the underlying circumstances for your situation?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a small, short-term, Personal/Emergency loan"
+      }
+    },
+    {
+      "name": "avoid_similar_situation",
+      "label": "How do you plan to avoid a similar situation in future?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a small, short-term, Personal/Emergency loan"
+      }
+    },
+    {
+      "name": "current_or_planned_institution",
+      "label": "Current or Planned Institution",
+      "type": "text",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "area_of_study",
+      "label": "Area of Study",
+      "type": "text",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "date_of_graduation",
+      "label": "Date of Graduation",
+      "type": "date",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "current_student_loan_amount",
+      "label": "Current Student Loan Amount",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "student_loans_expected_upon_graduation",
+      "label": "Amount of Student Loans Expected upon Graduation",
+      "type": "number",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "how_loan_will_benefit_you",
+      "label": "How will this loan benefit you?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "how_loan_will_benefit_you_business",
+      "label": "How will this loan benefit you?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      }
+    },
+    {
+      "name": "loan_will_benefit_others",
+      "label": "Will this loan benefit others? If so, who (family, community, society, etc.) and how?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "loan_will_benefit_others_business",
+      "label": "Will this loan benefit others? If so, who (family, community, society, etc.) and how?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      }
+    },
+    {
+      "name": "why_not_conventional_student_loans",
+      "label": "Why have you chosen not to use conventional student loans?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "minimum_amount_needed",
+      "label": "Is the amount you've requested the minimum amount that you need? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "explored_other_options",
+      "label": "Have you explored other options, such as those listed on lana's website, before submitting this application? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "repayment_plan_determination",
+      "label": "How did you determine your repayment plan? Does it take into account potential life changes (marriage, children, travel, etc.), or other activities that may jeopardize your ability to repay this loan? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "unable_to_meet_repayment",
+      "label": "What would you do if you were unable to meet the terms of your repayment plan, or were late in making a payment?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a small, short-term, Personal/Emergency loan"
+      }
+    },
+    {
+      "name": "unable_to_meet_repayment_education",
+      "label": "What would you do if you were unable to meet the terms of your repayment plan, or were late in making a payment?",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "communication_responsiveness",
+      "label": "How well do you communicate? How responsive are you to email and phone? Would you be able to promptly keep lana updated about your situation or respond to inquiries from lana? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "2. Loan Request"
+    },
+    {
+      "name": "guarantor_name",
+      "label": "Do you have a guarantor willing to sign with you? If so, please provide their name.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "collateral_description",
+      "label": "Do you have collateral for this loan? If so, please describe.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "credit_check_consent",
+      "label": "Do you consent to a credit check? If not, please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "3. Financial Status"
+    },
+    {
+      "name": "completed_steps_info",
+      "label": "Have you completed Steps A through E listed on lana's website? Please share more about your situation, what led you to seek out a loan, and any other relevant information.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "decide_to_pursue_program",
+      "label": "How and why did you decide to pursue this program of study? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "decide_to_pursue_initiative",
+      "label": "How and why did you decide to pursue this initiative? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      }
+    },
+    {
+      "name": "ethical_challenges_field_of_study",
+      "label": "Every field of study poses ethical challenges on both an individual and systemic level. What are some of these ethical challenges in your preferred field of study, and how would you respond to them?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "vision_for_accomplishment",
+      "label": "What is your vision for what you will accomplish through your field of study?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "books_enjoy_reading",
+      "label": "What types of books (e.g. genre, titles, authors) do you enjoy reading, and why?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for an Educational loan via Iana"
+      }
+    },
+    {
+      "name": "business_project_plan",
+      "label": "Do you have a business/project plan that you would be willing to share with IANA? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information",
+      "conditionalShow": {
+        "field": "application_type",
+        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+      }
+    },
+    {
+      "name": "community_involvement",
+      "label": "Are you involved in your local community? Do you volunteer? Please explain.",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "views_on_economic_system",
+      "label": "Please share your views on the modern economic system (e.g. interest/usury, debt, credit cards, banks etc.). Have you considered switching from a bank to a credit union? Have you considered canceling or minimizing credit card use?",
+      "type": "textarea",
+      "required": true,
+      "section": "4. Information"
+    },
+    {
+      "name": "studied_islamic_law",
+      "label": "Have you ever studied Islamic Law (Fiqh)? Please explain.",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "financial_literacy_training",
+      "label": "Have you taken any type of financial literacy training? If so, please describe.",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information",
+      "note": "In general, a free consultation with [MuslimMoney.co](https://muslimmoney.co) or equivalent is required; in some cases a 3-month coaching program is required to ensure healthy financial management habits and systems are in place"
+    },
+    {
+      "name": "interested_in_learning_economics",
+      "label": "Are you interested in learning more about Islamic and modern economics?",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "how_found_out_about_lana",
+      "label": "How did you find out about lana?",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    },
+    {
+      "name": "iana_membership",
+      "label": "Are you or any of your family or friends members of Iana? If so, please share their name(s). All things being equal, loan priority is given to the networks of current members of Iana",
+      "type": "textarea",
+      "required": false,
+      "section": "4. Information"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { useFormAutoSave } from '@/hooks/useFormAutoSave';
 import { FormSection } from './FormSection';
 import { FormField } from './FormField';
@@ -10,6 +11,7 @@ import { DocumentUpload } from './DocumentUpload';
 import { EducationSection } from './EducationSection';
 import { VolunteerSection } from './VolunteerSection';
 import { GuarantorReferencesSection } from './GuarantorReferencesSection';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface FieldDefinition {
   name: string;
@@ -19,9 +21,10 @@ interface FieldDefinition {
   section?: string;
   options?: string[];
   placeholder?: string;
-  width?: 'full' | 'half';
+  width?: 'full' | 'half' | 'third' | 'quarter';
   rowLabel?: string;
   isTotal?: boolean;
+  note?: string;
   conditionalRequired?: {
     field: string;
     value: string;
@@ -96,16 +99,38 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
     const fieldValue = formData[conditionField];
     
     // Handle undefined/null/empty values
-    if (fieldValue === undefined || fieldValue === null) {
+    if (fieldValue === undefined || fieldValue === null || fieldValue === '') {
       return false;
     }
     
+    // Map user-friendly application type labels to database values for comparison
+    const applicationTypeMap: Record<string, string> = {
+      'Preliminary Application for a small, short-term, Personal/Emergency loan': 'personal',
+      'Preliminary Application for an Educational loan via Iana': 'education',
+      'Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community': 'business',
+    };
+    
+    // For application_type field, handle both display labels and database values
+    let normalizedFieldValue = fieldValue;
+    let normalizedConditionValue = conditionValue;
+    
+    if (conditionField === 'application_type') {
+      // Map display label to database value if needed
+      if (applicationTypeMap[fieldValue as string]) {
+        normalizedFieldValue = applicationTypeMap[fieldValue as string];
+      }
+      // Map condition value if it's a display label
+      if (applicationTypeMap[conditionValue]) {
+        normalizedConditionValue = applicationTypeMap[conditionValue];
+      }
+    }
+    
     // For checkboxes, check if the value array includes the condition value
-    if (Array.isArray(fieldValue)) {
-      const isChecked = fieldValue.length > 0 && fieldValue.includes(conditionValue);
+    if (Array.isArray(normalizedFieldValue)) {
+      const isChecked = normalizedFieldValue.length > 0 && normalizedFieldValue.includes(normalizedConditionValue);
       return isChecked;
     }
-    return fieldValue === conditionValue;
+    return normalizedFieldValue === normalizedConditionValue;
   };
 
   // Group fields by section
@@ -426,6 +451,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
               <div className="space-y-4">
                 {(() => {
                   const renderedFields: JSX.Element[] = [];
+                  const sectionNotes: string[] = [];
                   let i = 0;
                   
                   while (i < sectionFields.length) {
@@ -437,14 +463,208 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                       continue;
                     }
                     
+                    // Handle quarter width (4 fields per row, or quarter + quarter + half)
+                    if (field.width === 'quarter') {
+                      const nextField = sectionFields[i + 1];
+                      const thirdField = sectionFields[i + 2];
+                      const nextIsQuarter = nextField?.width === 'quarter';
+                      const thirdIsHalf = thirdField?.width === 'half';
+                      
+                      // Handle quarter + quarter + half (phone + cell + email)
+                      if (nextIsQuarter && thirdIsHalf && nextField && thirdField && shouldShowField(nextField) && shouldShowField(thirdField)) {
+                        renderedFields.push(
+                          <div key={`quarter-quarter-half-${i}`}>
+                            {field.note && section !== '1. Personal Information' && (
+                              <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                                <AlertDescription className="font-medium text-sm">
+                                  {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                    if (linkMatch) {
+                                      return (
+                                        <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                          {linkMatch[1]}
+                                        </Link>
+                                      );
+                                    }
+                                    return <span key={idx}>{part}</span>;
+                                  })}
+                                </AlertDescription>
+                              </Alert>
+                            )}
+                            <div className="grid grid-cols-4 gap-4">
+                              {renderField(field)}
+                              {renderField(nextField)}
+                              <div className="col-span-2">{renderField(thirdField)}</div>
+                            </div>
+                          </div>
+                        );
+                        i += 3;
+                        continue;
+                      }
+                      
+                      // Handle regular quarter grouping (up to 4 fields)
+                      const quarterFields: FieldDefinition[] = [field];
+                      let j = i + 1;
+                      while (j < sectionFields.length && quarterFields.length < 4) {
+                        const nextField = sectionFields[j];
+                        if (nextField?.width === 'quarter' && shouldShowField(nextField)) {
+                          quarterFields.push(nextField);
+                          j++;
+                        } else {
+                          break;
+                        }
+                      }
+                      
+                      renderedFields.push(
+                        <div key={`quarter-${i}`}>
+                          {field.note && section !== '1. Personal Information' && (
+                            <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                              <AlertDescription className="font-medium text-sm">
+                                {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                  const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                  if (linkMatch) {
+                                    return (
+                                      <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                        {linkMatch[1]}
+                                      </Link>
+                                    );
+                                  }
+                                  return <span key={idx}>{part}</span>;
+                                })}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                          <div className="grid grid-cols-4 gap-4">
+                            {quarterFields.map((f) => renderField(f))}
+                          </div>
+                        </div>
+                      );
+                      i += quarterFields.length;
+                      continue;
+                    }
+                    
+                    // Handle third width (3 fields per row)
+                    if (field.width === 'third') {
+                      const thirdFields: FieldDefinition[] = [field];
+                      let j = i + 1;
+                      while (j < sectionFields.length && thirdFields.length < 3) {
+                        const nextField = sectionFields[j];
+                        if (nextField?.width === 'third' && shouldShowField(nextField)) {
+                          thirdFields.push(nextField);
+                          j++;
+                        } else {
+                          break;
+                        }
+                      }
+                      
+                      renderedFields.push(
+                        <div key={`third-${i}`}>
+                          {field.note && section !== '1. Personal Information' && (
+                            <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                              <AlertDescription className="font-medium text-sm">
+                                {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                  const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                  if (linkMatch) {
+                                    return (
+                                      <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                        {linkMatch[1]}
+                                      </Link>
+                                    );
+                                  }
+                                  return <span key={idx}>{part}</span>;
+                                })}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                          <div className="grid grid-cols-3 gap-4">
+                            {thirdFields.map((f) => renderField(f))}
+                          </div>
+                        </div>
+                      );
+                      i += thirdFields.length;
+                      continue;
+                    }
+                    
+                    // Handle half width (2 fields per row, or half + quarters)
                     const nextField = sectionFields[i + 1];
                     const isHalfWidth = field.width === 'half';
                     const nextIsHalfWidth = nextField?.width === 'half';
+                    const nextIsQuarter = nextField?.width === 'quarter';
+                    
+                    // Handle half + quarter + quarter (address + city + province)
+                    if (isHalfWidth && nextIsQuarter && nextField && shouldShowField(nextField)) {
+                      const thirdField = sectionFields[i + 2];
+                      const thirdIsQuarter = thirdField?.width === 'quarter';
+                      
+                      if (thirdIsQuarter && thirdField && shouldShowField(thirdField)) {
+                        renderedFields.push(
+                          <div key={`half-quarter-quarter-${i}`}>
+                            {field.note && (
+                              <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                                <AlertDescription className="font-medium text-sm">
+                                  {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                    if (linkMatch) {
+                                      return (
+                                        <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                          {linkMatch[1]}
+                                        </Link>
+                                      );
+                                    }
+                                    return <span key={idx}>{part}</span>;
+                                  })}
+                                </AlertDescription>
+                              </Alert>
+                            )}
+                            <div className="grid grid-cols-4 gap-4">
+                              <div className="col-span-2">{renderField(field)}</div>
+                              {renderField(nextField)}
+                              {renderField(thirdField)}
+                            </div>
+                            {(nextField.note || thirdField.note) && (
+                              <Alert className="mt-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                                <AlertDescription className="font-medium text-sm">
+                                  {(nextField.note || thirdField.note)?.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                    if (linkMatch) {
+                                      return (
+                                        <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                          {linkMatch[1]}
+                                        </Link>
+                                      );
+                                    }
+                                    return <span key={idx}>{part}</span>;
+                                  })}
+                                </AlertDescription>
+                              </Alert>
+                            )}
+                          </div>
+                        );
+                        i += 3;
+                        continue;
+                      }
+                    }
                     
                     if (isHalfWidth && nextIsHalfWidth && nextField && shouldShowField(nextField)) {
-                      // Render two fields side by side with optional row label
                       renderedFields.push(
                         <div key={field.name}>
+                          {field.note && section !== '1. Personal Information' && (
+                            <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                              <AlertDescription className="font-medium text-sm">
+                                {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                  const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                  if (linkMatch) {
+                                    return (
+                                      <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                        {linkMatch[1]}
+                                      </Link>
+                                    );
+                                  }
+                                  return <span key={idx}>{part}</span>;
+                                })}
+                              </AlertDescription>
+                            </Alert>
+                          )}
                           {field.rowLabel && (
                             <label className="block text-sm font-medium mb-2">
                               {field.rowLabel}
@@ -454,13 +674,47 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                             {renderField(field)}
                             {renderField(nextField)}
                           </div>
+                          {nextField.note && section !== '1. Personal Information' && (
+                            <Alert className="mt-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                              <AlertDescription className="font-medium text-sm">
+                                {nextField.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                  const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                  if (linkMatch) {
+                                    return (
+                                      <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                        {linkMatch[1]}
+                                      </Link>
+                                    );
+                                  }
+                                  return <span key={idx}>{part}</span>;
+                                })}
+                              </AlertDescription>
+                            </Alert>
+                          )}
                         </div>
                       );
-                      i += 2; // Skip next field as it's already rendered
+                      i += 2;
                     } else {
                       // Render single field (full width)
                       renderedFields.push(
                         <div key={field.name}>
+                          {field.note && section !== '1. Personal Information' && (
+                            <Alert className="mb-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                              <AlertDescription className="font-medium text-sm">
+                                {field.note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                                  const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                                  if (linkMatch) {
+                                    return (
+                                      <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                        {linkMatch[1]}
+                                      </Link>
+                                    );
+                                  }
+                                  return <span key={idx}>{part}</span>;
+                                })}
+                              </AlertDescription>
+                            </Alert>
+                          )}
                           {field.rowLabel && (
                             <label className="block text-sm font-medium mb-1">
                               {field.rowLabel}
@@ -471,6 +725,38 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                       );
                       i += 1;
                     }
+                  }
+                  
+                  // Collect notes from all fields in Personal Information section
+                  if (section === '1. Personal Information') {
+                    sectionFields.forEach((field) => {
+                      if (shouldShowField(field) && field.note && !sectionNotes.includes(field.note)) {
+                        sectionNotes.push(field.note);
+                      }
+                    });
+                  }
+                  
+                  // Render notes at the bottom of Personal Information section
+                  if (section === '1. Personal Information' && sectionNotes.length > 0) {
+                    sectionNotes.forEach((note, noteIdx) => {
+                      renderedFields.push(
+                        <Alert key={`section-note-${noteIdx}`} className="mt-4 bg-blue-50 border-blue-200 border-2 dark:bg-blue-950 dark:border-blue-800">
+                          <AlertDescription className="font-medium text-sm">
+                            {note.split(/(\[.*?\]\(.*?\))/g).map((part, idx) => {
+                              const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+                              if (linkMatch) {
+                                return (
+                                  <Link key={idx} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 font-semibold">
+                                    {linkMatch[1]}
+                                  </Link>
+                                );
+                              }
+                              return <span key={idx}>{part}</span>;
+                            })}
+                          </AlertDescription>
+                        </Alert>
+                      );
+                    });
                   }
                   
                   return renderedFields;
@@ -498,6 +784,10 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
       <div className="flex items-center justify-between">
         <AutoSaveIndicator lastSaved={lastSaved} />
         <FormSubmitButton isSubmitting={isSubmitting} />
+      </div>
+
+      <div className="mt-4 text-center text-sm text-muted-foreground">
+        <p>Thank you for submitting your application. Our team will review it carefully and respond to you as soon as possible, insha'Allah.</p>
       </div>
     </form>
   );
