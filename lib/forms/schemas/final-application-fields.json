@@ -30,7 +30,7 @@
       "type": "text",
       "required": true,
       "section": "Personal Information",
-      "width": "full"
+      "width": "half"
     },
     {
       "name": "city",
@@ -38,7 +38,7 @@
       "type": "text",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "province_state",
@@ -46,7 +46,7 @@
       "type": "text",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "country",
@@ -54,7 +54,7 @@
       "type": "text",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "postal_zip_code",
@@ -62,7 +62,7 @@
       "type": "text",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "phone",
@@ -70,7 +70,7 @@
       "type": "tel",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "cell",
@@ -78,7 +78,7 @@
       "type": "tel",
       "required": true,
       "section": "Personal Information",
-      "width": "half"
+      "width": "quarter"
     },
     {
       "name": "email",
@@ -86,7 +86,8 @@
       "type": "email",
       "required": true,
       "section": "Personal Information",
-      "width": "full"
+      "width": "half",
+      "note": "After you submit, a copy of your application will be sent to your email."
     },
     {
       "name": "sin",
@@ -131,35 +132,40 @@
       "label": "Amount requested",
       "type": "number",
       "required": true,
-      "section": "Confirmation of Loan Terms"
-    },
-    {
-      "name": "proposed_start_date",
-      "label": "Proposed start date",
-      "type": "date",
-      "required": true,
-      "section": "Confirmation of Loan Terms"
-    },
-    {
-      "name": "expected_repayment_start_date",
-      "label": "Expected date to start repayment",
-      "type": "date",
-      "required": true,
-      "section": "Confirmation of Loan Terms"
+      "section": "Confirmation of Loan Terms",
+      "width": "half"
     },
     {
       "name": "expected_monthly_payment",
       "label": "Expected monthly payment",
       "type": "number",
       "required": true,
-      "section": "Confirmation of Loan Terms"
+      "section": "Confirmation of Loan Terms",
+      "width": "half"
+    },
+    {
+      "name": "proposed_start_date",
+      "label": "Proposed start date",
+      "type": "date",
+      "required": true,
+      "section": "Confirmation of Loan Terms",
+      "width": "third"
+    },
+    {
+      "name": "expected_repayment_start_date",
+      "label": "Expected date to start repayment",
+      "type": "date",
+      "required": true,
+      "section": "Confirmation of Loan Terms",
+      "width": "third"
     },
     {
       "name": "expected_repayment_finish_date",
       "label": "Expected date to finish repayment",
       "type": "date",
       "required": true,
-      "section": "Confirmation of Loan Terms"
+      "section": "Confirmation of Loan Terms",
+      "width": "third"
     },
     {
       "name": "loan_type",
@@ -954,14 +960,14 @@
     },
     {
       "name": "bank_statements",
-      "label": "Bank/credit union statements",
+      "label": "Bank/credit union statements (Past three months for each account)",
       "type": "file",
       "required": true,
       "section": "Required Documents"
     },
     {
       "name": "credit_card_statements",
-      "label": "Credit card statements",
+      "label": "Credit card statements (Past three months for each credit card)",
       "type": "file",
       "required": true,
       "section": "Required Documents"
@@ -1049,6 +1055,16 @@
         "field": "loan_type",
         "value": "Business/Institutional"
       }
+    },
+    {
+      "name": "testimony_pledge",
+      "label": "I testify that the information provided is, to the best of my knowledge, true and accurate. I also pledge that, if awarded a loan, I will, insha'Allah, act in good faith and do my best to honor the terms of the loan.",
+      "type": "checkbox",
+      "required": true,
+      "section": "",
+      "options": [
+        "I agree"
+      ]
     }
   ]
 }

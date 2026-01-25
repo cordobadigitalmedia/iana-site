@@ -78,7 +78,7 @@ export function SiteHeader({
                            pathname?.startsWith("/apply/")
   
   return (
-    <header className={`${backgroundCol} sticky top-0 z-40 w-full border-b relative`}>
+    <header className={`${backgroundCol} sticky top-0 z-40 w-full border-b`}>
       <div className="container flex items-center" style={{ height: headerHeight }}>
         <Link href="/" className="flex items-center gap-1 flex-shrink-0">
           {header.logo && (

@@ -4,7 +4,7 @@ import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { checkBotId } from 'botid/server';
 import { finalApplicationSchema } from '@/lib/forms/schemas/final-application-schema';
-import { sendApplicationEmail } from '@/lib/email';
+import { sendApplicationEmail, sendGuarantorEmail, sendReferenceEmail } from '@/lib/email';
 
 export async function submitFinalApplication(formData: Record<string, any>) {
   try {
@@ -28,6 +28,34 @@ export async function submitFinalApplication(formData: Record<string, any>) {
       applicationType: 'final',
       formData: validatedData
     });
+    
+    // Send email to guarantor
+    if (validatedData.guarantor_email && validatedData.guarantor_full_name && validatedData.legal_name) {
+      await sendGuarantorEmail({
+        email: validatedData.guarantor_email as string,
+        guarantorName: validatedData.guarantor_full_name as string,
+        applicantName: validatedData.legal_name as string,
+        applicationId,
+      });
+    }
+    
+    // Send emails to references
+    const references = [
+      { email: validatedData.reference1_email, name: validatedData.reference1_full_name },
+      { email: validatedData.reference2_email, name: validatedData.reference2_full_name },
+      { email: validatedData.reference3_email, name: validatedData.reference3_full_name },
+    ];
+    
+    for (const reference of references) {
+      if (reference.email && reference.name && validatedData.legal_name) {
+        await sendReferenceEmail({
+          email: reference.email as string,
+          referenceName: reference.name as string,
+          applicantName: validatedData.legal_name as string,
+          applicationId,
+        });
+      }
+    }
     
     await sql`
       UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = ${applicationId}

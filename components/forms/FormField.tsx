@@ -24,6 +24,8 @@ interface FormFieldProps {
   error?: string;
   options?: string[];
   placeholder?: string;
+  inTable?: boolean;
+  rows?: number;
 }
 
 export function FormField({
@@ -37,6 +39,8 @@ export function FormField({
   error,
   options,
   placeholder,
+  inTable = false,
+  rows,
 }: FormFieldProps) {
   const fieldId = `field-${name}`;
 
@@ -52,7 +56,9 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            rows={rows}
+            className={`${error ? 'border-red-500' : ''} ${rows === 2 ? '!min-h-0' : ''}`}
+            style={rows === 2 ? { minHeight: 'auto' } : undefined}
           />
         );
       case 'select':
@@ -64,7 +70,7 @@ export function FormField({
           >
             <SelectTrigger
               id={fieldId}
-              className={error ? 'border-red-500' : ''}
+              className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
             >
               <SelectValue placeholder={placeholder || `Select ${label}`} />
             </SelectTrigger>
@@ -88,7 +94,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
       case 'date':
@@ -101,7 +107,7 @@ export function FormField({
             onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
       case 'email':
@@ -115,7 +121,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
       case 'tel':
@@ -129,7 +135,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
       case 'checkbox':
@@ -174,6 +180,7 @@ export function FormField({
             value={value as string}
             onValueChange={onChange}
             required={required}
+            className="flex flex-wrap gap-4"
           >
             {options.map((option) => {
               const optionId = `${fieldId}-${option}`;
@@ -202,18 +209,38 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
-            className={error ? 'border-red-500' : ''}
+            className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
     }
   };
 
+  // For radio buttons, put label and field on same line
+  if (type === 'radio' && !inTable) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-4">
+          <Label htmlFor={fieldId} className="whitespace-nowrap">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </Label>
+          {renderField()}
+        </div>
+        {error && (
+          <p className="text-sm text-red-500">{error}</p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-2">
-      <Label htmlFor={fieldId}>
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </Label>
+      {!inTable && (
+        <Label htmlFor={fieldId}>
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </Label>
+      )}
       {renderField()}
       {error && (
         <p className="text-sm text-red-500">{error}</p>

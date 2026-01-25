@@ -26,7 +26,7 @@ export function GuarantorReferencesSection({ formData, onChange, errors }: Guara
             type={type}
             value={formData[fieldName] || ''}
             onChange={(e) => onChange(fieldName, e.target.value)}
-            className={`border-0 focus-visible:ring-0 focus-visible:ring-offset-0 ${errors?.[fieldName] ? 'border-red-500' : ''}`}
+            className={`bg-white border border-gray-300 focus-visible:ring-1 focus-visible:ring-offset-1 ${errors?.[fieldName] ? 'border-red-500' : ''}`}
             required={required}
           />
           {errors?.[fieldName] && (

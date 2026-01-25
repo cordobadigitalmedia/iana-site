@@ -12,6 +12,8 @@ import { EducationSection } from './EducationSection';
 import { VolunteerSection } from './VolunteerSection';
 import { GuarantorReferencesSection } from './GuarantorReferencesSection';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 interface FieldDefinition {
   name: string;
@@ -139,8 +141,11 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
     return acc;
   }, {} as Record<string, FieldDefinition[]>);
 
-  // Fields without a section
-  const fieldsWithoutSection = fields.filter((field) => !field.section);
+  // Fields without a section (excluding testimony_pledge which is rendered separately)
+  const fieldsWithoutSection = fields.filter((field) => !field.section && field.name !== 'testimony_pledge');
+  
+  // Get testimony pledge field if it exists
+  const testimonyField = fields.find((field) => field.name === 'testimony_pledge');
 
   // Helper function to get table headers
   const getTableHeaders = (section: string) => {
@@ -170,7 +175,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
   };
 
   // Helper function to render a field (handles file uploads separately)
-  const renderField = (field: FieldDefinition) => {
+  const renderField = (field: FieldDefinition, inTable: boolean = false) => {
     if (field.type === 'file') {
       return (
         <DocumentUpload
@@ -194,6 +199,8 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         error={errors[field.name]}
         options={field.options}
         placeholder={field.placeholder}
+        inTable={inTable}
+        rows={field.type === 'textarea' && field.section === '2. Loan Request' ? 2 : undefined}
       />
     );
   };
@@ -217,7 +224,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
           ? "Before submitting your final loan application, please ensure that you have uploaded all required documents. Additional documents are required for business/institutional loans and educational loans as indicated below."
           : undefined;
 
-        const isTableSection = section === 'Assets' || section === 'Total Liabilities' || section === 'Monthly Living Expenses';
+        const isTableSection = section === 'Assets' || section === 'Total Liabilities' || section === 'Monthly Living Expenses' || section === 'Financial Status';
 
         return (
           <FormSection 
@@ -278,7 +285,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                     if (isHalfWidth && nextIsHalfWidth && shouldShowField(nextField)) {
                       // Render two fields side by side with optional row label
                       if (section === 'Assets') {
-                        // Assets: 3 columns - Label | Amount | Type
+                        // Assets: 3 columns - Label | Amount (label + input on same line) | Type (label + input on same line)
                         renderedFields.push(
                           <div key={field.name} className="border-b border-gray-300">
                             <div className="grid grid-cols-3 divide-x divide-gray-300">
@@ -289,11 +296,64 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                                   </label>
                                 )}
                               </div>
-                              <div className="p-4">
-                                {renderField(field)}
+                              <div className="p-4 bg-gray-50">
+                                <div className="flex items-center gap-2">
+                                  <label htmlFor={`field-${field.name}`} className="text-sm font-medium whitespace-nowrap">
+                                    {field.label}
+                                    {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+                                  </label>
+                                  <div className="flex-1">
+                                    {renderField(field, true)}
+                                  </div>
+                                </div>
+                                {errors[field.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
+                                )}
                               </div>
-                              <div className="p-4">
-                                {renderField(nextField)}
+                              <div className="p-4 bg-gray-50">
+                                <div className="flex items-center gap-2">
+                                  <label htmlFor={`field-${nextField.name}`} className="text-sm font-medium whitespace-nowrap">
+                                    {nextField.label}
+                                    {isFieldRequired(nextField) && <span className="text-red-500 ml-1">*</span>}
+                                  </label>
+                                  <div className="flex-1">
+                                    {renderField(nextField, true)}
+                                  </div>
+                                </div>
+                                {errors[nextField.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[nextField.name]}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      } else if (section === 'Total Liabilities') {
+                        // Total Liabilities: Single row with label + input on left, just input on right
+                        renderedFields.push(
+                          <div key={field.name} className="border-b border-gray-300">
+                            <div className="grid grid-cols-2 divide-x divide-gray-300">
+                              {/* Left column: rowLabel + Amount owing input on same line */}
+                              <div className="p-4 bg-gray-50">
+                                <div className="flex items-center gap-2">
+                                  {field.rowLabel && (
+                                    <label className="text-sm font-medium whitespace-nowrap">
+                                      {field.rowLabel}
+                                    </label>
+                                  )}
+                                  <div className="flex-1">
+                                    {renderField(field, true)}
+                                  </div>
+                                </div>
+                                {errors[field.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
+                                )}
+                              </div>
+                              {/* Right column: Just Monthly payment input (no label) */}
+                              <div className="p-4 bg-gray-50">
+                                {renderField(nextField, true)}
+                                {errors[nextField.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[nextField.name]}</p>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -320,17 +380,18 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                       }
                       i += 2; // Skip next field as it's already rendered
                     } else {
-                      // Render single field (full width) - for Monthly Living Expenses
+                      // Render single field (full width) - for Monthly Living Expenses and Financial Status
                       renderedFields.push(
                         <div key={field.name} className="border-b border-gray-300">
                           <div className="grid grid-cols-2 divide-x divide-gray-300">
-                            <div className="p-4">
+                            <div className="p-4 bg-gray-50">
                               <label className="block text-sm font-medium">
                                 {field.label}
+                                {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
                               </label>
                             </div>
                             <div className="p-4">
-                              {renderField(field)}
+                              {renderField(field, section === 'Financial Status' || section === 'Monthly Living Expenses')}
                             </div>
                           </div>
                         </div>
@@ -355,7 +416,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               )}
                             </div>
                             <div className="p-4">
-                              {renderField(totalField)}
+                              {renderField(totalField, true)}
                             </div>
                             <div className="p-4"></div>
                           </div>
@@ -368,16 +429,30 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                       renderedFields.push(
                         <div key="liabilities-total" className="border-t-2 border-gray-400 bg-gray-50">
                           <div className="grid grid-cols-2 divide-x divide-gray-300">
-                            <div className="p-4">
-                              {totalAmountField?.rowLabel && (
-                                <label className="block text-sm font-semibold mb-2">
-                                  {totalAmountField.rowLabel}
-                                </label>
+                            {/* Left column: rowLabel + Total Amount owing input on same line */}
+                            <div className="p-4 bg-gray-50">
+                              {totalAmountField && (
+                                <div className="flex items-center gap-2">
+                                  {totalAmountField.rowLabel && (
+                                    <label className="text-sm font-semibold whitespace-nowrap">
+                                      {totalAmountField.rowLabel}
+                                    </label>
+                                  )}
+                                  <div className="flex-1">
+                                    {renderField(totalAmountField, true)}
+                                  </div>
+                                </div>
                               )}
-                              {totalAmountField && renderField(totalAmountField)}
+                              {totalAmountField && errors[totalAmountField.name] && (
+                                <p className="text-sm text-red-500 mt-1">{errors[totalAmountField.name]}</p>
+                              )}
                             </div>
-                            <div className="p-4">
-                              {totalPaymentField && renderField(totalPaymentField)}
+                            {/* Right column: Just Total Monthly payment input (no label) */}
+                            <div className="p-4 bg-gray-50">
+                              {totalPaymentField && renderField(totalPaymentField, true)}
+                              {totalPaymentField && errors[totalPaymentField.name] && (
+                                <p className="text-sm text-red-500 mt-1">{errors[totalPaymentField.name]}</p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -394,7 +469,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               </label>
                             </div>
                             <div className="p-4">
-                              {renderField(totalField)}
+                              {renderField(totalField, true)}
                             </div>
                           </div>
                         </div>
@@ -535,7 +610,9 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                             </Alert>
                           )}
                           <div className="grid grid-cols-4 gap-4">
-                            {quarterFields.map((f) => renderField(f))}
+                            {quarterFields.map((f) => (
+                              <div key={f.name}>{renderField(f)}</div>
+                            ))}
                           </div>
                         </div>
                       );
@@ -577,7 +654,9 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                             </Alert>
                           )}
                           <div className="grid grid-cols-3 gap-4">
-                            {thirdFields.map((f) => renderField(f))}
+                            {thirdFields.map((f) => (
+                              <div key={f.name}>{renderField(f)}</div>
+                            ))}
                           </div>
                         </div>
                       );
@@ -727,7 +806,8 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                     }
                   }
                   
-                  // Collect notes from all fields in Personal Information section
+                  // Collect notes from all fields in Personal Information section (only for preliminary)
+                  // For final application "Personal Information", notes show inline above fields
                   if (section === '1. Personal Information') {
                     sectionFields.forEach((field) => {
                       if (shouldShowField(field) && field.note && !sectionNotes.includes(field.note)) {
@@ -736,7 +816,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                     });
                   }
                   
-                  // Render notes at the bottom of Personal Information section
+                  // Render notes at the bottom of Personal Information section (only for preliminary)
                   if (section === '1. Personal Information' && sectionNotes.length > 0) {
                     sectionNotes.forEach((note, noteIdx) => {
                       renderedFields.push(
@@ -781,13 +861,39 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         <div className="text-red-500 text-sm">{errors.submit}</div>
       )}
 
+      {testimonyField && (
+        <div className="mb-6 p-4 border rounded-lg bg-muted/50">
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id={`field-${testimonyField.name}`}
+              checked={Array.isArray(formData[testimonyField.name]) && formData[testimonyField.name].includes('I agree')}
+              onCheckedChange={(checked) => {
+                handleFieldChange(testimonyField.name, checked ? ['I agree'] : []);
+              }}
+              required={isFieldRequired(testimonyField)}
+              className="mt-1"
+            />
+            <Label
+              htmlFor={`field-${testimonyField.name}`}
+              className="text-sm font-normal cursor-pointer flex-1 leading-relaxed"
+            >
+              {testimonyField.label}
+              {isFieldRequired(testimonyField) && <span className="text-red-500 ml-1">*</span>}
+            </Label>
+          </div>
+          {errors[testimonyField.name] && (
+            <p className="text-sm text-red-500 mt-2 ml-7">{errors[testimonyField.name]}</p>
+          )}
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <AutoSaveIndicator lastSaved={lastSaved} />
         <FormSubmitButton isSubmitting={isSubmitting} />
       </div>
 
       <div className="mt-4 text-center text-sm text-muted-foreground">
-        <p>Thank you for submitting your application. Our team will review it carefully and respond to you as soon as possible, insha'Allah.</p>
+        <p>Thank you for submitting your application. Our team will review it carefully and respond to you as soon as possible, insha&apos;Allah.</p>
       </div>
     </form>
   );

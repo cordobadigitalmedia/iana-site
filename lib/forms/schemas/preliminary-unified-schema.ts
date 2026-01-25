@@ -64,9 +64,9 @@ const applicationTypeMap: Record<string, string> = {
 // Create refined schema that validates conditionally based on application_type
 export const preliminaryUnifiedSchema = baseSchema.superRefine((data, ctx) => {
   // Map display label to database value
-  let applicationType = data.application_type;
-  if (applicationType && applicationTypeMap[applicationType]) {
-    applicationType = applicationTypeMap[applicationType];
+  let applicationType = data.application_type as string | undefined;
+  if (applicationType && typeof applicationType === 'string' && applicationTypeMap[applicationType as keyof typeof applicationTypeMap]) {
+    applicationType = applicationTypeMap[applicationType as keyof typeof applicationTypeMap];
     // Update the data object with the mapped value for storage
     (data as any).application_type = applicationType;
   }

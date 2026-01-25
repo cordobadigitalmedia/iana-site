@@ -3,11 +3,13 @@ import { readNav } from "@/lib/content/nav";
 import { readHeader } from "@/lib/content/header";
 import { readFooter } from "@/lib/content/footer";
 import { readPageContent } from "@/lib/content/pages";
+import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { ApplicationIntro } from "@/components/forms/ApplicationIntro";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface FieldDefinition {
   name: string;
@@ -77,6 +79,11 @@ export async function PreliminaryApplicationPage({
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         <div className="grow container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
+            <div className="mb-4">
+              <Link href="/start-applying">
+                <Button variant="outline">Back to Application Home</Button>
+              </Link>
+            </div>
             <Card className="border-2">
               <CardContent className="p-8">
                 <h1 className="text-3xl font-bold mb-6">{title}</h1>

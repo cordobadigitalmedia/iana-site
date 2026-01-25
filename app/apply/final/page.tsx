@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { readNav } from "@/lib/content/nav";
 import { readHeader } from "@/lib/content/header";
 import { readFooter } from "@/lib/content/footer";
+import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { submitFinalApplication } from "./actions";
 import fieldDefinitions from "@/lib/forms/schemas/final-application-fields.json";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 type FieldDefinition = {
   name: string;
@@ -50,6 +52,11 @@ export default async function FinalApplicationPage() {
       <div className="flex min-h-[calc(100vh-65px)] flex-col">
         <div className="grow container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
+            <div className="mb-4">
+              <Link href="/start-applying">
+                <Button variant="outline">Back to Application Home</Button>
+              </Link>
+            </div>
             <Card className="border-2">
               <CardContent className="p-8">
                 <h1 className="text-3xl font-bold mb-6">Final Interest-Free Loan Application</h1>
