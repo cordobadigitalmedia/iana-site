@@ -29,12 +29,17 @@ export async function submitFinalApplication(formData: Record<string, any>) {
       formData: validatedData
     });
     
+    const applicantName = [validatedData.first_name, validatedData.middle_name, validatedData.last_name]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+
     // Send email to guarantor
-    if (validatedData.guarantor_email && validatedData.guarantor_full_name && validatedData.legal_name) {
+    if (validatedData.guarantor_email && validatedData.guarantor_full_name && applicantName) {
       await sendGuarantorEmail({
         email: validatedData.guarantor_email as string,
         guarantorName: validatedData.guarantor_full_name as string,
-        applicantName: validatedData.legal_name as string,
+        applicantName,
         applicationId,
       });
     }
@@ -47,11 +52,11 @@ export async function submitFinalApplication(formData: Record<string, any>) {
     ];
     
     for (const reference of references) {
-      if (reference.email && reference.name && validatedData.legal_name) {
+      if (reference.email && reference.name && applicantName) {
         await sendReferenceEmail({
           email: reference.email as string,
           referenceName: reference.name as string,
-          applicantName: validatedData.legal_name as string,
+          applicantName,
           applicationId,
         });
       }

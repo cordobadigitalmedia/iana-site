@@ -47,6 +47,14 @@ function buildSchemaFromFields(fields: typeof fieldDefinitions.fields) {
     schemaObject[field.name] = fieldSchema;
   }
 
+  // Credit cards: repeating rows with amount, description (optional), monthly payment
+  const creditCardRowSchema = z.object({
+    amount_owing: z.union([z.coerce.number(), z.literal('')]).optional(),
+    description: z.string().optional(),
+    monthly_payment: z.union([z.coerce.number(), z.literal('')]).optional(),
+  });
+  schemaObject.credit_cards = z.array(creditCardRowSchema).default([]).optional();
+
   // Create base schema
   const baseSchema = z.object(schemaObject);
 

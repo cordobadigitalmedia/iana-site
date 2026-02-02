@@ -57,8 +57,8 @@ const baseSchema = buildSchemaFromFields(fieldDefinitions.fields);
 // Map user-friendly labels to database values
 const applicationTypeMap: Record<string, string> = {
   'Preliminary Application for a small, short-term, Personal/Emergency loan': 'personal',
-  'Preliminary Application for an Educational loan via Iana': 'education',
-  'Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community': 'business',
+  'Preliminary Application for an Educational loan': 'education',
+  'Preliminary Application for a Business or Institutional loan': 'business',
 };
 
 // Create refined schema that validates conditionally based on application_type

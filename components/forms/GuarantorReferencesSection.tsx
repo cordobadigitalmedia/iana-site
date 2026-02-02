@@ -12,8 +12,8 @@ interface GuarantorReferencesSectionProps {
 export function GuarantorReferencesSection({ formData, onChange, errors }: GuarantorReferencesSectionProps) {
   const renderTableRow = (label: string, fieldName: string, type: 'text' | 'email' | 'tel' = 'text', required = false) => {
     return (
-      <div className="grid grid-cols-2 border-b border-gray-300">
-        <div className="p-3 bg-gray-50 border-r border-gray-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 border-b border-gray-300">
+        <div className="p-3 bg-gray-50 md:border-r border-gray-300">
           <Label htmlFor={fieldName} className="font-normal">
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}

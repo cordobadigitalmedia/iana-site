@@ -149,7 +149,7 @@ export function EducationSection({ formData, onChange, errors }: EducationSectio
               )}
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor={`education_program_${index + 1}`}>
                   Program:

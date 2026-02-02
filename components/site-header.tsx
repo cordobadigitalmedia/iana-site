@@ -77,58 +77,72 @@ export function SiteHeader({
   const isApplicationPage = pathname?.startsWith("/start-applying") || 
                            pathname?.startsWith("/apply/")
   
+  const BismallahSalawat = () => (
+    <div className="flex flex-row items-center justify-center gap-2 md:gap-4">
+      <div
+        className="font-scheherazade text-lg md:text-2xl text-white"
+        style={{ fontFeatureSettings: '"liga" 1, "calt" 1' }}
+      >
+        {"\uFDFA"}
+      </div>
+      <div
+        className="font-noto_naskh text-lg md:text-2xl leading-relaxed text-white"
+        style={{ fontFeatureSettings: '"liga" 1, "calt" 1', lineHeight: "1.2" }}
+      >
+        {"\uFDFD"}
+      </div>
+    </div>
+  )
+
   return (
-    <header className={`${backgroundCol} sticky top-0 z-40 w-full border-b`}>
-      <div className="container flex items-center" style={{ height: headerHeight }}>
-        <Link href="/" className="flex items-center gap-1 flex-shrink-0">
-          {header.logo && (
-            <div
-              style={{
-                position: "relative",
-                width: logoWidth,
-                height: logoHeight,
-              }}
-            >
-              <Image
-                src={header.logo}
-                alt={header.siteTitle || ""}
-                fill
-                style={{
-                  objectFit: "contain",
-                }}
-              />
+    <header
+      className={`${backgroundCol} sticky top-0 z-40 w-full border-b`}
+      style={
+        {
+          "--logo-w": `${logoWidth}px`,
+          "--logo-h": `${logoHeight}px`,
+          "--header-h": headerHeight,
+        } as React.CSSProperties
+      }
+    >
+      <div
+        className={`container flex ${isApplicationPage ? "flex-col md:flex-row md:items-center md:h-[var(--header-h)]" : "flex items-center"}`}
+        style={isApplicationPage ? undefined : { height: headerHeight }}
+      >
+        {/* Top row: logo + (bismallah/salawat on md+) + nav */}
+        <div
+          className={`flex w-full items-center flex-shrink-0 ${isApplicationPage ? "min-h-14 md:flex-1 md:min-h-0" : ""}`}
+          style={!isApplicationPage ? { height: headerHeight } : undefined}
+        >
+          {/* Spacer on mobile (app pages only) to center the logo */}
+          {isApplicationPage && (
+            <div className="flex-1 min-w-0 md:flex-none md:w-0" aria-hidden />
+          )}
+          <Link href="/" className="flex items-center gap-1 flex-shrink-0">
+            {header.logo && (
+              <div
+                className="relative shrink-0 min-w-[6rem] min-h-[2.5rem] w-24 h-10 md:min-w-[var(--logo-w)] md:min-h-[var(--logo-h)] md:w-[var(--logo-w)] md:h-[var(--logo-h)]"
+                style={{ maxWidth: logoWidth, maxHeight: logoHeight }}
+              >
+                <Image
+                  src={header.logo}
+                  alt={header.siteTitle || ""}
+                  fill
+                  sizes="(max-width: 768px) 96px, 195px"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+            )}
+            {header.logoTitle && (
+              <div className="font-crimson">{header.logoTitle}</div>
+            )}
+          </Link>
+          {isApplicationPage && (
+            <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
+              <BismallahSalawat />
             </div>
           )}
-          {header.logoTitle && (
-            <div className="font-crimson">{header.logoTitle}</div>
-          )}
-        </Link>
-        {isApplicationPage && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-            <div className="flex flex-row items-center justify-center gap-4">
-              <div
-                className="font-scheherazade text-2xl text-white"
-                style={{
-                  fontFeatureSettings: '"liga" 1, "calt" 1',
-                }}
-              >
-                {/* Salawat Unicode: U+FDFA */}
-                {"\uFDFA"}
-              </div>
-              <div
-                className="font-noto_naskh text-2xl leading-relaxed text-white"
-                style={{
-                  fontFeatureSettings: '"liga" 1, "calt" 1',
-                  lineHeight: "1.2",
-                }}
-              >
-                {/* Bismillah Unicode: U+FDFD */}
-                {"\uFDFD"}
-              </div>
-            </div>
-          </div>
-        )}
-        <div className="flex-1 flex items-center justify-end gap-4">
+          <div className="flex-1 flex items-center justify-end gap-4">
           {Array.isArray(nav.links) && nav.links.length > 0 && (
             <div
               className={`hidden ${
@@ -235,6 +249,13 @@ export function SiteHeader({
                 <ThemeToggle />
               </div>
             )}
+          </div>
+        )}
+        </div>
+        {/* Bismallah + salawat below logo on small screens (application pages only) */}
+        {isApplicationPage && (
+          <div className="flex md:hidden items-center justify-center py-2 border-t border-white/20">
+            <BismallahSalawat />
           </div>
         )}
       </div>

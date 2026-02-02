@@ -12,6 +12,13 @@ import {
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Info } from 'lucide-react';
 
 interface FormFieldProps {
   name: string;
@@ -26,6 +33,7 @@ interface FormFieldProps {
   placeholder?: string;
   inTable?: boolean;
   rows?: number;
+  tooltip?: string;
 }
 
 export function FormField({
@@ -41,6 +49,7 @@ export function FormField({
   placeholder,
   inTable = false,
   rows,
+  tooltip,
 }: FormFieldProps) {
   const fieldId = `field-${name}`;
 
@@ -233,12 +242,36 @@ export function FormField({
     );
   }
 
+  const labelContent = (
+    <>
+      {label}
+      {required && <span className="text-red-500 ml-1">*</span>}
+      {tooltip && !inTable && (
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex ml-1.5 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded-full"
+                aria-label="More information"
+              >
+                <Info className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-xs">
+              {tooltip}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+    </>
+  );
+
   return (
     <div className="space-y-2">
       {!inTable && (
-        <Label htmlFor={fieldId}>
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+        <Label htmlFor={fieldId} className="flex items-center gap-0">
+          {labelContent}
         </Label>
       )}
       {renderField()}

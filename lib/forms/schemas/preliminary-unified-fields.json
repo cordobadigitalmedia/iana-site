@@ -18,8 +18,8 @@
       "width": "full",
       "options": [
         "Preliminary Application for a small, short-term, Personal/Emergency loan",
-        "Preliminary Application for an Educational loan via Iana",
-        "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "Preliminary Application for an Educational loan",
+        "Preliminary Application for a Business or Institutional loan"
       ]
     },
     {
@@ -154,7 +154,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -165,7 +165,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "value": "Preliminary Application for a Business or Institutional loan"
       }
     },
     {
@@ -198,7 +198,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -209,7 +209,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -220,7 +220,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -231,7 +231,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -242,7 +242,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -253,7 +253,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -264,7 +264,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "value": "Preliminary Application for a Business or Institutional loan"
       }
     },
     {
@@ -275,7 +275,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -286,7 +286,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "value": "Preliminary Application for a Business or Institutional loan"
       }
     },
     {
@@ -297,7 +297,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -340,7 +340,7 @@
       "section": "2. Loan Request",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -386,7 +386,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -397,7 +397,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "value": "Preliminary Application for a Business or Institutional loan"
       }
     },
     {
@@ -408,7 +408,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -419,7 +419,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -430,7 +430,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for an Educational loan via Iana"
+        "value": "Preliminary Application for an Educational loan"
       }
     },
     {
@@ -441,7 +441,7 @@
       "section": "4. Information",
       "conditionalShow": {
         "field": "application_type",
-        "value": "Preliminary Application for a Business or Institutional loan via Iana Independence or Iana Community"
+        "value": "Preliminary Application for a Business or Institutional loan"
       }
     },
     {

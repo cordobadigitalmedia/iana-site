@@ -92,13 +92,13 @@ export function Footer({ footer }: { footer: FooterData }) {
   const bgStyle = footer.backgroundColor ? `bg-${footer.backgroundColor}` : ""
   return (
     <footer className={`${bgStyle} mt-10`}>
-      <div className="container mx-auto px-2 py-4 md:flex md:items-center md:justify-between lg:px-4">
-        <div className="mt-8 md:mt-0">
+      <div className="container mx-auto px-2 py-2 md:py-4 md:flex md:items-center md:justify-between lg:px-4 flex flex-col items-center text-center md:flex-row md:text-left">
+        <div className="mt-4 md:mt-0">
           <p className="text-primary text-sm leading-5">
             &copy; {year} {footer.copyright}
           </p>
         </div>
-        <div className="flex justify-center md:justify-start">
+        <div className="flex justify-center md:justify-start mt-2 md:mt-0">
           <nav className="flex items-center space-x-1">
             <div className="text-primary flex h-full items-center text-sm">
               Contact us:
