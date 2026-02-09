@@ -137,7 +137,7 @@ export function VolunteerSection({ formData, onChange, errors }: VolunteerSectio
                   className="text-red-600 hover:text-red-800"
                   aria-label="Remove volunteer role"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="size-4" />
                 </button>
               )}
             </div>
@@ -250,7 +250,7 @@ export function VolunteerSection({ formData, onChange, errors }: VolunteerSectio
           onClick={addEntry}
           className="w-full"
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="size-4 mr-2" />
           Add Another Volunteer Role
         </Button>
       )}

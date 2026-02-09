@@ -5,6 +5,7 @@ import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif, Scheherazade_New, Reem_Kufi }
 import { Analytics } from "@vercel/analytics/react"
 import { BotIdClient } from "botid/client"
 
+import { ClerkProvider } from "@clerk/nextjs"
 import { ThemeProvider } from "@/components/theme-provider"
 
 // Default metadata
@@ -90,15 +91,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
             reem_kufi.variable
           }
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Analytics />
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+            <Analytics />
+          </ClerkProvider>
         </body>
       </html>
     </>

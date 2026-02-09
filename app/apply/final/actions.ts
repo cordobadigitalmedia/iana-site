@@ -4,7 +4,23 @@ import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { checkBotId } from 'botid/server';
 import { finalApplicationSchema } from '@/lib/forms/schemas/final-application-schema';
-import { sendApplicationEmail, sendGuarantorEmail, sendReferenceEmail } from '@/lib/email';
+import { randomBytes } from 'crypto';
+import {
+  sendApplicationEmail,
+  sendGuarantorLinkEmail,
+  sendReferenceLinkEmail,
+  sendApplicantAcknowledgementEmail,
+} from '@/lib/email';
+
+function generateToken(): string {
+  return randomBytes(16).toString('hex');
+}
+
+function getBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
+}
 
 export async function submitFinalApplication(formData: Record<string, any>) {
   try {
@@ -34,34 +50,51 @@ export async function submitFinalApplication(formData: Record<string, any>) {
       .join(' ')
       .trim();
 
-    // Send email to guarantor
-    if (validatedData.guarantor_email && validatedData.guarantor_full_name && applicantName) {
-      await sendGuarantorEmail({
-        email: validatedData.guarantor_email as string,
-        guarantorName: validatedData.guarantor_full_name as string,
+    const baseUrl = getBaseUrl();
+    const guarantorEmail = validatedData.guarantor_email as string | undefined;
+    if (guarantorEmail && applicantName) {
+      const token = generateToken();
+      await sql`
+        INSERT INTO response_links (application_id, role, reference_index, token, email)
+        VALUES (${applicationId}, ${'guarantor'}, ${0}, ${token}, ${guarantorEmail})
+      `;
+      await sendGuarantorLinkEmail({
         applicantName,
-        applicationId,
+        email: guarantorEmail,
+        linkUrl: `${baseUrl}/respond/guarantor/${token}`,
       });
     }
-    
-    // Send emails to references
-    const references = [
-      { email: validatedData.reference1_email, name: validatedData.reference1_full_name },
-      { email: validatedData.reference2_email, name: validatedData.reference2_full_name },
-      { email: validatedData.reference3_email, name: validatedData.reference3_full_name },
-    ];
-    
-    for (const reference of references) {
-      if (reference.email && reference.name && applicantName) {
-        await sendReferenceEmail({
-          email: reference.email as string,
-          referenceName: reference.name as string,
-          applicantName,
-          applicationId,
-        });
-      }
+
+    // Send Reference Questions email to each reference (automatic on submit)
+    const refEmails = [
+      validatedData.reference1_email,
+      validatedData.reference2_email,
+      validatedData.reference3_email,
+    ].filter((e): e is string => Boolean(e));
+
+    for (let i = 0; i < refEmails.length; i++) {
+      const email = refEmails[i];
+      if (!applicantName) continue;
+      const token = generateToken();
+      await sql`
+        INSERT INTO response_links (application_id, role, reference_index, token, email)
+        VALUES (${applicationId}, ${'reference'}, ${i + 1}, ${token}, ${email})
+      `;
+      await sendReferenceLinkEmail({
+        applicantName,
+        email,
+        linkUrl: `${baseUrl}/respond/reference/${token}`,
+      });
     }
-    
+
+    if (validatedData.email) {
+      await sendApplicantAcknowledgementEmail({
+        to: validatedData.email as string,
+        applicationId,
+        applicationType: 'final',
+      });
+    }
+
     await sql`
       UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = ${applicationId}
     `;
@@ -75,5 +108,3 @@ export async function submitFinalApplication(formData: Record<string, any>) {
     return { success: false, error: 'An error occurred while submitting your application.' };
   }
 }
-
-

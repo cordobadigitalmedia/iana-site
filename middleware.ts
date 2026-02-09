@@ -1,73 +1,53 @@
-import { NextResponse, type NextRequest } from "next/server"
+import { NextResponse, type NextRequest } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-// Define your redirects here
 const redirects = [
-  {
-    source: "/faq",
-    destination: "/faqs",
-    permanent: true,
-  },
-  {
-    source: "/award-philosophy/apply",
-    destination: "/award-philosophy",
-    permanent: true,
-  },
-  {
-    source: "/relief-organizations",
-    destination: "/resources/relief-orgs",
-    permanent: true,
-  },
-  {
-    source: "/relief-organizations/:path",
-    destination: "/resources/relief-orgs",
-    permanent: true,
-  },
-  {
-    source: "/applications",
-    destination: "/start-applying",
-    permanent: true,
-  },
-  // Add more redirects as needed
-]
+  { source: '/faq', destination: '/faqs', permanent: true },
+  { source: '/award-philosophy/apply', destination: '/award-philosophy', permanent: true },
+  { source: '/relief-organizations', destination: '/resources/relief-orgs', permanent: true },
+  { source: '/relief-organizations/:path', destination: '/resources/relief-orgs', permanent: true },
+  { source: '/applications', destination: '/start-applying', permanent: true },
+];
 
-export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
-
-  // Check for exact matches first
+function applyRedirects(request: NextRequest): NextResponse | null {
+  const path = request.nextUrl.pathname;
   for (const redirect of redirects) {
-    // Simple exact match
     if (redirect.source === path) {
-      const url = request.nextUrl.clone()
-      url.pathname = redirect.destination
-      return NextResponse.redirect(url, {
-        status: redirect.permanent ? 308 : 307,
-      })
+      const url = request.nextUrl.clone();
+      url.pathname = redirect.destination;
+      return NextResponse.redirect(url, { status: redirect.permanent ? 308 : 307 });
     }
-
-    // Handle parameterized redirects
-    if (redirect.source.includes(":slug")) {
-      const sourcePattern = redirect.source.replace(":slug", "([^/]+)")
-      const regex = new RegExp(`^${sourcePattern}$`)
-      const match = path.match(regex)
-
-      if (match) {
-        const slug = match[1]
-        const destination = redirect.destination.replace(":slug", slug)
-        const url = request.nextUrl.clone()
-        url.pathname = destination
-        return NextResponse.redirect(url, {
-          status: redirect.permanent ? 308 : 307,
-        })
+    if (redirect.source.includes(':path')) {
+      const sourcePattern = redirect.source.replace(':path', '([^/]+)');
+      const regex = new RegExp(`^${sourcePattern}$`);
+      if (regex.test(path)) {
+        const url = request.nextUrl.clone();
+        url.pathname = redirect.destination;
+        return NextResponse.redirect(url, { status: redirect.permanent ? 308 : 307 });
       }
     }
   }
-
-  return NextResponse.next()
+  return null;
 }
+
+const isAdminRoute = createRouteMatcher(['/admin(.*)']);
+
+export default clerkMiddleware(async (auth, request: NextRequest) => {
+  const redirectResponse = applyRedirects(request);
+  if (redirectResponse) return redirectResponse;
+
+  if (isAdminRoute(request)) {
+    await auth.protect();
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [
-    // Skip API routes, static files, and _next
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
   ],
-}
+};

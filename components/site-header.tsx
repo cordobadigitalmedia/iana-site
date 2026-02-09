@@ -4,6 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -76,6 +77,7 @@ export function SiteHeader({
   // Check if we're on an application page
   const isApplicationPage = pathname?.startsWith("/start-applying") || 
                            pathname?.startsWith("/apply/")
+  const isAdminPage = pathname?.startsWith("/admin")
   
   const BismallahSalawat = () => (
     <div className="flex flex-row items-center justify-center gap-2 md:gap-4">
@@ -111,17 +113,17 @@ export function SiteHeader({
       >
         {/* Top row: logo + (bismallah/salawat on md+) + nav */}
         <div
-          className={`flex w-full items-center flex-shrink-0 ${isApplicationPage ? "min-h-14 md:flex-1 md:min-h-0" : ""}`}
+          className={`flex w-full items-center shrink-0 ${isApplicationPage ? "min-h-14 md:flex-1 md:min-h-0" : ""}`}
           style={!isApplicationPage ? { height: headerHeight } : undefined}
         >
           {/* Spacer on mobile (app pages only) to center the logo */}
           {isApplicationPage && (
             <div className="flex-1 min-w-0 md:flex-none md:w-0" aria-hidden />
           )}
-          <Link href="/" className="flex items-center gap-1 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-1 shrink-0">
             {header.logo && (
               <div
-                className="relative shrink-0 min-w-[6rem] min-h-[2.5rem] w-24 h-10 md:min-w-[var(--logo-w)] md:min-h-[var(--logo-h)] md:w-[var(--logo-w)] md:h-[var(--logo-h)]"
+                className="relative shrink-0 min-w-24 min-h-10 w-24 h-10 md:min-w-[var(--logo-w)] md:min-h-[var(--logo-h)] md:w-[var(--logo-w)] md:h-[var(--logo-h)]"
                 style={{ maxWidth: logoWidth, maxHeight: logoHeight }}
               >
                 <Image
@@ -138,7 +140,7 @@ export function SiteHeader({
             )}
           </Link>
           {isApplicationPage && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
+            <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
               <BismallahSalawat />
             </div>
           )}
@@ -182,8 +184,23 @@ export function SiteHeader({
               </ul>
             </div>
           )}
-          {header.ctaButton && !isApplicationPage && (
-            <div key={header.ctaButton.link} className="flex-shrink-0">
+          {isAdminPage && (
+            <div className="shrink-0 flex items-center gap-2">
+              <Link href="/">
+                <Button variant="outline">Back to IANA site</Button>
+              </Link>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/admin" />
+              </SignedIn>
+              <SignedOut>
+                <Link href="/admin">
+                  <Button variant="default">Sign in</Button>
+                </Link>
+              </SignedOut>
+            </div>
+          )}
+          {header.ctaButton && !isApplicationPage && !isAdminPage && (
+            <div key={header.ctaButton.link} className="shrink-0">
               <Link
                 href={header.ctaButton.link || ""}
                 target={header.ctaButton.type === "relative" ? "_self" : "_blank"}

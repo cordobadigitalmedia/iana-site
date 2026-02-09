@@ -16,6 +16,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 interface FieldDefinition {
   name: string;
@@ -318,7 +319,21 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="relative">
+      {isSubmitting && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <div className="flex flex-col items-center gap-4 rounded-lg border bg-background p-8 shadow-lg">
+            <Loader2 className="size-10 animate-spin text-primary" aria-hidden />
+            <p className="text-lg font-medium">Submitting your application...</p>
+            <p className="text-sm text-muted-foreground">Please wait, do not close this page.</p>
+          </div>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className={`space-y-6 ${isSubmitting ? 'pointer-events-none select-none' : ''}`}>
       {sections.map((section) => {
         const sectionFields = fieldsBySection[section];
         if (!sectionFields || sectionFields.length === 0) return null;
@@ -1081,6 +1096,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         <p>Thank you for submitting your application. Our team will review it carefully and respond to you as soon as possible, insha&apos;Allah.</p>
       </div>
     </form>
+    </div>
   );
 }
 

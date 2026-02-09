@@ -4,7 +4,7 @@ import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { checkBotId } from 'botid/server';
 import { preliminaryUnifiedSchema } from '@/lib/forms/schemas/preliminary-unified-schema';
-import { sendApplicationEmail } from '@/lib/email';
+import { sendApplicationEmail, sendApplicantAcknowledgementEmail } from '@/lib/email';
 
 export async function submitPreliminaryApplication(formData: Record<string, any>) {
   try {
@@ -31,12 +31,19 @@ export async function submitPreliminaryApplication(formData: Record<string, any>
       VALUES (${applicationId}, ${dbApplicationType}, ${JSON.stringify(validatedData)}, ${validatedData.email || null})
     `;
     
-    // Send email
     await sendApplicationEmail({
       applicationId,
       applicationType: dbApplicationType,
       formData: validatedData
     });
+
+    if (validatedData.email) {
+      await sendApplicantAcknowledgementEmail({
+        to: validatedData.email as string,
+        applicationId,
+        applicationType: dbApplicationType,
+      });
+    }
     
     // Update email_sent status
     await sql`

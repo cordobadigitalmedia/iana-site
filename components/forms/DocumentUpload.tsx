@@ -87,7 +87,7 @@ export function DocumentUpload({
       {value ? (
         <div className="flex items-center justify-between p-3 border border-green-300 bg-green-50 rounded-md">
           <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-600" />
+            <Check className="size-4 text-green-600" />
             <span className="text-sm text-green-800">
               {fileName || 'File uploaded successfully'}
             </span>
@@ -97,7 +97,7 @@ export function DocumentUpload({
             onClick={handleRemove}
             className="text-red-600 hover:text-red-800"
           >
-            <X className="h-4 w-4" />
+            <X className="size-4" />
           </button>
         </div>
       ) : (
@@ -121,12 +121,12 @@ export function DocumentUpload({
           >
             {uploading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+                <div className="animate-spin rounded-full size-4 border-b-2 border-gray-900"></div>
                 <span className="text-sm text-gray-600">Uploading...</span>
               </>
             ) : (
               <>
-                <Upload className="h-4 w-4 text-gray-600" />
+                <Upload className="size-4 text-gray-600" />
                 <span className="text-sm text-gray-600">
                   Click to upload or drag and drop
                 </span>
@@ -138,7 +138,7 @@ export function DocumentUpload({
 
       {(error || uploadError) && (
         <div className="flex items-center gap-2 text-sm text-red-600">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className="size-4" />
           <span>{error || uploadError}</span>
         </div>
       )}

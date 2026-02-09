@@ -255,7 +255,7 @@ export function FormField({
                 className="inline-flex ml-1.5 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded-full"
                 aria-label="More information"
               >
-                <Info className="h-4 w-4" />
+                <Info className="size-4" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="top" className="max-w-xs">

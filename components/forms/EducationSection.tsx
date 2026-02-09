@@ -124,7 +124,7 @@ export function EducationSection({ formData, onChange, errors }: EducationSectio
                 className="text-red-600 hover:text-red-800"
                 aria-label="Remove institution"
               >
-                <X className="h-4 w-4" />
+                <X className="size-4" />
               </button>
             )}
           </div>
@@ -199,7 +199,7 @@ export function EducationSection({ formData, onChange, errors }: EducationSectio
           onClick={addEntry}
           className="w-full"
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="size-4 mr-2" />
           Add Another Institution
         </Button>
       )}

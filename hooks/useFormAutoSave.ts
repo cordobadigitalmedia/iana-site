@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 
 export function useFormAutoSave(
   formKey: string,
@@ -9,22 +9,27 @@ export function useFormAutoSave(
 ) {
   const storageKey = `iana-form-${formKey}`;
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  const isRestored = useRef(false);
+  const restoreAttempted = useRef(false);
 
-  // Restore data on mount
+  // Only start saving after we've run restore, so we don't overwrite localStorage with {} before restore applies
+  const [saveEnabled, setSaveEnabled] = useState(false);
+
+  // Restore data on mount (runs once)
   useEffect(() => {
-    if (isRestored.current) return;
-    
+    if (restoreAttempted.current) return;
+    restoreAttempted.current = true;
+
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
         onRestore?.(parsed);
-        isRestored.current = true;
       }
     } catch (error) {
       console.error('Error restoring form data:', error);
     }
+    // Allow saving after restore has run and (if we restored) the next render has the restored formData
+    setSaveEnabled(true);
   }, [storageKey, onRestore]);
 
   // Auto-save with debounce
@@ -42,12 +47,11 @@ export function useFormAutoSave(
     }, 1500); // 1.5 second debounce
   }, [storageKey]);
 
-  // Save on form data change
+  // Save on form data change — only after restore has run, so we never overwrite draft with empty {}
   useEffect(() => {
-    if (isRestored.current) {
-      saveToStorage(formData);
-    }
-  }, [formData, saveToStorage]);
+    if (!saveEnabled) return;
+    saveToStorage(formData);
+  }, [formData, saveToStorage, saveEnabled]);
 
   // Clear storage function
   const clearStorage = useCallback(() => {
