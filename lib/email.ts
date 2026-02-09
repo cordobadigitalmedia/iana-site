@@ -203,7 +203,7 @@ www.ianafinancial.org`;
   }
 }
 
-/** Applicant acknowledgement (dummy content for now) */
+/** Acknowledgement email to the applicant after they submit (application ID, next steps). */
 export async function sendApplicantAcknowledgementEmail({
   to,
   applicationId,

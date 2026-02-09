@@ -3,7 +3,7 @@
 import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { preliminaryPersonalSchema } from '@/lib/forms/schemas/preliminary-personal-schema';
-import { sendApplicationEmail } from '@/lib/email';
+import { sendApplicationEmail, sendApplicantAcknowledgementEmail } from '@/lib/email';
 
 export async function submitPersonalApplication(formData: Record<string, any>) {
   try {
@@ -19,12 +19,19 @@ export async function submitPersonalApplication(formData: Record<string, any>) {
       VALUES (${applicationId}, ${'preliminary-personal'}, ${JSON.stringify(validatedData)}, ${validatedData.email || null})
     `;
     
-    // Send email
     await sendApplicationEmail({
       applicationId,
       applicationType: 'preliminary-personal',
       formData: validatedData
     });
+
+    if (validatedData.email) {
+      await sendApplicantAcknowledgementEmail({
+        to: validatedData.email as string,
+        applicationId,
+        applicationType: 'preliminary-personal',
+      });
+    }
     
     // Update email_sent status
     await sql`

@@ -3,7 +3,7 @@
 import { sql } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { preliminaryEducationSchema } from '@/lib/forms/schemas/preliminary-education-schema';
-import { sendApplicationEmail } from '@/lib/email';
+import { sendApplicationEmail, sendApplicantAcknowledgementEmail } from '@/lib/email';
 
 export async function submitEducationApplication(formData: Record<string, any>) {
   try {
@@ -20,6 +20,14 @@ export async function submitEducationApplication(formData: Record<string, any>) 
       applicationType: 'preliminary-education',
       formData: validatedData
     });
+
+    if (validatedData.email) {
+      await sendApplicantAcknowledgementEmail({
+        to: validatedData.email as string,
+        applicationId,
+        applicationType: 'preliminary-education',
+      });
+    }
     
     await sql`
       UPDATE applications SET email_sent = true, email_sent_at = NOW() WHERE id = ${applicationId}
