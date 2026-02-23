@@ -257,3 +257,93 @@ www.ianafinancial.org`;
     console.error('Error sending applicant acknowledgement email:', error);
   }
 }
+
+/** Award email when loan is approved (formal approval + agreement to follow). */
+export async function sendLoanApprovedEmail({
+  to,
+  applicantName,
+  applicationId,
+}: {
+  to: string;
+  applicantName: string;
+  applicationId: string;
+}) {
+  const text = `As-salamu Alaikum ${applicantName},
+
+We are pleased to inform you that your interest-free loan application has been approved.
+
+Your Application ID: ${applicationId}
+
+A formal loan agreement will be sent to you shortly. Please review it and follow the instructions provided.
+
+We pray this support is of benefit to you and your family.
+
+Was'salam/Peace
+IANA Financial
+www.ianafinancial.org`;
+
+  const html = `
+<div style="font-family: -apple-system, sans-serif; color: rgb(0,0,0); max-width: 600px;">
+  <p>As-salamu Alaikum <strong>${applicantName}</strong>,</p>
+  <p>We are pleased to inform you that your interest-free loan application has been <strong>approved</strong>.</p>
+  <p>Your Application ID: <strong>${applicationId}</strong></p>
+  <p>A formal loan agreement will be sent to you shortly. Please review it and follow the instructions provided.</p>
+  <p>We pray this support is of benefit to you and your family.</p>
+  <p>Was'salam/Peace<br>IANA Financial<br><a href="http://www.ianafinancial.org">www.ianafinancial.org</a></p>
+</div>`;
+
+  ensureResendConfigured();
+  try {
+    const { data, error } = await resend.emails.send({
+      from: getFromAddress(),
+      to,
+      subject: `Loan approved – IANA Financial (${applicationId})`,
+      text,
+      html,
+    });
+    if (error) {
+      console.error('[Email] Loan approved email failed:', error);
+      throw new Error(`Resend: ${error.message}`);
+    }
+    console.log('[Email] Loan approved email sent to', to, '– id:', data?.id);
+  } catch (error) {
+    console.error('Error sending loan approved email:', error);
+    throw error;
+  }
+}
+
+/** Send a custom email to an applicant (admin-edited draft). Used for status emails: Invite for Full Application, Pending, Not Now. */
+export async function sendApplicantCustomEmail({
+  to,
+  subject,
+  bodyText,
+}: {
+  to: string;
+  subject: string;
+  bodyText: string;
+}): Promise<{ error?: string }> {
+  ensureResendConfigured();
+  const html = bodyText
+    .split(/\n\n+/)
+    .map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+  const wrappedHtml = `<div style="font-family: -apple-system, sans-serif; color: rgb(0,0,0); max-width: 600px;">${html}</div>`;
+  try {
+    const { data, error } = await resend.emails.send({
+      from: getFromAddress(),
+      to,
+      subject: subject.trim() || 'Message from IANA Financial',
+      text: bodyText,
+      html: wrappedHtml,
+    });
+    if (error) {
+      console.error('[Email] Applicant custom email failed:', error);
+      return { error: error.message };
+    }
+    console.log('[Email] Applicant email sent to', to, '– id:', data?.id);
+    return {};
+  } catch (error) {
+    console.error('Error sending applicant email:', error);
+    return { error: error instanceof Error ? error.message : 'Failed to send email' };
+  }
+}

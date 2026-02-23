@@ -3,7 +3,18 @@
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Button } from '@/components/ui/button';
+import { APPLICATION_STATUS_LABELS } from '@/lib/applications';
 import { updateApplicationStatus } from './actions';
+
+const STATUS_OPTIONS = [
+  'submitted',
+  'not_now',
+  'pending',
+  'invite_full_application',
+  'awaiting_final_application',
+  'awaiting_interview',
+  'approved',
+] as const;
 
 type Props = {
   applicationId: string;
@@ -34,12 +45,17 @@ export function UpdateStatusForm({ applicationId, currentStatus }: Props) {
         name="status"
         defaultValue={currentStatus}
         disabled={isPending}
-        className="rounded-md border border-input bg-background px-3 py-2 text-sm disabled:opacity-50"
+        className="rounded-md border border-input bg-background px-3 py-2 text-sm disabled:opacity-50 min-w-[11rem]"
       >
-        <option value="submitted">Submitted</option>
-        <option value="reviewed">Reviewed</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
+        {STATUS_OPTIONS.map((value) => (
+          <option key={value} value={value}>
+            {APPLICATION_STATUS_LABELS[value] ?? value}
+          </option>
+        ))}
+        {/* Legacy values may exist in DB; show if current status is one of these */}
+        {!STATUS_OPTIONS.includes(currentStatus as (typeof STATUS_OPTIONS)[number]) && (
+          <option value={currentStatus}>{APPLICATION_STATUS_LABELS[currentStatus] ?? currentStatus}</option>
+        )}
       </select>
       <Button type="submit" disabled={isPending}>
         {isPending ? 'Updating…' : 'Update status'}

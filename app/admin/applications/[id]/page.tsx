@@ -3,9 +3,18 @@ import Link from 'next/link';
 import { getAdminUser } from '@/lib/admin-auth';
 import { sql } from '@/lib/db';
 import { getOrderedFieldNames } from '@/lib/forms/field-order';
+import { getApplicantName, getApplicantPhone, getStatusLabel } from '@/lib/applications';
 import { Button } from '@/components/ui/button';
+import {
+  APPLICANT_EMAIL_TEMPLATES,
+  fillTemplate,
+  type EmailTemplateId,
+} from '@/lib/email-templates';
 import { UpdateStatusForm } from './update-status-form';
+import { ChecklistForm } from './checklist-form';
+import { EmailApplicantForm } from './email-applicant-form';
 import { FormDataView } from './form-data-view';
+import { NotesSection } from './notes-section';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,15 +23,17 @@ export default async function AdminApplicationDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const admin = await getAdminUser();
-  if (!admin || admin.role !== 'admin') {
+  const user = await getAdminUser();
+  if (!user) {
     redirect('/admin/access-denied');
   }
+  const canEdit = user.role === 'admin';
 
   const { id } = await params;
 
   const appRows = await sql`
-    SELECT id, application_type, status, submitted_at, applicant_email, form_data
+    SELECT id, application_type, status, submitted_at, applicant_email, form_data,
+           guarantor_approved, references_approved, interview_date, interview_notes, loan_approved_at
     FROM applications
     WHERE id = ${id}
     LIMIT 1
@@ -34,6 +45,11 @@ export default async function AdminApplicationDetailPage({
     submitted_at: string | null;
     applicant_email: string | null;
     form_data: Record<string, unknown>;
+    guarantor_approved: boolean | null;
+    references_approved: boolean | null;
+    interview_date: string | null;
+    interview_notes: string | null;
+    loan_approved_at: string | null;
   } | undefined;
 
   if (!app) notFound();
@@ -66,6 +82,39 @@ export default async function AdminApplicationDetailPage({
   );
   const orderedFieldNames = getOrderedFieldNames(app.application_type);
 
+  const templateIds: EmailTemplateId[] = [
+    'invite_full_application',
+    'pending',
+    'not_now',
+  ];
+  const filledTemplates = Object.fromEntries(
+    templateIds.map((tid) => {
+      const filled = fillTemplate(APPLICANT_EMAIL_TEMPLATES[tid]);
+      return [tid, { subject: filled.subject, bodyText: filled.bodyText }];
+    })
+  ) as Record<EmailTemplateId, { subject: string; bodyText: string }>;
+
+  const notesRows = await sql`
+    SELECT n.id, n.type, n.content, n.created_at, u.email AS author_email
+    FROM application_notes n
+    JOIN admin_users u ON u.id = n.admin_user_id
+    WHERE n.application_id = ${id}
+    ORDER BY n.created_at DESC
+  `;
+  const notes = (notesRows as Array<{
+    id: string;
+    type: string;
+    content: string;
+    created_at: string;
+    author_email: string | null;
+  }>).map((r) => ({
+    id: r.id,
+    type: r.type,
+    content: r.content,
+    author_email: r.author_email,
+    created_at: r.created_at,
+  }));
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-6 flex items-center gap-4">
@@ -76,14 +125,51 @@ export default async function AdminApplicationDetailPage({
 
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">Application {app.id.slice(0, 8)}…</h1>
-        <p className="text-muted-foreground">
-          Type: {app.application_type} · Status: {app.status} · Submitted:{' '}
+        <p className="text-muted-foreground mb-1">
+          <strong>Applicant:</strong> {getApplicantName(formData)} · {getApplicantPhone(formData)}
+        </p>
+        <p className="text-muted-foreground mb-1">
+          Type: {app.application_type} · Status: {getStatusLabel(app.status)} · Submitted:{' '}
           {app.submitted_at ? new Date(app.submitted_at).toLocaleString() : '—'}
         </p>
-        <p className="text-muted-foreground">Applicant email: {app.applicant_email ?? '—'}</p>
+        <p className="text-muted-foreground">Email: {app.applicant_email ?? '—'}</p>
 
-        <UpdateStatusForm key={app.status} applicationId={id} currentStatus={app.status} />
+        {canEdit && (
+          <UpdateStatusForm key={app.status} applicationId={id} currentStatus={app.status} />
+        )}
       </div>
+
+      {canEdit && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Email applicant</h2>
+          <EmailApplicantForm
+            applicationId={id}
+            applicantEmail={app.applicant_email}
+            currentStatus={app.status}
+            templates={filledTemplates}
+          />
+        </section>
+      )}
+
+      {canEdit && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Checklist</h2>
+          <ChecklistForm
+            applicationId={id}
+            applicationType={app.application_type}
+            guarantorApproved={app.guarantor_approved ?? false}
+            referencesApproved={app.references_approved ?? false}
+            interviewDate={app.interview_date}
+            interviewNotes={app.interview_notes}
+            loanApprovedAt={app.loan_approved_at}
+          />
+        </section>
+      )}
+
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Notes & comments</h2>
+        <NotesSection applicationId={id} notes={notes} canEdit={canEdit} />
+      </section>
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Form data</h2>
