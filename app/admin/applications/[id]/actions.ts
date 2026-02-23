@@ -15,6 +15,8 @@ export async function updateApplicationStatus(applicationId: string, formData: F
 
   const status = formData.get('status') as string | null;
   const allowed = [
+    'submitted',
+    'not_now',
     'pending',
     'invite_full_application',
     'awaiting_final_application',
