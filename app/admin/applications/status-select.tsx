@@ -40,7 +40,7 @@ export function StatusSelect({ applicationId, currentStatus }: Props) {
       value={currentStatus}
       onChange={handleChange}
       disabled={isPending}
-      className="rounded-md border border-input bg-background px-2 py-1.5 text-sm disabled:opacity-50 min-w-[10rem] w-full max-w-[12rem]"
+      className="rounded-md border border-input bg-background px-2 py-1.5 text-sm disabled:opacity-50 min-w-40 w-full max-w-48"
       aria-label="Change status"
     >
       {STATUS_OPTIONS.map((value) => (

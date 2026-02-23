@@ -15,6 +15,7 @@ import { ChecklistForm } from './checklist-form';
 import { EmailApplicantForm } from './email-applicant-form';
 import { FormDataView } from './form-data-view';
 import { NotesSection } from './notes-section';
+import { DocumentPreviewLink } from './document-preview-dialog';
 
 export const dynamic = 'force-dynamic';
 
@@ -187,14 +188,13 @@ export default async function AdminApplicationDetailPage({
           <ul className="list-disc list-inside space-y-1">
             {fileKeys.map((key) => (
               <li key={key}>
-                <a
-                  href={formData[key] as string}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <DocumentPreviewLink
+                  label={key.replace(/_/g, ' ')}
+                  url={formData[key] as string}
                   className="text-primary hover:underline"
                 >
-                  {key.replace(/_/g, ' ')} (open)
-                </a>
+                  {key.replace(/_/g, ' ')} (preview)
+                </DocumentPreviewLink>
               </li>
             ))}
           </ul>
@@ -233,14 +233,13 @@ export default async function AdminApplicationDetailPage({
                     )}
                     {link.document_url && (
                       <p className="mt-2">
-                        <a
-                          href={link.document_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <DocumentPreviewLink
+                          label={link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'}
+                          url={link.document_url}
                           className="text-primary hover:underline text-sm"
                         >
-                          {link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'} (open)
-                        </a>
+                          {link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'} (preview)
+                        </DocumentPreviewLink>
                       </p>
                     )}
                   </>

@@ -45,7 +45,7 @@ export function UpdateStatusForm({ applicationId, currentStatus }: Props) {
         name="status"
         defaultValue={currentStatus}
         disabled={isPending}
-        className="rounded-md border border-input bg-background px-3 py-2 text-sm disabled:opacity-50 min-w-[11rem]"
+        className="rounded-md border border-input bg-background px-3 py-2 text-sm disabled:opacity-50 min-w-44"
       >
         {STATUS_OPTIONS.map((value) => (
           <option key={value} value={value}>
