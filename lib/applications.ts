@@ -40,6 +40,18 @@ export function getStatusLabel(status: string): string {
   return APPLICATION_STATUS_LABELS[status] ?? status;
 }
 
+/** Human-readable application type for display. */
+export const APPLICATION_TYPE_LABELS: Record<string, string> = {
+  'preliminary-personal': 'Preliminary – Personal/Emergency',
+  'preliminary-education': 'Preliminary – Education',
+  'preliminary-business': 'Preliminary – Business/Institutional',
+  final: 'Final Interest-Free Loan Application',
+};
+
+export function getApplicationTypeLabel(type: string): string {
+  return APPLICATION_TYPE_LABELS[type] ?? type;
+}
+
 /** One row per applicant (grouped by email) for checklist table. */
 export type ApplicantRow = {
   applicantEmail: string | null;

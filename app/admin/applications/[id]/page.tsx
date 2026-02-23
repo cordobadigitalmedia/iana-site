@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getAdminUser } from '@/lib/admin-auth';
 import { sql } from '@/lib/db';
 import { getOrderedFieldNames } from '@/lib/forms/field-order';
-import { getApplicantName, getApplicantPhone, getStatusLabel } from '@/lib/applications';
+import { getApplicantName, getApplicantPhone, getStatusLabel, getApplicationTypeLabel } from '@/lib/applications';
 import { Button } from '@/components/ui/button';
 import {
   APPLICANT_EMAIL_TEMPLATES,
@@ -16,6 +16,7 @@ import { EmailApplicantForm } from './email-applicant-form';
 import { FormDataView } from './form-data-view';
 import { NotesSection } from './notes-section';
 import { DocumentPreviewLink } from './document-preview-dialog';
+import { ApplicationDetailAccordion, type SectionSpec } from './application-detail-accordion';
 
 export const dynamic = 'force-dynamic';
 
@@ -116,6 +117,147 @@ export default async function AdminApplicationDetailPage({
     created_at: r.created_at,
   }));
 
+  const applicationTypeLabel = getApplicationTypeLabel(app.application_type);
+
+  const sections: SectionSpec[] = [
+    { value: 'overview', title: 'Overview' },
+    ...(canEdit ? [{ value: 'email', title: 'Email applicant' }] : []),
+    ...(canEdit ? [{ value: 'checklist', title: 'Checklist' }] : []),
+    { value: 'form', title: 'Form data' },
+    ...(fileKeys.length > 0 ? [{ value: 'documents', title: 'Application documents' }] : []),
+    ...(app.application_type === 'final' && linkRows.length > 0
+      ? [{ value: 'guarantor-refs', title: 'Guarantor & references' }]
+      : []),
+    { value: 'notes', title: 'Notes & comments' },
+  ];
+
+  const overviewContent = (
+    <div className="space-y-4">
+      <p className="text-muted-foreground">
+        <strong>Applicant:</strong> {getApplicantName(formData)} · {getApplicantPhone(formData)}
+      </p>
+      <p className="text-muted-foreground">
+        <strong>Status:</strong> {getStatusLabel(app.status)} ·{' '}
+        <strong>Submitted:</strong>{' '}
+        {app.submitted_at ? new Date(app.submitted_at).toLocaleString() : '—'}
+      </p>
+      <p className="text-muted-foreground">
+        <strong>Email:</strong> {app.applicant_email ?? '—'}
+      </p>
+      {canEdit && (
+        <UpdateStatusForm key={app.status} applicationId={id} currentStatus={app.status} />
+      )}
+    </div>
+  );
+
+  const emailContent = canEdit ? (
+    <EmailApplicantForm
+      applicationId={id}
+      applicantEmail={app.applicant_email}
+      currentStatus={app.status}
+      templates={filledTemplates}
+    />
+  ) : null;
+
+  const checklistContent = canEdit ? (
+    <ChecklistForm
+      applicationId={id}
+      applicationType={app.application_type}
+      guarantorApproved={app.guarantor_approved ?? false}
+      referencesApproved={app.references_approved ?? false}
+      interviewDate={app.interview_date}
+      interviewNotes={app.interview_notes}
+      loanApprovedAt={app.loan_approved_at}
+    />
+  ) : null;
+
+  const formContent = (
+    <FormDataView
+      formData={formData}
+      fileKeys={fileKeys}
+      applicationId={id}
+      orderedFieldNames={orderedFieldNames}
+    />
+  );
+
+  const documentsContent =
+    fileKeys.length > 0 ? (
+      <ul className="list-disc list-inside space-y-1">
+        {fileKeys.map((key) => (
+          <li key={key}>
+            <DocumentPreviewLink
+              label={key.replace(/_/g, ' ')}
+              url={formData[key] as string}
+              className="text-primary hover:underline"
+            >
+              {key.replace(/_/g, ' ')} (preview)
+            </DocumentPreviewLink>
+          </li>
+        ))}
+      </ul>
+    ) : null;
+
+  const guarantorRefsContent =
+    app.application_type === 'final' && linkRows.length > 0 ? (
+      <div className="space-y-6">
+        {linkRows.map((link) => (
+          <div key={link.id} className="rounded-md border p-4">
+            <p className="font-medium">
+              {link.role === 'guarantor'
+                ? 'Guarantor'
+                : `Reference ${link.reference_index}`}{' '}
+              · {link.email} ·{' '}
+              {link.submitted_at ? (
+                <span className="text-green-600">Submitted</span>
+              ) : (
+                <span className="text-amber-600">Pending</span>
+              )}
+            </p>
+            {link.submitted_at && (
+              <>
+                {link.answers && (
+                  <div className="mt-3 text-sm">
+                    {Object.entries(link.answers).map(([q, a]) => (
+                      <div key={q} className="mb-2">
+                        <span className="text-muted-foreground">{q}:</span>{' '}
+                        {String(a).slice(0, 200)}
+                        {String(a).length > 200 ? '…' : ''}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {link.document_url && (
+                  <p className="mt-2">
+                    <DocumentPreviewLink
+                      label={link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'}
+                      url={link.document_url}
+                      className="text-primary hover:underline text-sm"
+                    >
+                      {link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'} (preview)
+                    </DocumentPreviewLink>
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    ) : null;
+
+  const notesContent = (
+    <NotesSection applicationId={id} notes={notes} canEdit={canEdit} />
+  );
+
+  const accordionChildren = [
+    overviewContent,
+    ...(canEdit ? [emailContent] : []),
+    ...(canEdit ? [checklistContent] : []),
+    formContent,
+    ...(fileKeys.length > 0 ? [documentsContent] : []),
+    ...(app.application_type === 'final' && linkRows.length > 0 ? [guarantorRefsContent] : []),
+    notesContent,
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-6 flex items-center gap-4">
@@ -124,131 +266,18 @@ export default async function AdminApplicationDetailPage({
         </Button>
       </div>
 
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Application {app.id.slice(0, 8)}…</h1>
-        <p className="text-muted-foreground mb-1">
-          <strong>Applicant:</strong> {getApplicantName(formData)} · {getApplicantPhone(formData)}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold mb-1">
+          {applicationTypeLabel}
+        </h1>
+        <p className="text-muted-foreground text-sm">
+          Application ID: {app.id.slice(0, 8)}…
         </p>
-        <p className="text-muted-foreground mb-1">
-          Type: {app.application_type} · Status: {getStatusLabel(app.status)} · Submitted:{' '}
-          {app.submitted_at ? new Date(app.submitted_at).toLocaleString() : '—'}
-        </p>
-        <p className="text-muted-foreground">Email: {app.applicant_email ?? '—'}</p>
-
-        {canEdit && (
-          <UpdateStatusForm key={app.status} applicationId={id} currentStatus={app.status} />
-        )}
       </div>
 
-      {canEdit && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Email applicant</h2>
-          <EmailApplicantForm
-            applicationId={id}
-            applicantEmail={app.applicant_email}
-            currentStatus={app.status}
-            templates={filledTemplates}
-          />
-        </section>
-      )}
-
-      {canEdit && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Checklist</h2>
-          <ChecklistForm
-            applicationId={id}
-            applicationType={app.application_type}
-            guarantorApproved={app.guarantor_approved ?? false}
-            referencesApproved={app.references_approved ?? false}
-            interviewDate={app.interview_date}
-            interviewNotes={app.interview_notes}
-            loanApprovedAt={app.loan_approved_at}
-          />
-        </section>
-      )}
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Notes & comments</h2>
-        <NotesSection applicationId={id} notes={notes} canEdit={canEdit} />
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Form data</h2>
-        <FormDataView
-          formData={formData}
-          fileKeys={fileKeys}
-          applicationId={id}
-          orderedFieldNames={orderedFieldNames}
-        />
-      </section>
-
-      {fileKeys.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Application documents</h2>
-          <ul className="list-disc list-inside space-y-1">
-            {fileKeys.map((key) => (
-              <li key={key}>
-                <DocumentPreviewLink
-                  label={key.replace(/_/g, ' ')}
-                  url={formData[key] as string}
-                  className="text-primary hover:underline"
-                >
-                  {key.replace(/_/g, ' ')} (preview)
-                </DocumentPreviewLink>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {app.application_type === 'final' && linkRows.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Guarantor & references</h2>
-          <div className="space-y-6">
-            {linkRows.map((link) => (
-              <div key={link.id} className="rounded-md border p-4">
-                <p className="font-medium">
-                  {link.role === 'guarantor'
-                    ? 'Guarantor'
-                    : `Reference ${link.reference_index}`}{' '}
-                  · {link.email} ·{' '}
-                  {link.submitted_at ? (
-                    <span className="text-green-600">Submitted</span>
-                  ) : (
-                    <span className="text-amber-600">Pending</span>
-                  )}
-                </p>
-                {link.submitted_at && (
-                  <>
-                    {link.answers && (
-                      <div className="mt-3 text-sm">
-                        {Object.entries(link.answers).map(([q, a]) => (
-                          <div key={q} className="mb-2">
-                            <span className="text-muted-foreground">{q}:</span>{' '}
-                            {String(a).slice(0, 200)}
-                            {String(a).length > 200 ? '…' : ''}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {link.document_url && (
-                      <p className="mt-2">
-                        <DocumentPreviewLink
-                          label={link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'}
-                          url={link.document_url}
-                          className="text-primary hover:underline text-sm"
-                        >
-                          {link.role === 'guarantor' ? 'Government ID' : 'Letter of reference'} (preview)
-                        </DocumentPreviewLink>
-                      </p>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <ApplicationDetailAccordion sections={sections} defaultOpen={['overview', 'form']}>
+        {accordionChildren}
+      </ApplicationDetailAccordion>
     </div>
   );
 }
