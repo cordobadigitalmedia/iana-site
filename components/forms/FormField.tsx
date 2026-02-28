@@ -34,6 +34,8 @@ interface FormFieldProps {
   inTable?: boolean;
   rows?: number;
   tooltip?: string;
+  /** Shown between the label and the input (e.g. for the email "copy sent" note). */
+  description?: string;
 }
 
 export function FormField({
@@ -50,6 +52,7 @@ export function FormField({
   inTable = false,
   rows,
   tooltip,
+  description,
 }: FormFieldProps) {
   const fieldId = `field-${name}`;
 
@@ -273,6 +276,9 @@ export function FormField({
         <Label htmlFor={fieldId} className="flex items-center gap-0">
           {labelContent}
         </Label>
+      )}
+      {description && !inTable && (
+        <p className="text-sm text-muted-foreground">{description}</p>
       )}
       {renderField()}
       {error && (

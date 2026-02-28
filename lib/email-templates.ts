@@ -100,7 +100,7 @@ export function getTemplateIdForStatus(status: string): EmailTemplateId | null {
   return null;
 }
 
-function getApplyUrl(): string {
+export function getApplyUrl(): string {
   if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_APP_URL) {
     return `${process.env.NEXT_PUBLIC_APP_URL}/apply/final`;
   }

@@ -330,7 +330,7 @@
     },
     {
       "name": "currently_employed",
-      "label": "Are you currently employed?",
+      "label": "Are you currently working?",
       "type": "radio",
       "required": true,
       "section": "Employment",
@@ -342,7 +342,7 @@
     {
       "name": "employment_explanation",
       "label": "If no, please explain:",
-      "type": "textarea",
+      "type": "text",
       "required": false,
       "section": "Employment"
     },

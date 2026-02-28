@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 interface VolunteerEntry {
@@ -143,42 +142,43 @@ export function VolunteerSection({ formData, onChange, errors }: VolunteerSectio
             </div>
           
           <div className="space-y-3">
-            <div>
-              <Label htmlFor={`volunteer_role_${index + 1}`}>
-                Volunteer role:
-              </Label>
-              <Input
-                id={`volunteer_role_${index + 1}`}
-                name={`volunteer_role_${index + 1}`}
-                type="text"
-                value={entry.role}
-                onChange={(e) => updateEntry(index, 'role', e.target.value)}
-                className={errors?.[`volunteer_role_${index + 1}`] ? 'border-red-500' : ''}
-              />
-              {errors?.[`volunteer_role_${index + 1}`] && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors[`volunteer_role_${index + 1}`]}
-                </p>
-              )}
-            </div>
-            
-            <div>
-              <Label htmlFor={`volunteer_organization_${index + 1}`}>
-                Organization:
-              </Label>
-              <Input
-                id={`volunteer_organization_${index + 1}`}
-                name={`volunteer_organization_${index + 1}`}
-                type="text"
-                value={entry.organization}
-                onChange={(e) => updateEntry(index, 'organization', e.target.value)}
-                className={errors?.[`volunteer_organization_${index + 1}`] ? 'border-red-500' : ''}
-              />
-              {errors?.[`volunteer_organization_${index + 1}`] && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors[`volunteer_organization_${index + 1}`]}
-                </p>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor={`volunteer_role_${index + 1}`}>
+                  Volunteer role:
+                </Label>
+                <Input
+                  id={`volunteer_role_${index + 1}`}
+                  name={`volunteer_role_${index + 1}`}
+                  type="text"
+                  value={entry.role}
+                  onChange={(e) => updateEntry(index, 'role', e.target.value)}
+                  className={errors?.[`volunteer_role_${index + 1}`] ? 'border-red-500' : ''}
+                />
+                {errors?.[`volunteer_role_${index + 1}`] && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors[`volunteer_role_${index + 1}`]}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor={`volunteer_organization_${index + 1}`}>
+                  Organization:
+                </Label>
+                <Input
+                  id={`volunteer_organization_${index + 1}`}
+                  name={`volunteer_organization_${index + 1}`}
+                  type="text"
+                  value={entry.organization}
+                  onChange={(e) => updateEntry(index, 'organization', e.target.value)}
+                  className={errors?.[`volunteer_organization_${index + 1}`] ? 'border-red-500' : ''}
+                />
+                {errors?.[`volunteer_organization_${index + 1}`] && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors[`volunteer_organization_${index + 1}`]}
+                  </p>
+                )}
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -225,12 +225,12 @@ export function VolunteerSection({ formData, onChange, errors }: VolunteerSectio
               <Label htmlFor={`volunteer_duties_${index + 1}`}>
                 Duties and achievements:
               </Label>
-              <Textarea
+              <Input
                 id={`volunteer_duties_${index + 1}`}
                 name={`volunteer_duties_${index + 1}`}
+                type="text"
                 value={entry.duties}
                 onChange={(e) => updateEntry(index, 'duties', e.target.value)}
-                rows={4}
                 className={errors?.[`volunteer_duties_${index + 1}`] ? 'border-red-500' : ''}
               />
               {errors?.[`volunteer_duties_${index + 1}`] && (

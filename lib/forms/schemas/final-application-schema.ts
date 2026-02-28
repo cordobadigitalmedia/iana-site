@@ -40,8 +40,9 @@ function buildSchemaFromFields(fields: typeof fieldDefinitions.fields) {
         break;
     }
 
+    // Optional fields: allow empty string (form sends "" for blank inputs)
     if (!field.required && field.type !== 'checkbox') {
-      fieldSchema = fieldSchema.optional();
+      fieldSchema = z.union([fieldSchema, z.literal('')]).optional();
     }
 
     schemaObject[field.name] = fieldSchema;

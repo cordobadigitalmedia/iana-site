@@ -2,10 +2,13 @@
 
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { randomBytes } from 'crypto';
 import { getAdminUser } from '@/lib/admin-auth';
 import { sql } from '@/lib/db';
 import { getApplicantName } from '@/lib/applications';
 import { sendLoanApprovedEmail, sendApplicantCustomEmail } from '@/lib/email';
+import { getApplyUrl } from '@/lib/email-templates';
+import type { EmailTemplateId } from '@/lib/email-templates';
 
 export async function updateApplicationStatus(applicationId: string, formData: FormData): Promise<void> {
   const admin = await getAdminUser();
@@ -159,7 +162,8 @@ export async function addApplicationNote(
 export async function sendApplicantStatusEmail(
   applicationId: string,
   subject: string,
-  bodyText: string
+  bodyText: string,
+  templateId?: EmailTemplateId | null
 ): Promise<{ error?: string }> {
   const admin = await getAdminUser();
   if (!admin || admin.role !== 'admin') {
@@ -174,10 +178,27 @@ export async function sendApplicantStatusEmail(
     return { error: 'No applicant email on this application.' };
   }
 
+  let finalBody = bodyText.trim() || 'No message body.';
+  if (templateId === 'invite_full_application') {
+    const token = randomBytes(16).toString('hex');
+    await sql`
+      INSERT INTO final_apply_tokens (token, applicant_email)
+      VALUES (${token}, ${row.applicant_email})
+      ON CONFLICT (token) DO NOTHING
+    `;
+    const baseUrl = getApplyUrl();
+    const applyUrlWithToken = `${baseUrl}?token=${token}`;
+    finalBody = finalBody.replace(new RegExp(escapeRegex(baseUrl), 'g'), applyUrlWithToken);
+  }
+
   const result = await sendApplicantCustomEmail({
     to: row.applicant_email,
     subject: subject.trim() || 'Message from IANA Financial',
-    bodyText: bodyText.trim() || 'No message body.',
+    bodyText: finalBody,
   });
   return result;
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

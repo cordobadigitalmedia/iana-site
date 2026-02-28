@@ -16,6 +16,73 @@ function generateToken(): string {
   return randomBytes(16).toString('hex');
 }
 
+/** Map preliminary form_data to final application fields (Personal Info + Confirmation of Loan Terms). */
+function mapPrelimToFinal(prelim: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  const legalName = (prelim.legal_name as string)?.trim() || '';
+  const parts = legalName.split(/\s+/).filter(Boolean);
+  if (parts.length >= 1) {
+    out.first_name = parts[0];
+    out.last_name = parts.length > 1 ? parts[parts.length - 1] : '';
+    out.middle_name = parts.length > 2 ? parts.slice(1, -1).join(' ') : '';
+  }
+  const direct = [
+    'city', 'province_state', 'country', 'postal_zip_code', 'phone', 'cell', 'email',
+    'amount_requested', 'expected_monthly_payment', 'proposed_start_date',
+    'expected_repayment_start_date', 'expected_repayment_finish_date',
+  ] as const;
+  for (const key of direct) {
+    if (prelim[key] !== undefined && prelim[key] !== null && prelim[key] !== '') {
+      out[key] = prelim[key];
+    }
+  }
+  if (prelim.address !== undefined && prelim.address !== null && prelim.address !== '') {
+    out.permanent_address = prelim.address;
+  }
+  const appType = prelim.application_type as string | undefined;
+  if (appType === 'Preliminary Application for a small, short-term, Personal/Emergency loan') {
+    out.loan_type = 'Personal';
+  } else if (appType === 'Preliminary Application for an Educational loan') {
+    out.loan_type = 'Education';
+  } else if (appType === 'Preliminary Application for a Business or Institutional loan') {
+    out.loan_type = 'Business/Institutional';
+  }
+  return out;
+}
+
+/** Get preliminary data for pre-filling the final form. Uses token (from invite link) or email. */
+export async function getPrelimDataForFinal(
+  token: string | null | undefined,
+  email: string | null | undefined
+): Promise<Record<string, unknown> | null> {
+  let applicantEmail: string | null = null;
+  if (token) {
+    const rows = await sql`
+      SELECT applicant_email FROM final_apply_tokens WHERE token = ${token} LIMIT 1
+    `;
+    const row = rows[0] as { applicant_email: string } | undefined;
+    applicantEmail = row?.applicant_email ?? null;
+  }
+  if (!applicantEmail && email?.trim()) {
+    applicantEmail = email.trim();
+  }
+  if (!applicantEmail) return null;
+
+  const rows = await sql`
+    SELECT form_data, application_type
+    FROM applications
+    WHERE applicant_email = ${applicantEmail}
+      AND application_type IN ('preliminary-personal', 'preliminary-education', 'preliminary-business')
+    ORDER BY submitted_at DESC NULLS LAST
+    LIMIT 1
+  `;
+  const row = rows[0] as { form_data: Record<string, unknown>; application_type: string } | undefined;
+  if (!row?.form_data) return null;
+
+  const prelim = typeof row.form_data === 'string' ? JSON.parse(row.form_data) : row.form_data;
+  return mapPrelimToFinal(prelim);
+}
+
 function getBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
@@ -102,8 +169,22 @@ export async function submitFinalApplication(formData: Record<string, any>) {
     return { success: true, applicationId };
   } catch (error: any) {
     console.error('Error submitting application:', error);
-    if (error.name === 'ZodError') {
-      return { success: false, error: 'Validation failed. Please check your inputs.' };
+    const issues = error?.name === 'ZodError' ? (error.issues ?? error.errors) : null;
+    if (issues && Array.isArray(issues)) {
+      const fieldErrors: Record<string, string> = {};
+      for (const issue of issues) {
+        const path = issue.path?.filter(Boolean);
+        const key = path && path.length > 0 ? (path[0] as string) : 'form';
+        const msg = issue.message || 'Invalid value';
+        if (!fieldErrors[key] || key === 'form') {
+          fieldErrors[key] = msg;
+        }
+      }
+      return {
+        success: false,
+        error: 'Please fix the highlighted fields below.',
+        fieldErrors: Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined,
+      };
     }
     return { success: false, error: 'An error occurred while submitting your application.' };
   }

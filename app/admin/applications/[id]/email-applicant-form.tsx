@@ -66,7 +66,12 @@ export function EmailApplicantForm({
       return;
     }
     startTransition(async () => {
-      const result = await sendApplicantStatusEmail(applicationId, subject, body);
+      const result = await sendApplicantStatusEmail(
+        applicationId,
+        subject,
+        body,
+        selectedTemplateId || undefined
+      );
       if (result?.error) {
         alert(result.error);
         return;
@@ -152,6 +157,9 @@ export function EmailApplicantForm({
         <label htmlFor="email-body" className="block text-sm font-medium mb-1">
           Message (edit as needed)
         </label>
+        <p className="text-sm text-muted-foreground mb-2">
+          When sending the &quot;Invite for Full Application&quot; template, a unique link with a token is added automatically so the applicant can pre-fill their form. Do not delete the application link (the URL) in the message—it will be replaced with the tokenized link when the email is sent.
+        </p>
         <textarea
           id="email-body"
           rows={12}

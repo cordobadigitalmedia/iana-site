@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
-import { submitFinalApplication } from "./actions";
+import { submitFinalApplication, getPrelimDataForFinal } from "./actions";
 import fieldDefinitions from "@/lib/forms/schemas/final-application-fields.json";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,12 +39,20 @@ export const metadata: Metadata = {
   description: "Submit your final interest-free loan application.",
 };
 
-export default async function FinalApplicationPage() {
+export default async function FinalApplicationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
   const [nav, header, footer] = await Promise.all([
     readNav(),
     readHeader(),
     readFooter(),
   ]);
+
+  const params = await searchParams;
+  const token = params?.token;
+  const initialFormData = token ? await getPrelimDataForFinal(token, null) : null;
 
   return (
     <>
@@ -68,6 +76,7 @@ export default async function FinalApplicationPage() {
                   sections={fieldDefinitions.sections}
                   formKey="final"
                   onSubmit={submitFinalApplication}
+                  initialFormData={initialFormData ?? undefined}
                 />
               </CardContent>
             </Card>

@@ -20,7 +20,8 @@ export function PreliminaryApplicationCards() {
 
   return (
     <Card className="border-2 my-6">
-      <CardContent className="p-6">
+      <CardContent className="px-6 pb-6 pt-2">
+        <p className="text-lg font-semibold mb-4 text-left">Part 1: Preliminary Application</p>
         <Button
           asChild
           variant="outline"
@@ -45,7 +46,8 @@ export function FinalApplicationCard() {
 
   return (
     <Card className="border-2 my-6">
-      <CardContent className="p-6">
+      <CardContent className="px-6 pb-6 pt-2">
+        <p className="text-lg font-semibold mb-4 text-left">Part 2: Final Interest-Free Loan Application</p>
         <Button
           asChild
           variant="outline"

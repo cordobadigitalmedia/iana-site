@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useFormAutoSave } from '@/hooks/useFormAutoSave';
 import { FormSection } from './FormSection';
@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { getPrelimDataForFinal } from '@/app/apply/final/actions';
 
 interface FieldDefinition {
   name: string;
@@ -44,21 +45,53 @@ interface ApplicationFormProps {
   fields: FieldDefinition[];
   sections: string[];
   formKey: string;
-  onSubmit: (data: Record<string, any>) => Promise<{ success: boolean; applicationId?: string; error?: string }>;
+  onSubmit: (data: Record<string, any>) => Promise<{ success: boolean; applicationId?: string; error?: string; fieldErrors?: Record<string, string> }>;
+  /** Pre-filled from preliminary application (token or email). Server-provided keys win over localStorage on restore. */
+  initialFormData?: Record<string, unknown>;
 }
 
-export function ApplicationForm({ fields, sections, formKey, onSubmit }: ApplicationFormProps) {
-  const [formData, setFormData] = useState<Record<string, any>>({});
+export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFormData }: ApplicationFormProps) {
+  const [formData, setFormData] = useState<Record<string, any>>(() => (initialFormData ?? {}) as Record<string, any>);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const initialFormDataRef = useRef(initialFormData);
+  const [loadPrelimEmail, setLoadPrelimEmail] = useState('');
+  const [loadPrelimPending, setLoadPrelimPending] = useState(false);
+  const [loadPrelimError, setLoadPrelimError] = useState<string | null>(null);
 
-  // Restore form data from localStorage
-  const handleRestore = (data: Record<string, any>) => {
-    setFormData(data);
-  };
+  // Restore form data from localStorage; merge with initialFormData so server data wins
+  const handleRestore = useCallback((data: Record<string, any>) => {
+    setFormData((prev) => ({
+      ...data,
+      ...(initialFormDataRef.current ?? {}),
+    }));
+  }, []);
 
   const { clearStorage } = useFormAutoSave(formKey, formData, handleRestore);
+
+  const handleLoadFromPrelim = useCallback(async () => {
+    const email = loadPrelimEmail.trim();
+    if (!email) {
+      setLoadPrelimError('Please enter the email you used for your preliminary application.');
+      return;
+    }
+    setLoadPrelimError(null);
+    setLoadPrelimPending(true);
+    try {
+      const data = await getPrelimDataForFinal(null, email);
+      if (data && Object.keys(data).length > 0) {
+        setFormData((prev) => ({ ...prev, ...data }));
+        setLastSaved(new Date());
+      } else {
+        setLoadPrelimError('No preliminary application found for this email.');
+      }
+    } catch {
+      setLoadPrelimError('Unable to load. Please try again.');
+    } finally {
+      setLoadPrelimPending(false);
+    }
+  }, [loadPrelimEmail]);
 
   // Update form data
   const handleFieldChange = (name: string, value: string | string[]) => {
@@ -172,6 +205,18 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
 
   const formatTotal = (n: number): string => (n === 0 ? '' : String(n));
 
+  // Scroll to first field with an error when validation fails
+  useEffect(() => {
+    const fieldKeys = Object.keys(errors).filter((k) => k !== 'submit');
+    if (fieldKeys.length > 0) {
+      const firstKey = fieldKeys[0];
+      const el = document.getElementById(`field-${firstKey}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [errors]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -190,7 +235,9 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         clearStorage();
         window.location.href = `/apply/success/${result.applicationId}`;
       } else {
-        setErrors({ submit: result.error || 'An error occurred. Please try again.' });
+        const nextErrors: Record<string, string> = { ...(result.fieldErrors ?? {}) };
+        if (result.error) nextErrors.submit = result.error;
+        setErrors(nextErrors);
       }
     } catch (error) {
       setErrors({ submit: 'An error occurred. Please try again.' });
@@ -259,7 +306,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
     } else if (section === 'Total Liabilities') {
       return ['Amount owing', 'Monthly payment'];
     } else if (section === 'Monthly Living Expenses') {
-      return ['Expense', 'Amount'];
+      return ['Expense', 'Amount', 'Expense', 'Amount'];
     }
     return [];
   };
@@ -280,7 +327,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
   };
 
   // Helper function to render a field (handles file uploads separately)
-  const renderField = (field: FieldDefinition, inTable: boolean = false, options?: { tooltip?: string }) => {
+  const renderField = (field: FieldDefinition, inTable: boolean = false, options?: { tooltip?: string; description?: string }) => {
     if (field.type === 'file') {
       return (
         <DocumentUpload
@@ -307,6 +354,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         inTable={inTable}
         rows={field.type === 'textarea' && field.section === '2. Loan Request' ? 2 : undefined}
         tooltip={options?.tooltip}
+        description={options?.description}
       />
     );
   };
@@ -334,12 +382,47 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
         </div>
       )}
       <form onSubmit={handleSubmit} className={`space-y-6 ${isSubmitting ? 'pointer-events-none select-none' : ''}`}>
+      {formKey === 'final' && (
+        <div className="rounded-md border border-gray-300 bg-muted/30 p-4 space-y-3">
+          <p className="text-sm font-medium">Load from my preliminary application</p>
+          <p className="text-sm text-muted-foreground">
+            If you already submitted a preliminary application, enter the email you used to pre-fill your personal information and loan terms.
+          </p>
+          <div className="flex flex-wrap items-end gap-2">
+            <div className="min-w-[200px] flex-1">
+              <Label htmlFor="load-prelim-email" className="sr-only">
+                Email used for preliminary application
+              </Label>
+              <Input
+                id="load-prelim-email"
+                type="email"
+                placeholder="Email address"
+                value={loadPrelimEmail}
+                onChange={(e) => setLoadPrelimEmail(e.target.value)}
+                disabled={loadPrelimPending}
+                className="bg-background"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleLoadFromPrelim}
+              disabled={loadPrelimPending}
+            >
+              {loadPrelimPending ? 'Loading…' : 'Load'}
+            </Button>
+          </div>
+          {loadPrelimError && (
+            <p className="text-sm text-red-500">{loadPrelimError}</p>
+          )}
+        </div>
+      )}
       {sections.map((section) => {
         const sectionFields = fieldsBySection[section];
         if (!sectionFields || sectionFields.length === 0) return null;
 
         const instruction = section === 'Education' 
-          ? "For student loans: please list your current or proposed educational institution, program, and your graduation year."
+          ? "Please list your current or proposed educational institution, program, and your graduation year."
           : section === 'Reference Documents'
           ? "Before submitting your final loan application, please ensure that you have uploaded all required documents. Additional documents are required for business/institutional loans and educational loans as indicated below."
           : undefined;
@@ -359,8 +442,9 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                   const headers = getTableHeaders(section);
                   if (headers.length > 0) {
                     const isAssets = section === 'Assets';
+                    const isMonthlyExpenses = section === 'Monthly Living Expenses';
                     return (
-                      <div className={`grid grid-cols-1 ${isAssets ? 'md:grid-cols-3' : 'md:grid-cols-2'} divide-x divide-gray-300 bg-gray-100 border-b border-gray-300`}>
+                      <div className={`grid grid-cols-1 ${isAssets ? 'md:grid-cols-3' : isMonthlyExpenses ? 'md:grid-cols-4' : 'md:grid-cols-2'} divide-x divide-gray-300 bg-gray-100 border-b border-gray-300`}>
                         {headers.map((header, idx) => (
                           <div key={idx} className="p-3 font-semibold text-sm">
                             {header}
@@ -394,6 +478,106 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                     
                     // Skip field if it shouldn't be shown
                     if (!shouldShowField(field)) {
+                      i += 1;
+                      continue;
+                    }
+                    
+                    // Financial Status: annual_gross_income and monthly_net_income on one row
+                    if (section === 'Financial Status' && field.name === 'annual_gross_income') {
+                      const nextField = regularFields[i + 1];
+                      if (nextField?.name === 'monthly_net_income' && shouldShowField(nextField)) {
+                        renderedFields.push(
+                          <div key="financial-income-row" className="border-b border-gray-300">
+                            <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-300">
+                              <div className="p-4 bg-gray-50">
+                                <label className="block text-sm font-medium">
+                                  {field.label}
+                                  {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+                                </label>
+                                <div className="mt-1">
+                                  {renderField(field, true)}
+                                </div>
+                                {errors[field.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
+                                )}
+                              </div>
+                              <div className="p-4 bg-gray-50">
+                                <label className="block text-sm font-medium">
+                                  {nextField.label}
+                                  {isFieldRequired(nextField) && <span className="text-red-500 ml-1">*</span>}
+                                </label>
+                                <div className="mt-1">
+                                  {renderField(nextField, true)}
+                                </div>
+                                {errors[nextField.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[nextField.name]}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                        i += 2;
+                        continue;
+                      }
+                    }
+                    
+                    // Monthly Living Expenses: two expense+amount pairs per row (4 columns)
+                    if (section === 'Monthly Living Expenses') {
+                      const nextField = regularFields[i + 1];
+                      const canPair = nextField && !nextField.isTotal && shouldShowField(nextField);
+                      if (canPair) {
+                        renderedFields.push(
+                          <div key={field.name} className="border-b border-gray-300">
+                            <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-gray-300">
+                              <div className="p-4 bg-gray-50">
+                                <label className="block text-sm font-medium">
+                                  {field.label}
+                                  {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+                                </label>
+                              </div>
+                              <div className="p-4">
+                                {renderField(field, true)}
+                                {errors[field.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
+                                )}
+                              </div>
+                              <div className="p-4 bg-gray-50">
+                                <label className="block text-sm font-medium">
+                                  {nextField.label}
+                                  {isFieldRequired(nextField) && <span className="text-red-500 ml-1">*</span>}
+                                </label>
+                              </div>
+                              <div className="p-4">
+                                {renderField(nextField, true)}
+                                {errors[nextField.name] && (
+                                  <p className="text-sm text-red-500 mt-1">{errors[nextField.name]}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                        i += 2;
+                        continue;
+                      }
+                      // Single field (odd one out): render in first two columns
+                      renderedFields.push(
+                        <div key={field.name} className="border-b border-gray-300">
+                          <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-gray-300">
+                            <div className="p-4 bg-gray-50">
+                              <label className="block text-sm font-medium">
+                                {field.label}
+                                {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+                              </label>
+                            </div>
+                            <div className="p-4 md:col-span-3">
+                              {renderField(field, true)}
+                              {errors[field.name] && (
+                                <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
                       i += 1;
                       continue;
                     }
@@ -511,7 +695,7 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               </label>
                             </div>
                             <div className="p-4">
-                              {renderField(field, section === 'Financial Status' || section === 'Monthly Living Expenses')}
+                              {renderField(field, true)}
                             </div>
                           </div>
                         </div>
@@ -664,18 +848,18 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                         </div>
                       );
                     } else if (section === 'Monthly Living Expenses') {
-                      // Monthly Living Expenses total: calculated, read-only
+                      // Monthly Living Expenses total: calculated, read-only (4-col layout)
                       const totalField = totalFields[0];
                       const expensesTotal = computeMonthlyExpensesTotal(formData);
                       renderedFields.push(
                         <div key={totalField.name} className="border-t-2 border-gray-400 bg-gray-50">
-                          <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-300">
+                          <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-gray-300">
                             <div className="p-4">
                               <label className="block text-sm font-semibold">
                                 {totalField.label}
                               </label>
                             </div>
-                            <div className="p-4 bg-gray-50">
+                            <div className="p-4 bg-gray-50 md:col-span-3">
                               <Input
                                 type="text"
                                 readOnly
@@ -736,6 +920,14 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                 }}
                 errors={errors}
               />
+            ) : section === 'Reference Documents' ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sectionFields.filter((field) => shouldShowField(field)).map((field) => (
+                  <div key={field.name}>
+                    {renderField(field)}
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="space-y-4">
                 {(() => {
@@ -999,7 +1191,13 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                               {field.rowLabel}
                             </label>
                           )}
-                          {renderField(field)}
+                          {renderField(
+                            field,
+                            false,
+                            section === '1. Personal Information' && field.name === 'email' && field.note
+                              ? { description: field.note }
+                              : undefined
+                          )}
                         </div>
                       );
                       i += 1;
@@ -1007,10 +1205,10 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit }: Applica
                   }
                   
                   // Collect notes from all fields in Personal Information section (only for preliminary)
-                  // For final application "Personal Information", notes show inline above fields
+                  // Email note is shown between label and input, so exclude it from bottom notes
                   if (section === '1. Personal Information') {
                     sectionFields.forEach((field) => {
-                      if (shouldShowField(field) && field.note && !sectionNotes.includes(field.note)) {
+                      if (shouldShowField(field) && field.note && field.name !== 'email' && !sectionNotes.includes(field.note)) {
                         sectionNotes.push(field.note);
                       }
                     });

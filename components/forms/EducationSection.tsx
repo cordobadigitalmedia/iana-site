@@ -129,7 +129,7 @@ export function EducationSection({ formData, onChange, errors }: EducationSectio
             )}
           </div>
           
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4">
             <div>
               <Label htmlFor={`education_institution_${index + 1}`}>
                 Institution:
@@ -148,45 +148,41 @@ export function EducationSection({ formData, onChange, errors }: EducationSectio
                 </p>
               )}
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor={`education_program_${index + 1}`}>
-                  Program:
-                </Label>
-                <Input
-                  id={`education_program_${index + 1}`}
-                  name={`education_program_${index + 1}`}
-                  type="text"
-                  value={entry.program}
-                  onChange={(e) => updateEntry(index, 'program', e.target.value)}
-                  className={errors?.[`education_program_${index + 1}`] ? 'border-red-500' : ''}
-                />
-                {errors?.[`education_program_${index + 1}`] && (
-                  <p className="text-sm text-red-500 mt-1">
-                    {errors[`education_program_${index + 1}`]}
-                  </p>
-                )}
-              </div>
-              
-              <div>
-                <Label htmlFor={`education_year_${index + 1}`}>
-                  Year:
-                </Label>
-                <Input
-                  id={`education_year_${index + 1}`}
-                  name={`education_year_${index + 1}`}
-                  type="text"
-                  value={entry.year}
-                  onChange={(e) => updateEntry(index, 'year', e.target.value)}
-                  className={errors?.[`education_year_${index + 1}`] ? 'border-red-500' : ''}
-                />
-                {errors?.[`education_year_${index + 1}`] && (
-                  <p className="text-sm text-red-500 mt-1">
-                    {errors[`education_year_${index + 1}`]}
-                  </p>
-                )}
-              </div>
+            <div>
+              <Label htmlFor={`education_program_${index + 1}`}>
+                Program:
+              </Label>
+              <Input
+                id={`education_program_${index + 1}`}
+                name={`education_program_${index + 1}`}
+                type="text"
+                value={entry.program}
+                onChange={(e) => updateEntry(index, 'program', e.target.value)}
+                className={errors?.[`education_program_${index + 1}`] ? 'border-red-500' : ''}
+              />
+              {errors?.[`education_program_${index + 1}`] && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors[`education_program_${index + 1}`]}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor={`education_year_${index + 1}`}>
+                Year:
+              </Label>
+              <Input
+                id={`education_year_${index + 1}`}
+                name={`education_year_${index + 1}`}
+                type="text"
+                value={entry.year}
+                onChange={(e) => updateEntry(index, 'year', e.target.value)}
+                className={errors?.[`education_year_${index + 1}`] ? 'border-red-500' : ''}
+              />
+              {errors?.[`education_year_${index + 1}`] && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors[`education_year_${index + 1}`]}
+                </p>
+              )}
             </div>
           </div>
         </div>
