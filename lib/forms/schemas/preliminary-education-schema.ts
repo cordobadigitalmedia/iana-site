@@ -38,7 +38,7 @@ function buildSchemaFromFields(fields: typeof fieldDefinitions.fields) {
     }
 
     if (!field.required && field.type !== 'checkbox') {
-      fieldSchema = fieldSchema.optional();
+      fieldSchema = z.union([fieldSchema, z.literal('')]).optional();
     }
 
     schemaObject[field.name] = fieldSchema;

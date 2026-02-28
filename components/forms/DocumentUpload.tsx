@@ -101,10 +101,10 @@ export function DocumentUpload({
           </button>
         </div>
       ) : (
-        <div className="relative">
+        <div className="relative" id={`field-${name}`}>
           <input
             type="file"
-            id={name}
+            id={`field-${name}`}
             name={name}
             accept={accept}
             onChange={handleFileSelect}
@@ -112,7 +112,7 @@ export function DocumentUpload({
             className="hidden"
           />
           <label
-            htmlFor={name}
+            htmlFor={`field-${name}`}
             className={`flex items-center justify-center gap-2 p-4 border-2 border-dashed rounded-md cursor-pointer transition-colors ${
               error || uploadError
                 ? 'border-red-300 bg-red-50'

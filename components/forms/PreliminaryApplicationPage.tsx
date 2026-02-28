@@ -38,7 +38,7 @@ interface PreliminaryApplicationPageProps {
   fields: FieldDefinition[];
   sections: string[];
   formKey: string;
-  onSubmit: (data: Record<string, any>) => Promise<{ success: boolean; applicationId?: string; error?: string }>;
+  onSubmit: (data: Record<string, any>) => Promise<{ success: boolean; applicationId?: string; error?: string; fieldErrors?: Record<string, string> }>;
 }
 
 export async function PreliminaryApplicationPage({

@@ -39,10 +39,9 @@ function buildSchemaFromFields(fields: typeof fieldDefinitions.fields) {
         break;
     }
 
-    // Make fields optional if they're not required OR if they have conditionalShow
-    // (conditional fields will be validated in superRefine based on application_type)
+    // Optional fields: allow empty string (form sends "" for blank inputs)
     if ((!field.required || field.conditionalShow) && field.type !== 'checkbox') {
-      fieldSchema = fieldSchema.optional();
+      fieldSchema = z.union([fieldSchema, z.literal('')]).optional();
     }
 
     schemaObject[field.name] = fieldSchema;
