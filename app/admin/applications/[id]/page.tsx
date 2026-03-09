@@ -1,3 +1,4 @@
+import React from 'react';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAdminUser } from '@/lib/admin-auth';
@@ -24,6 +25,8 @@ import { FormDataView } from './form-data-view';
 import { NotesSection } from './notes-section';
 import { DocumentPreviewLink } from './document-preview-dialog';
 import { ApplicationDetailAccordion, type SectionSpec } from './application-detail-accordion';
+import { ContractSection } from './contract-section';
+import { FinalApplicationProgress, type FinalAppProgressStep } from './final-application-progress';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +42,11 @@ type AppRow = {
   interview_date: string | null;
   interview_notes: string | null;
   loan_approved_at: string | null;
+  contract_token: string | null;
+  contract_draft_content: string | null;
+  contract_sent_at: string | null;
+  signed_contract_url: string | null;
+  contract_signed_at: string | null;
 };
 
 type LinkRow = {
@@ -76,7 +84,8 @@ export default async function AdminApplicationDetailPage({
 
   const appRows = await sql`
     SELECT id, application_type, status, submitted_at, applicant_email, form_data,
-           guarantor_approved, references_approved, interview_date, interview_notes, loan_approved_at
+           guarantor_approved, references_approved, interview_date, interview_notes, loan_approved_at,
+           contract_token, contract_draft_content, contract_sent_at, signed_contract_url, contract_signed_at
     FROM applications
     WHERE id = ${id}
     LIMIT 1
@@ -89,7 +98,8 @@ export default async function AdminApplicationDetailPage({
     currentApp.applicant_email != null
       ? (await sql`
           SELECT id, application_type, status, submitted_at, applicant_email, form_data,
-                 guarantor_approved, references_approved, interview_date, interview_notes, loan_approved_at
+                 guarantor_approved, references_approved, interview_date, interview_notes, loan_approved_at,
+                 contract_token, contract_draft_content, contract_sent_at, signed_contract_url, contract_signed_at
           FROM applications
           WHERE applicant_email = ${currentApp.applicant_email}
           ORDER BY submitted_at DESC NULLS LAST
@@ -244,14 +254,35 @@ export default async function AdminApplicationDetailPage({
     const notesContent = (
       <NotesSection applicationId={app.id} notes={notes} canEdit={canEdit} />
     );
-    const accordionChildren = [
-      overviewContent,
-      ...(canEdit ? [emailContent] : []),
-      formContent,
-      ...(fileKeys.length > 0 ? [documentsContent] : []),
-      notesContent,
+    const sectionContents: { value: string; content: React.ReactNode }[] = [
+      { value: 'overview', content: overviewContent },
+      ...(canEdit ? [{ value: 'email', content: emailContent }] : []),
+      { value: 'form', content: formContent },
+      ...(fileKeys.length > 0 ? [{ value: 'documents', content: documentsContent }] : []),
+      { value: 'notes', content: notesContent },
     ];
+    const accordionChildren = sectionContents.map(({ value, content }) => (
+      <React.Fragment key={value}>{content}</React.Fragment>
+    ));
     return { sections, accordionChildren };
+  };
+
+  /** Build progress steps for the horizontal checklist (final application only). */
+  const buildFinalProgressSteps = (app: AppRow): FinalAppProgressStep[] => {
+    const inviteDone = !['submitted', 'not_now', 'pending'].includes(app.status);
+    const checklistDone =
+      !!app.guarantor_approved &&
+      !!app.references_approved &&
+      !!app.interview_date &&
+      String(app.interview_date).trim() !== '';
+    return [
+      { id: 'overview', label: 'Overview & status', done: true },
+      { id: 'email', label: 'Email / invite', done: inviteDone },
+      { id: 'checklist', label: 'Checklist', done: checklistDone },
+      { id: 'approve', label: 'Approve loan', done: !!app.loan_approved_at },
+      { id: 'contract', label: 'Send contract', done: !!app.contract_sent_at },
+      { id: 'signed', label: 'Contract signed', done: !!app.contract_signed_at },
+    ];
   };
 
   const buildFinalSectionsAndContent = (app: AppRow) => {
@@ -270,10 +301,12 @@ export default async function AdminApplicationDetailPage({
       author_email: r.author_email,
       created_at: r.created_at,
     }));
+    // Sequential order matching the approval process (see FinalApplicationProgress)
     const sections: SectionSpec[] = [
-      { value: 'overview', title: 'Overview' },
+      { value: 'overview', title: 'Overview & status' },
       ...(canEdit ? [{ value: 'email', title: 'Email applicant' }] : []),
       ...(canEdit ? [{ value: 'checklist', title: 'Checklist' }] : []),
+      ...(canEdit ? [{ value: 'contract', title: 'Contract' }] : []),
       { value: 'form', title: 'Form data' },
       ...(fileKeys.length > 0 ? [{ value: 'documents', title: 'Application documents' }] : []),
       ...(linkRows.length > 0 ? [{ value: 'guarantor-refs', title: 'Guarantor & references' }] : []),
@@ -315,6 +348,21 @@ export default async function AdminApplicationDetailPage({
         interviewNotes={app.interview_notes}
         loanApprovedAt={app.loan_approved_at}
       />
+    ) : null;
+    const contractContent = canEdit ? (
+      app.loan_approved_at ? (
+        <ContractSection
+          applicationId={app.id}
+          contractDraftContent={app.contract_draft_content}
+          contractSentAt={app.contract_sent_at}
+          signedContractUrl={app.signed_contract_url}
+          contractSignedAt={app.contract_signed_at}
+        />
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          Complete the <strong>Checklist</strong> section above and click <strong>Loan Approved</strong>, then return here to generate and send the contract.
+        </p>
+      )
     ) : null;
     const formContent = (
       <FormDataView
@@ -389,15 +437,19 @@ export default async function AdminApplicationDetailPage({
     const notesContent = (
       <NotesSection applicationId={app.id} notes={notes} canEdit={canEdit} />
     );
-    const accordionChildren = [
-      overviewContent,
-      ...(canEdit ? [emailContent] : []),
-      ...(canEdit ? [checklistContent] : []),
-      formContent,
-      ...(fileKeys.length > 0 ? [documentsContent] : []),
-      ...(linkRows.length > 0 ? [guarantorRefsContent] : []),
-      notesContent,
+    const sectionContents: { value: string; content: React.ReactNode }[] = [
+      { value: 'overview', content: overviewContent },
+      ...(canEdit ? [{ value: 'email', content: emailContent }] : []),
+      ...(canEdit ? [{ value: 'checklist', content: checklistContent }] : []),
+      ...(canEdit ? [{ value: 'contract', content: contractContent }] : []),
+      { value: 'form', content: formContent },
+      ...(fileKeys.length > 0 ? [{ value: 'documents', content: documentsContent }] : []),
+      ...(linkRows.length > 0 ? [{ value: 'guarantor-refs', content: guarantorRefsContent }] : []),
+      { value: 'notes', content: notesContent },
     ];
+    const accordionChildren = sectionContents.map(({ value, content }) => (
+      <React.Fragment key={value}>{content}</React.Fragment>
+    ));
     return { sections, accordionChildren };
   };
 
@@ -466,11 +518,18 @@ export default async function AdminApplicationDetailPage({
         <TabsContent value="final" className="mt-2">
           {finalApplication ? (
             (() => {
+              const progressSteps = buildFinalProgressSteps(finalApplication);
               const { sections, accordionChildren } = buildFinalSectionsAndContent(finalApplication);
+              const defaultOpen = finalApplication.loan_approved_at
+                ? ['overview', 'checklist', 'contract', 'form']
+                : ['overview', 'checklist', 'contract', 'form'];
               return (
-                <ApplicationDetailAccordion sections={sections} defaultOpen={['overview', 'form']}>
-                  {accordionChildren}
-                </ApplicationDetailAccordion>
+                <>
+                  <FinalApplicationProgress steps={progressSteps} />
+                  <ApplicationDetailAccordion sections={sections} defaultOpen={defaultOpen}>
+                    {accordionChildren}
+                  </ApplicationDetailAccordion>
+                </>
               );
             })()
           ) : (

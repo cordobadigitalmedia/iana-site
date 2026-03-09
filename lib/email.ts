@@ -312,6 +312,68 @@ www.ianafinancial.org`;
   }
 }
 
+/** Email applicant with unique link to review and sign the contract. */
+export async function sendContractEmail({
+  to,
+  applicantName,
+  contractUrl,
+}: {
+  to: string;
+  applicantName: string;
+  contractUrl: string;
+}) {
+  const text = `As-salamu Alaikum ${applicantName},
+
+Your interest-free loan has been approved. Please review and sign your loan agreement using the link below.
+
+${contractUrl}
+
+Steps:
+1. Review the contract
+2. Download the contract as PDF and sign it
+3. Upload the signed contract and submit
+
+If you have any questions, please contact us.
+
+Was'salam/Peace
+IANA Financial
+www.ianafinancial.org`;
+
+  const html = `
+<div style="font-family: -apple-system, sans-serif; color: rgb(0,0,0); max-width: 600px;">
+  <p>As-salamu Alaikum <strong>${applicantName}</strong>,</p>
+  <p>Your interest-free loan has been approved. Please review and sign your loan agreement.</p>
+  <p><a href="${contractUrl}" style="color: #2563eb;">Review and sign your contract</a></p>
+  <p><strong>Steps:</strong></p>
+  <ol>
+    <li>Review the contract</li>
+    <li>Download the contract as PDF and sign it</li>
+    <li>Upload the signed contract and submit</li>
+  </ol>
+  <p>If you have any questions, please contact us.</p>
+  <p>Was'salam/Peace<br>IANA Financial<br><a href="http://www.ianafinancial.org">www.ianafinancial.org</a></p>
+</div>`;
+
+  ensureResendConfigured();
+  try {
+    const { data, error } = await resend.emails.send({
+      from: getFromAddress(),
+      to,
+      subject: 'Sign your loan agreement – IANA Financial',
+      text,
+      html,
+    });
+    if (error) {
+      console.error('[Email] Contract email failed:', error);
+      throw new Error(`Resend: ${error.message}`);
+    }
+    console.log('[Email] Contract email sent to', to, '– id:', data?.id);
+  } catch (error) {
+    console.error('Error sending contract email:', error);
+    throw error;
+  }
+}
+
 /** Send a custom email to an applicant (admin-edited draft). Used for status emails: Invite for Full Application, Pending, Not Now. */
 export async function sendApplicantCustomEmail({
   to,

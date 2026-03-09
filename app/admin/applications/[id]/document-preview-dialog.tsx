@@ -63,6 +63,7 @@ export function DocumentPreviewLink({ label, url, className, children }: Props) 
               />
             )}
             {type === 'image' && (
+              // eslint-disable-next-line @next/next/no-img-element -- dynamic upload URL (Vercel Blob, etc.)
               <img
                 src={url}
                 alt={label}

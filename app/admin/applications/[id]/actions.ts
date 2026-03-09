@@ -6,9 +6,10 @@ import { randomBytes } from 'crypto';
 import { getAdminUser } from '@/lib/admin-auth';
 import { sql } from '@/lib/db';
 import { getApplicantName } from '@/lib/applications';
-import { sendLoanApprovedEmail, sendApplicantCustomEmail } from '@/lib/email';
+import { sendLoanApprovedEmail, sendApplicantCustomEmail, sendContractEmail } from '@/lib/email';
 import { getApplyUrl } from '@/lib/email-templates';
 import type { EmailTemplateId } from '@/lib/email-templates';
+import { CONTRACT_TEMPLATE, fillContractTemplate, getContractUrl } from '@/lib/contract-template';
 
 export async function updateApplicationStatus(applicationId: string, formData: FormData): Promise<void> {
   const admin = await getAdminUser();
@@ -25,6 +26,7 @@ export async function updateApplicationStatus(applicationId: string, formData: F
     'awaiting_final_application',
     'awaiting_interview',
     'approved',
+    'contract_signed',
     'reviewed',
     'rejected',
   ];
@@ -126,8 +128,7 @@ export async function approveLoan(applicationId: string): Promise<{ error?: stri
     VALUES (${applicationId}, ${admin.id}, 'approval', 'Loan approved')
   `;
 
-  // Draft loan agreement: placeholder – in production you would generate PDF and store/link
-  console.log('[Loan] Draft agreement placeholder for application', applicationId);
+  // Contract is generated and sent from the Contract section (after approval).
 
   revalidatePath(`/admin/applications/${applicationId}`);
   revalidatePath('/admin/applications');
@@ -201,4 +202,126 @@ export async function sendApplicantStatusEmail(
 
 function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Generate contract from template (when loan is approved). Creates token if needed, saves draft content. */
+export async function generateContract(applicationId: string): Promise<{ error?: string }> {
+  const admin = await getAdminUser();
+  if (!admin || admin.role !== 'admin') {
+    redirect('/admin/access-denied');
+  }
+
+  const rows = await sql`
+    SELECT id, applicant_email, form_data, application_type, loan_approved_at, contract_token, contract_draft_content
+    FROM applications
+    WHERE id = ${applicationId} AND application_type = 'final'
+    LIMIT 1
+  `;
+  const app = rows[0] as {
+    id: string;
+    form_data: Record<string, unknown>;
+    loan_approved_at: string | null;
+    contract_token: string | null;
+    contract_draft_content: string | null;
+  } | undefined;
+  if (!app) return { error: 'Application not found' };
+  if (!app.loan_approved_at) return { error: 'Loan must be approved before generating a contract' };
+
+  const applicantName = getApplicantName(app.form_data);
+  const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+  const amount = typeof app.form_data?.amount_requested === 'string'
+    ? app.form_data.amount_requested
+    : typeof app.form_data?.amount_requested === 'number'
+      ? String(app.form_data.amount_requested)
+      : '';
+
+  const content = fillContractTemplate(CONTRACT_TEMPLATE, {
+    APPLICANT_NAME: applicantName !== '—' ? applicantName : 'Applicant',
+    DATE: date,
+    AMOUNT_REQUESTED: amount || '[amount]',
+    APPLICATION_ID: applicationId,
+  });
+
+  const token = app.contract_token ?? randomBytes(24).toString('hex');
+  await sql`
+    UPDATE applications
+    SET contract_token = ${token},
+        contract_draft_content = ${content}
+    WHERE id = ${applicationId}
+  `;
+
+  revalidatePath(`/admin/applications/${applicationId}`);
+  revalidatePath('/admin/applications');
+  return {};
+}
+
+/** Save admin-edited contract draft content. */
+export async function saveContractDraft(applicationId: string, content: string): Promise<{ error?: string }> {
+  const admin = await getAdminUser();
+  if (!admin || admin.role !== 'admin') {
+    redirect('/admin/access-denied');
+  }
+
+  await sql`
+    UPDATE applications
+    SET contract_draft_content = ${content}
+    WHERE id = ${applicationId} AND application_type = 'final'
+  `;
+
+  revalidatePath(`/admin/applications/${applicationId}`);
+  return {};
+}
+
+/** Send contract to applicant (set sent_at, email with unique link). */
+export async function sendContract(applicationId: string): Promise<{ error?: string }> {
+  const admin = await getAdminUser();
+  if (!admin || admin.role !== 'admin') {
+    redirect('/admin/access-denied');
+  }
+
+  const rows = await sql`
+    SELECT id, applicant_email, form_data, contract_token, contract_draft_content, contract_sent_at
+    FROM applications
+    WHERE id = ${applicationId} AND application_type = 'final'
+    LIMIT 1
+  `;
+  const app = rows[0] as {
+    id: string;
+    applicant_email: string | null;
+    form_data: Record<string, unknown>;
+    contract_token: string | null;
+    contract_draft_content: string | null;
+    contract_sent_at: string | null;
+  } | undefined;
+  if (!app) return { error: 'Application not found' };
+  if (!app.contract_token || !app.contract_draft_content) return { error: 'Generate and save the contract first' };
+  if (app.contract_sent_at) return { error: 'Contract has already been sent' };
+
+  const to = app.applicant_email;
+  if (!to) return { error: 'No applicant email' };
+
+  const contractUrl = getContractUrl(app.contract_token);
+  const applicantName = getApplicantName(app.form_data);
+
+  try {
+    await sendContractEmail({
+      to,
+      applicantName: applicantName !== '—' ? applicantName : 'Applicant',
+      contractUrl,
+    });
+  } catch (e) {
+    console.error('Failed to send contract email:', e);
+    return { error: 'Failed to send email. Please try again.' };
+  }
+
+  const now = new Date().toISOString();
+  await sql`
+    UPDATE applications
+    SET contract_sent_at = ${now}
+    WHERE id = ${applicationId}
+  `;
+
+  revalidatePath(`/admin/applications/${applicationId}`);
+  revalidatePath('/admin/applications');
+  return {};
 }

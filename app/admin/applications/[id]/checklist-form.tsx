@@ -137,7 +137,7 @@ export function ChecklistForm({
 
       {loanApprovedAt && (
         <p className="text-sm text-green-600 font-medium">
-          Loan approved on {new Date(loanApprovedAt).toLocaleString()}. Award email sent; agreement draft logged.
+          Loan approved on {new Date(loanApprovedAt).toLocaleString()}. Award email sent. Use the <strong>Contract</strong> section to generate, edit, and send the contract to the applicant.
         </p>
       )}
     </div>

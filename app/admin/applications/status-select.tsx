@@ -13,6 +13,7 @@ const STATUS_OPTIONS = [
   'awaiting_final_application',
   'awaiting_interview',
   'approved',
+  'contract_signed',
 ] as const;
 
 type Props = {

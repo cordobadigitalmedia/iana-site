@@ -32,6 +32,7 @@ export const APPLICATION_STATUS_LABELS: Record<string, string> = {
   awaiting_final_application: 'Awaiting Final Application',
   awaiting_interview: 'Awaiting Interview',
   approved: 'Approved',
+  contract_signed: 'Contract signed or accepted',
   reviewed: 'Reviewed',
   rejected: 'Rejected',
 };
