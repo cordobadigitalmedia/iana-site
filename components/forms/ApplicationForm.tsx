@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+  type ComponentProps,
+} from 'react';
 import Link from 'next/link';
 import { useFormAutoSave } from '@/hooks/useFormAutoSave';
 import { FormSection } from './FormSection';
@@ -18,6 +25,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { getPrelimDataForFinal } from '@/app/apply/final/actions';
+import {
+  getSortedCountryNames,
+  getRegionsForCountryName,
+} from '@/lib/forms/country-region-options';
 
 interface FieldDefinition {
   name: string;
@@ -26,6 +37,10 @@ interface FieldDefinition {
   required: boolean;
   section?: string;
   options?: string[];
+  /** Populate country dropdown from ISO country list (preliminary personal info). */
+  optionsSource?: 'countries';
+  /** Field name whose value selects region options (e.g. country → province_state). */
+  optionsFromField?: string;
   placeholder?: string;
   width?: 'full' | 'half' | 'third' | 'quarter';
   rowLabel?: string;
@@ -52,10 +67,16 @@ interface ApplicationFormProps {
 
 export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFormData }: ApplicationFormProps) {
   const [formData, setFormData] = useState<Record<string, any>>(() => (initialFormData ?? {}) as Record<string, any>);
+  /** Mirrors formData so submit always reads the latest values (avoids stale Radix Select / batching edge cases). */
+  const formDataRef = useRef<Record<string, any>>((initialFormData ?? {}) as Record<string, any>);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const initialFormDataRef = useRef(initialFormData);
+
+  useEffect(() => {
+    formDataRef.current = formData;
+  }, [formData]);
   const [loadPrelimEmail, setLoadPrelimEmail] = useState('');
   const [loadPrelimPending, setLoadPrelimPending] = useState(false);
   const [loadPrelimError, setLoadPrelimError] = useState<string | null>(null);
@@ -93,10 +114,83 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFo
     }
   }, [loadPrelimEmail]);
 
+  const countryFieldDef = useMemo(
+    () => fields.find((f) => f.optionsSource === 'countries'),
+    [fields]
+  );
+
+  const provinceFromCountryField = useMemo(() => {
+    if (!countryFieldDef) return undefined;
+    return fields.find((f) => f.optionsFromField === countryFieldDef.name);
+  }, [fields, countryFieldDef]);
+
+  const countryNameOptions = useMemo(() => getSortedCountryNames(), []);
+
+  const getEffectiveFieldProps = useCallback(
+    (field: FieldDefinition) => {
+      if (field.optionsSource === 'countries') {
+        return {
+          type: 'select' as const,
+          options: countryNameOptions,
+          placeholder: field.placeholder ?? 'Select country',
+          disabled: false,
+        };
+      }
+      if (field.optionsFromField) {
+        const countryVal = String(
+          formData[field.optionsFromField] ?? ''
+        ).trim();
+        const regions = getRegionsForCountryName(countryVal);
+        const current = String(formData[field.name] ?? '');
+        let regionOpts = [...regions];
+        if (current && !regionOpts.includes(current)) {
+          regionOpts = [current, ...regionOpts];
+        }
+        if (!countryVal) {
+          return {
+            type: 'text' as const,
+            options: undefined,
+            placeholder: 'Select country first',
+            disabled: true,
+          };
+        }
+        if (regionOpts.length === 0) {
+          return {
+            type: 'text' as const,
+            options: undefined,
+            placeholder: 'Province, state, or region',
+            disabled: false,
+          };
+        }
+        return {
+          type: 'select' as const,
+          options: regionOpts,
+          placeholder: field.placeholder ?? 'Select province or state',
+          disabled: false,
+        };
+      }
+      return {
+        type: field.type,
+        options: field.options,
+        placeholder: field.placeholder,
+        disabled: false,
+      };
+    },
+    [countryNameOptions, formData]
+  );
+
   // Update form data
   const handleFieldChange = (name: string, value: string | string[]) => {
     setFormData((prev) => {
-      const updated = { ...prev, [name]: value };
+      let updated: Record<string, unknown> = { ...prev, [name]: value };
+      if (
+        countryFieldDef &&
+        provinceFromCountryField &&
+        name === countryFieldDef.name
+      ) {
+        updated = { ...updated, [provinceFromCountryField.name]: '' };
+      }
+      formDataRef.current = updated as Record<string, any>;
       setLastSaved(new Date());
       return updated;
     });
@@ -223,12 +317,13 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFo
     setErrors({});
 
     try {
+      const data = formDataRef.current;
       const payload = {
-        ...formData,
-        assets_total: computeAssetsTotal(formData),
-        liabilities_total_amount_owing: computeLiabilitiesTotalAmount(formData),
-        liabilities_total_monthly_payment: computeLiabilitiesTotalPayment(formData),
-        monthly_expenses_total: computeMonthlyExpensesTotal(formData),
+        ...data,
+        assets_total: computeAssetsTotal(data),
+        liabilities_total_amount_owing: computeLiabilitiesTotalAmount(data),
+        liabilities_total_monthly_payment: computeLiabilitiesTotalPayment(data),
+        monthly_expenses_total: computeMonthlyExpensesTotal(data),
       };
       const result = await onSubmit(payload);
       if (result.success && result.applicationId) {
@@ -340,19 +435,45 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFo
         />
       );
     }
+    const eff = getEffectiveFieldProps(field);
+    const effectiveType = eff.type;
+    const effectiveOptions =
+      eff.options !== undefined ? eff.options : field.options;
+
+    const rawVal = formData[field.name];
+    const effectiveValue =
+      effectiveType === 'checkbox'
+        ? Array.isArray(rawVal)
+          ? rawVal
+          : []
+        : rawVal ?? '';
+
+    /** Remount province/state when country or control type changes so Radix Select stays in sync with React state. */
+    const fieldRemountKey = field.optionsFromField
+      ? `${field.name}-${String(formData[field.optionsFromField] ?? '')}-${eff.type}`
+      : field.name;
+
     return (
       <FormField
+        key={fieldRemountKey}
         name={field.name}
         label={field.label}
-        type={field.type}
+        type={
+          effectiveType as ComponentProps<typeof FormField>['type']
+        }
         required={isFieldRequired(field)}
-        value={formData[field.name] || (field.type === 'checkbox' ? [] : '')}
+        value={effectiveValue}
         onChange={(value) => handleFieldChange(field.name, value)}
         error={errors[field.name]}
-        options={field.options}
-        placeholder={field.placeholder}
+        options={effectiveOptions}
+        placeholder={eff.placeholder ?? field.placeholder}
+        disabled={eff.disabled}
         inTable={inTable}
-        rows={field.type === 'textarea' && field.section === '2. Loan Request' ? 2 : undefined}
+        rows={
+          effectiveType === 'textarea' && field.section === '2. Loan Request'
+            ? 2
+            : undefined
+        }
         tooltip={options?.tooltip}
         description={options?.description}
       />
@@ -381,7 +502,11 @@ export function ApplicationForm({ fields, sections, formKey, onSubmit, initialFo
           </div>
         </div>
       )}
-      <form onSubmit={handleSubmit} className={`space-y-6 ${isSubmitting ? 'pointer-events-none select-none' : ''}`}>
+      <form
+        noValidate
+        onSubmit={handleSubmit}
+        className={`space-y-6 ${isSubmitting ? 'pointer-events-none select-none' : ''}`}
+      >
       {formKey === 'final' && (
         <div className="rounded-md border border-gray-300 bg-muted/30 p-4 space-y-3">
           <p className="text-sm font-medium">Load from my preliminary application</p>

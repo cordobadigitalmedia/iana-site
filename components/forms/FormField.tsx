@@ -31,6 +31,7 @@ interface FormFieldProps {
   error?: string;
   options?: string[];
   placeholder?: string;
+  disabled?: boolean;
   inTable?: boolean;
   rows?: number;
   tooltip?: string;
@@ -49,6 +50,7 @@ export function FormField({
   error,
   options,
   placeholder,
+  disabled = false,
   inTable = false,
   rows,
   tooltip,
@@ -68,6 +70,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
+            disabled={disabled}
             rows={rows}
             className={`${error ? 'border-red-500' : ''} ${rows === 2 ? '!min-h-0' : ''}`}
             style={rows === 2 ? { minHeight: 'auto' } : undefined}
@@ -76,13 +79,19 @@ export function FormField({
       case 'select':
         return (
           <Select
-            value={value as string}
+            value={
+              value === '' || value === undefined || value === null
+                ? undefined
+                : String(value)
+            }
             onValueChange={onChange}
             required={required}
+            disabled={disabled}
           >
             <SelectTrigger
               id={fieldId}
               className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
+              disabled={disabled}
             >
               <SelectValue placeholder={placeholder || `Select ${label}`} />
             </SelectTrigger>
@@ -106,6 +115,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
+            disabled={disabled}
             className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
@@ -119,6 +129,7 @@ export function FormField({
             onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
             required={required}
+            disabled={disabled}
             className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
@@ -133,6 +144,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
+            disabled={disabled}
             className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
@@ -147,6 +159,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
+            disabled={disabled}
             className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );
@@ -221,6 +234,7 @@ export function FormField({
             onBlur={onBlur}
             placeholder={placeholder}
             required={required}
+            disabled={disabled}
             className={error ? 'border-red-500' : inTable ? 'bg-white' : ''}
           />
         );

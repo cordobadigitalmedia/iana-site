@@ -3,6 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useTransition, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { APPLICATION_STATUS_LABELS } from '@/lib/applications';
 import type { EmailTemplateId } from '@/lib/email-templates';
 import { sendApplicantStatusEmail } from './actions';
@@ -40,6 +48,15 @@ export function EmailApplicantForm({
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [selectedTemplateId, setSelectedTemplateId] = useState<EmailTemplateId | ''>('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+
+  const showModal = (title: string, message: string) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalOpen(true);
+  };
 
   const loadTemplate = (templateId: EmailTemplateId) => {
     const t = templates[templateId];
@@ -62,7 +79,7 @@ export function EmailApplicantForm({
 
   const handleSend = () => {
     if (!subject.trim() || !body.trim()) {
-      alert('Please enter subject and message body.');
+      showModal('Missing information', 'Please enter subject and message body.');
       return;
     }
     startTransition(async () => {
@@ -73,10 +90,10 @@ export function EmailApplicantForm({
         selectedTemplateId || undefined
       );
       if (result?.error) {
-        alert(result.error);
+        showModal('Unable to send email', result.error);
         return;
       }
-      alert('Email sent.');
+      showModal('Email sent', 'Email sent.');
       router.refresh();
     });
   };
@@ -173,6 +190,20 @@ export function EmailApplicantForm({
       <Button type="button" onClick={handleSend} disabled={isPending || !subject.trim() || !body.trim()}>
         {isPending ? 'Sending…' : 'Send email'}
       </Button>
+
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{modalTitle}</DialogTitle>
+            <DialogDescription>{modalMessage}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" onClick={() => setModalOpen(false)}>
+              OK
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

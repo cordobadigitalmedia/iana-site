@@ -38,7 +38,11 @@ export function MarkdownRenderer({
             components={{
               a: ({ href, children, ...props }: any) => {
                 if (!href) return <>{children}</>
-                if (href.startsWith("https") || href.startsWith("mailto:")) {
+                if (
+                  href.startsWith("http://") ||
+                  href.startsWith("https://") ||
+                  href.startsWith("mailto:")
+                ) {
                   return (
                     <a
                       href={href}

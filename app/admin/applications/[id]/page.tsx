@@ -24,6 +24,7 @@ import { EmailApplicantForm } from './email-applicant-form';
 import { FormDataView } from './form-data-view';
 import { NotesSection } from './notes-section';
 import { DocumentPreviewLink } from './document-preview-dialog';
+import { DeleteApplicationButton } from './delete-application-button';
 import { ApplicationDetailAccordion, type SectionSpec } from './application-detail-accordion';
 import { ContractSection } from './contract-section';
 import { FinalApplicationProgress, type FinalAppProgressStep } from './final-application-progress';
@@ -215,7 +216,13 @@ export default async function AdminApplicationDetailPage({
           <strong>Email:</strong> {app.applicant_email ?? '—'}
         </p>
         {canEdit && (
-          <UpdateStatusForm key={app.status} applicationId={app.id} currentStatus={app.status} />
+          <div className="flex flex-wrap items-center gap-3">
+            <UpdateStatusForm key={app.status} applicationId={app.id} currentStatus={app.status} />
+            <DeleteApplicationButton
+              applicationId={app.id}
+              applicationLabel={`${getApplicationTypeLabel(app.application_type)} application`}
+            />
+          </div>
         )}
       </div>
     );
@@ -326,7 +333,13 @@ export default async function AdminApplicationDetailPage({
           <strong>Email:</strong> {app.applicant_email ?? '—'}
         </p>
         {canEdit && (
-          <UpdateStatusForm key={app.status} applicationId={app.id} currentStatus={app.status} />
+          <div className="flex flex-wrap items-center gap-3">
+            <UpdateStatusForm key={app.status} applicationId={app.id} currentStatus={app.status} />
+            <DeleteApplicationButton
+              applicationId={app.id}
+              applicationLabel={`${getApplicationTypeLabel(app.application_type)} application`}
+            />
+          </div>
         )}
       </div>
     );

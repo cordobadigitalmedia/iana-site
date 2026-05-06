@@ -325,3 +325,52 @@ export async function sendContract(applicationId: string): Promise<{ error?: str
   revalidatePath('/admin/applications');
   return {};
 }
+
+/**
+ * Permanently delete an application (admin only).
+ * Returns a redirect target so the client can navigate away if needed.
+ */
+export async function deleteApplication(
+  applicationId: string
+): Promise<{ error?: string; redirectTo?: string }> {
+  const admin = await getAdminUser();
+  if (!admin || admin.role !== 'admin') {
+    redirect('/admin/access-denied');
+  }
+
+  const rows = await sql`
+    SELECT id, applicant_email
+    FROM applications
+    WHERE id = ${applicationId}
+    LIMIT 1
+  `;
+  const app = rows[0] as { id: string; applicant_email: string | null } | undefined;
+  if (!app) return { error: 'Application not found.' };
+
+  await sql`
+    DELETE FROM applications
+    WHERE id = ${applicationId}
+  `;
+
+  let redirectTo = '/admin/applications';
+  if (app.applicant_email) {
+    const remaining = await sql`
+      SELECT id
+      FROM applications
+      WHERE applicant_email = ${app.applicant_email}
+      ORDER BY submitted_at DESC NULLS LAST
+      LIMIT 1
+    `;
+    const nextApp = remaining[0] as { id: string } | undefined;
+    if (nextApp?.id) {
+      redirectTo = `/admin/applications/${nextApp.id}`;
+    }
+  }
+
+  revalidatePath(`/admin/applications/${applicationId}`);
+  revalidatePath('/admin/applications');
+  if (redirectTo.startsWith('/admin/applications/')) {
+    revalidatePath(redirectTo);
+  }
+  return { redirectTo };
+}

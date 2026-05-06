@@ -30,6 +30,7 @@ function buildSchemaFromFields(fields: typeof fieldDefinitions.fields) {
           : z.array(z.string()).optional();
         break;
       case 'radio':
+      case 'select':
         fieldSchema = z.string().min(1, `${field.label} is required`);
         break;
       case 'text':

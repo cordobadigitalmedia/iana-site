@@ -4,8 +4,29 @@
  */
 export function getApplicantName(formData: Record<string, unknown> | null): string {
   if (!formData || typeof formData !== 'object') return '—';
+
+  const normalize = (value: unknown): string =>
+    typeof value === 'string' ? value.trim() : '';
+  const looksLikeLabelPlaceholder = (value: string): boolean => {
+    if (!value) return true;
+    // Ignore punctuation/case so values like "Legal Name:", "LEGAL NAME", etc. are treated as placeholders.
+    const simplified = value.toLowerCase().replace(/[^a-z]/g, '');
+    return simplified === 'legalname' || simplified === 'fulllegalname';
+  };
+
   const legalName = formData.legal_name;
-  if (typeof legalName === 'string' && legalName.trim()) return legalName.trim();
+  const normalizedLegalName = normalize(legalName);
+  if (normalizedLegalName && !looksLikeLabelPlaceholder(normalizedLegalName)) {
+    return normalizedLegalName;
+  }
+
+  // Fallbacks seen in imported/migrated payloads.
+  const altNameKeys = ['full_name', 'name', 'applicant_name'] as const;
+  for (const key of altNameKeys) {
+    const value = normalize(formData[key]);
+    if (value && !looksLikeLabelPlaceholder(value)) return value;
+  }
+
   const first = formData.first_name;
   const last = formData.last_name;
   const middle = formData.middle_name;

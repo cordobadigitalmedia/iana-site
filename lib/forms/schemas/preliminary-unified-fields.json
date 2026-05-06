@@ -47,20 +47,22 @@
       "width": "quarter"
     },
     {
-      "name": "province_state",
-      "label": "Province/State",
-      "type": "text",
-      "required": true,
-      "section": "1. Personal Information",
-      "width": "quarter"
-    },
-    {
       "name": "country",
       "label": "Country",
-      "type": "text",
+      "type": "select",
       "required": true,
       "section": "1. Personal Information",
-      "width": "quarter"
+      "width": "quarter",
+      "optionsSource": "countries"
+    },
+    {
+      "name": "province_state",
+      "label": "Province/State",
+      "type": "select",
+      "required": true,
+      "section": "1. Personal Information",
+      "width": "quarter",
+      "optionsFromField": "country"
     },
     {
       "name": "postal_zip_code",
