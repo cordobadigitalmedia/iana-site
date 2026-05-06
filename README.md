@@ -42,6 +42,10 @@ pnpm run build
 pnpm start
 ```
 
+## Email (Resend)
+
+Application and applicant emails are sent via [Resend](https://resend.com). The Resend account is currently connected to **ismael@cordobadigitalmedia.com**. This should be moved to the production/IANA account before going live.
+
 ## Deploy
 
 The site can be deployed to any static hosting service:

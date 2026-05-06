@@ -62,6 +62,8 @@ module.exports = {
         noto_naskh: ["var(--font-noto-naskh)"],
         noto_serif: ["var(--font-noto-serif)"],
         noto_sans: ["var(--font-noto-sans)"],
+        scheherazade: ["var(--font-scheherazade-new)"],
+        reem_kufi: ["var(--font-reem-kufi)"],
       },
       keyframes: {
         "accordion-down": {

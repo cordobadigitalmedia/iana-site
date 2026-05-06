@@ -1,9 +1,11 @@
 import "@/styles/globals.css"
 import "@/styles/styles.css"
 import type { Metadata, Viewport } from "next"
-import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif } from "next/font/google"
+import { Noto_Naskh_Arabic, Noto_Sans, Noto_Serif, Scheherazade_New, Reem_Kufi } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
+import { BotIdClient } from "botid/client"
 
+import { ClerkProvider } from "@clerk/nextjs"
 import { ThemeProvider } from "@/components/theme-provider"
 
 // Default metadata
@@ -44,29 +46,62 @@ const noto_serif = Noto_Serif({
   variable: "--font-noto-serif",
 })
 
+const scheherazade_new = Scheherazade_New({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  variable: "--font-scheherazade-new",
+})
+
+const reem_kufi = Reem_Kufi({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-reem-kufi",
+})
+
+const protectedRoutes = [
+  {
+    path: '/apply/preliminary',
+    method: 'POST',
+  },
+  {
+    path: '/apply/final',
+    method: 'POST',
+  },
+];
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <head />
+        <head>
+          <BotIdClient protect={protectedRoutes} />
+        </head>
         <body
           className={
             noto_sans.variable +
             " " +
             noto_Naskh.variable +
             " " +
-            noto_serif.variable
+            noto_serif.variable +
+            " " +
+            scheherazade_new.variable +
+            " " +
+            reem_kufi.variable
           }
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Analytics />
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+            <Analytics />
+          </ClerkProvider>
         </body>
       </html>
     </>

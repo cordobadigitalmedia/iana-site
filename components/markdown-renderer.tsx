@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { GoogleMap } from "@/components/ui/iframe-googlemap"
 import { VideoPlayer } from "@/components/ui/iframe-video"
+import { PreliminaryApplicationCards, FinalApplicationCard } from "@/components/ApplicationCards"
 
 interface MarkdownRendererProps {
   content: string
@@ -37,7 +38,11 @@ export function MarkdownRenderer({
             components={{
               a: ({ href, children, ...props }: any) => {
                 if (!href) return <>{children}</>
-                if (href.startsWith("https") || href.startsWith("mailto:")) {
+                if (
+                  href.startsWith("http://") ||
+                  href.startsWith("https://") ||
+                  href.startsWith("mailto:")
+                ) {
                   return (
                     <a
                       href={href}
@@ -81,7 +86,7 @@ interface ProcessedItem {
 function processComponentTags(content: string): ProcessedItem[] {
   const items: ProcessedItem[] = []
   const componentPattern =
-    /<(Button|Alert|Youtube|Googlemap)([^>]*?)\/>/g
+    /<(Button|Alert|Youtube|Googlemap|PreliminaryApplicationCards|FinalApplicationCard)([^>]*?)\/>/g
 
   let lastIndex = 0
   let match
@@ -164,6 +169,10 @@ function renderComponent(
       return <VideoPlayer url={`https://www.youtube.com/embed/${props.id}`} />
     case "Googlemap":
       return <GoogleMap url={props.src} />
+    case "PreliminaryApplicationCards":
+      return <PreliminaryApplicationCards />
+    case "FinalApplicationCard":
+      return <FinalApplicationCard />
     default:
       return null
   }

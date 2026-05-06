@@ -11,7 +11,7 @@
   "backgroundColor": "secondary",
   "ctaButton": {
     "title": "Apply for a loan",
-    "link": "/applications",
+    "link": "/start-applying",
     "type": "relative"
   },
   "darkmode": false

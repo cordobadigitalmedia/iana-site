@@ -1,0 +1,91 @@
+import type { Metadata } from "next";
+import { readNav } from "@/lib/content/nav";
+import { readHeader } from "@/lib/content/header";
+import { readFooter } from "@/lib/content/footer";
+import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
+import { ApplicationForm } from "@/components/forms/ApplicationForm";
+import { submitFinalApplication, getPrelimDataForFinal } from "./actions";
+import fieldDefinitions from "@/lib/forms/schemas/final-application-fields.json";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+type FieldDefinition = {
+  name: string;
+  label: string;
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'number' | 'email' | 'tel' | 'file';
+  required: boolean;
+  section?: string;
+  options?: string[];
+  placeholder?: string;
+  width?: 'full' | 'half';
+  rowLabel?: string;
+  isTotal?: boolean;
+  conditionalRequired?: {
+    field: string;
+    value: string;
+  };
+  conditionalShow?: {
+    field: string;
+    value: string;
+  };
+};
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Final Interest-Free Loan Application | IANA Financial",
+  description: "Submit your final interest-free loan application.",
+};
+
+export default async function FinalApplicationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
+  const [nav, header, footer] = await Promise.all([
+    readNav(),
+    readHeader(),
+    readFooter(),
+  ]);
+
+  const params = await searchParams;
+  const token = params?.token;
+  const initialFormData = token ? await getPrelimDataForFinal(token, null) : null;
+
+  return (
+    <>
+      <SiteHeader nav={nav as any} header={header as any} />
+      <div className="flex min-h-[calc(100vh-65px)] flex-col">
+        <div className="grow container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-4">
+              <Link href="/start-applying">
+                <Button variant="outline">Back to Application Home</Button>
+              </Link>
+            </div>
+            <Card className="border-2">
+              <CardContent className="p-8">
+                <h1 className="text-3xl font-bold mb-6">Final Interest-Free Loan Application</h1>
+                <p className="text-muted-foreground mb-8">
+                  Please fill out all required fields. Your information will be saved automatically as you type.
+                </p>
+                <ApplicationForm
+                  fields={fieldDefinitions.fields as FieldDefinition[]}
+                  sections={fieldDefinitions.sections}
+                  formKey="final"
+                  onSubmit={submitFinalApplication}
+                  initialFormData={initialFormData ?? undefined}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <Footer footer={footer as any} />
+      </div>
+    </>
+  );
+}
+
+

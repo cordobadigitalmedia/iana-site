@@ -1,0 +1,247 @@
+Delivered-To: ismael.rumzan@gmail.com
+Received: by 2002:a05:7108:9d0a:b0:54d:409e:b29e with SMTP id gu10csp2585155gdb;
+        Tue, 27 Jan 2026 22:14:16 -0800 (PST)
+X-Received: by 2002:a05:6a21:4591:b0:36a:dbc6:2572 with SMTP id adf61e73a8af0-38ec632fe2emr3618739637.18.1769580856670;
+        Tue, 27 Jan 2026 22:14:16 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1769580856; cv=pass;
+        d=google.com; s=arc-20240605;
+        b=AdX+A2sfoH+lhdF9MiM/UaFKTgieQzbmbF7dqscwv6j7hw4Z/fC5f1mVuvgYYTKjx/
+         wTKYKX1/8rrfUqjz6d5d4ZiZM/Lrr0M8QfjN9QrPPu67kjCUGebWFyXka0hJANnEM4Is
+         5vG99+DzlYzYQcGe+Y01qmZayhjrLfbrk59QmAZZuPookxJmgveDqSJ7n/yaMEvQtqx+
+         SJtZ5Kegys3VmU5Cp9AfXcdOLKu9CNQtDRGe+H1FTVElGIVRawgTO4+p9MqmcdUpYBar
+         cr7YzM9wmsCsp8bfLsD8qhZR64E1MXbfz9bwenmh5SRftjFAYc6rZoP1MscqikaoZetY
+         szgg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=azho1FeFwjYosY4uXf55Xq/2lfHOB4k5znrwri8NMD4=;
+        fh=T+CUeZRMy1FKZzHGPX2zjJSc32IK9bzhF9GExLsHVDg=;
+        b=b7geDGKlUhCSjv0t0aNlvUmr+G53Nh4mMOHcycGbnkvsNQ8XndlBd4zXb2u/MmxFtD
+         dmFv0W0ekOKiBDZBguxQc6fmCZW9GsA/eNYIB81MszVgrjUT40C6jW6naeBdOs8IW/BZ
+         MIu7Bh6sltk7C6oePxmJ7CsTR/xQTn6HQxAMdM9wQA1jFgVaAQqStJC0nZMxaTegt4ii
+         1YS+ER6PFFSZ0LwxBL/sIdVLuuRktpI0MLyY/pli00lIVs2TrnaPR4g96OlUV9zljqtq
+         hEAdQiyhUlWemR+pq8uQmHJ7IgbSJbUJWGiKy8bUp1eWSm3Xdg9qj2RMlEJcx18fm5oD
+         U86w==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@ianafinancial-org.20230601.gappssmtp.com header.s=20230601 header.b=hOplsida;
+       arc=pass (i=1);
+       spf=none (google.com: applications@ianafinancial.org does not designate permitted sender hosts) smtp.mailfrom=applications@ianafinancial.org;
+       dara=pass header.i=@gmail.com
+Return-Path: <applications@ianafinancial.org>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 98e67ed59e1d1-3540f46bbedsor967489a91.12.2026.01.27.22.14.16
+        for <ismael.rumzan@gmail.com>
+        (Google Transport Security);
+        Tue, 27 Jan 2026 22:14:16 -0800 (PST)
+Received-SPF: none (google.com: applications@ianafinancial.org does not designate permitted sender hosts) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@ianafinancial-org.20230601.gappssmtp.com header.s=20230601 header.b=hOplsida;
+       arc=pass (i=1);
+       spf=none (google.com: applications@ianafinancial.org does not designate permitted sender hosts) smtp.mailfrom=applications@ianafinancial.org;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1769580856; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TyYc+X9s5mwseTQVtkH2smC0c9xvU+YoSzMA4OGrvalCy3UytVGUaed59xNI1uJDOQ
+         AFj/3rFIvXhpeIQXYssJ4+X4cxKUOLQvpV2uqje6REKgWuy5wPXc5EyUeIesrAkHK6pM
+         aABs5ua1r3KnU6s9Nt8S5ywc9hADF7zM1AFQYE7SPN23sUBluu39684RKbtM+t0G7/kP
+         gR2ENsdKiNei5lHzNEk26MCNC3ySMwH+7JFgR7xjA0giJzliYAaEaJ8k6+0N9qgti//g
+         sfqELcd68A2L1vBVCAsIvrU9vPx2ae8R2iFhxZ1QWWtOgvIuUfVUlIzIXEw8uKaQiUyk
+         tEVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=azho1FeFwjYosY4uXf55Xq/2lfHOB4k5znrwri8NMD4=;
+        fh=T+CUeZRMy1FKZzHGPX2zjJSc32IK9bzhF9GExLsHVDg=;
+        b=C34/3dHmXVeh7jPcDb0fQZ5dR2PF/euQDvCr9a05W9bwWpoxnEZzdPRDeyBl/cMDR8
+         P2YtCU9Jqvm/93bgepKtB2swpwfzZJw3011cT3C5FTY0q02xzLox7qHTdLZgjOih9HkC
+         dFnjDQAyKvsG4PXUU/sznAwxvuInfvrhxKEnstLGj4Qfc0eaR5b6TorSJ+JTNst4sEPa
+         AVN3huG/PcjI+0ViZ/TKDXgTkJ+AkINFQotunfW/E6E3sKitmhFpuHBrQCK0OzcpVBJL
+         Gtgp28PEAeC6HOliUGFLirjCQeW1AgtK86ij49qToeoQGUKZRF0uWcnZY5vnBuUfRUfG
+         n8BA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ianafinancial-org.20230601.gappssmtp.com; s=20230601; t=1769580856; x=1770185656; dara=google.com;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=azho1FeFwjYosY4uXf55Xq/2lfHOB4k5znrwri8NMD4=;
+        b=hOplsidaRRhU5KgYkvGAuIH6+yk0OxPeCeU3QZS2mh7vxyKXiuq8m7iFxlNMmORoZh
+         BgQTuSyVsuuGMIIzyDtzMhl2qc4Ono/U/2remzhf7iMPbaz59uh7f7ujceGZhejf2l15
+         JckSRF8E/BpmkmmEsjnZ2EJQNeFgn2oHCaBsUCrvJxo6Q4a4TFTH8S4ygttbsslXy7+8
+         hDi5UM4ZWiDHfNZ7aM1RfhGhycY8wAsfW+WYpfTNORF7BkIPbdmZM8Q1UPqK2rXo1q7g
+         o2WcYIOQl0yqqkBwXLRP3/mveaE9pt5uAEcCpu8ci1I7v+DYbx1DD7USarLh007+BvD5
+         Nyfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769580856; x=1770185656;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=azho1FeFwjYosY4uXf55Xq/2lfHOB4k5znrwri8NMD4=;
+        b=EJorYMns+b54YU1QPbdULcSCt6lCsS6vzMZKm2sjy/t7jnT0zMO6adAuGjvG+F/DkW
+         /Xkn0ik+GlxiqGYZhmESOz/stoGijBpUEe5X1QmhCS7oYMoM42y8tcZsipGDG7pA4C0z
+         /LBWMVBEaBaabgvVfY68wnO7qnyxsybe/CeGW3FLvlSSi/uvxcH+9mslXefhyVHvYLDZ
+         aXpIsmIFgt2XeQxZrJqpL3Qe9NfnGhyt9s533ulFaTava0dA307XUfi1I3WW21zS7LVc
+         v13zgONfCrzU/PKgmINhlNj0YJyuzY5Tb4uWqZCthI9ZfjkqtqaOvInlWZXmi9XSsMJr
+         KVHQ==
+X-Gm-Message-State: AOJu0YxmuDDnhku75d3XrtEL6lnlui1YkQm7KJzPmWiahM1oRTOOkZDD
+	FsBKmqKCCKGBXjLQwTTLCYRFuncLvrhJ9OcWU7my6Fl2KH34eo7nkZnOqgb9SIom4gWc1pZbXB5
+	nzcU4xBvS3HWslLnw3TWCBQqjhTzR1WJVINfuQhQabYZ394QX5S0=
+X-Gm-Gg: AZuq6aK1OxTHVBOSKBO1SZK7IwBnTXXsdU0RwO6fO1+9rHrUbRq9RV1T7mI1PyOHcTR
+	svjz+IB8Tc4hWEGX5bCQ3nk9dweCHdmKD/NrqF6XxhLSw5isBAphLyKoTfl85ptuPK4AQWW+hP6
+	T/LCSknSKhaUN+mx/Eqlfma/K2KeE3xw8ltAy5h0rJNTjuSzhne0DkCycXUL2R4ENvs9ffcXdHO
+	pcQWPY5QECaliqr1tGyzbHdoROK4L9Kou72PLWES0Y/zRpLTiFbq0U63rJOtnSGfhXbAnauMS5S
+	9VzPOx/d
+X-Received: by 2002:a17:90b:1a86:b0:340:776d:f4ca with SMTP id
+ 98e67ed59e1d1-353fed9c9f9mr3938257a91.26.1769580855821; Tue, 27 Jan 2026
+ 22:14:15 -0800 (PST)
+MIME-Version: 1.0
+From: Iana Applications <applications@ianafinancial.org>
+Date: Tue, 27 Jan 2026 23:14:04 -0700
+X-Gm-Features: AZwV_Qiojft6udSIwoix1VFpgC5HyNMspm_9OPnOZYqmVnIyibLqRFiVvgWJI5k
+Message-ID: <CAEXA8GkH5vFKDpeNC9POszd+cDk3yhw6+-CcjUMWGuTuXV49UQ@mail.gmail.com>
+Subject: Reference Questions
+To: ismael.rumzan@gmail.com
+Cc: Sharafe Elladen <sharafe.elladen@ianafinancial.org>
+Content-Type: multipart/alternative; boundary="000000000000501d9606496ca64a"
+
+--000000000000501d9606496ca64a
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+=EF=B7=BD
+
+Salam/Peace
+
+We pray you and yours are well.
+
+You were listed as a reference for ***** for an interest-free loan from
+Iana Financial.
+
+Iana is entrusted with peoples' gifts and savings, and we are required to
+be extra careful and cautious in choosing who to lend funds to.  It is
+extremely important that those awarded loans are very honest, highly
+competent and will do everything they can to diligently repay their loan,
+inshaAllah, God-willing.
+
+*Privacy*
+All of your information is kept private and confidential for the purposes
+of Iana; Iana volunteers sign confidentiality agreements and we do not
+share your information with anyone else.
+
+Please answer the following questions to the best of your knowledge and
+ability and as candidly as possible; if you've already provided a letter
+of reference, thank you and please kindly answer the questions.
+
+1.      What is your full name and occupation?
+
+2.      How long have you known the applicant and in what capacity? i.e.
+Describe your relationship to the applicant.
+
+3.      What has your experience been with the applicant in terms of
+character and conduct?  Please elaborate and provide examples.
+
+4.      Specifically, how reliable, competent, and trustworthy is the
+applicant?
+
+5.      How well does the applicant communicate?
+
+6.      Would you personally lend the applicant money?  Please explain.
+
+7.      Would you please provide your phone number and address in case we
+need to reach you?
+
+Many thanks and God reward you for your honesty and sincere advice.
+
+Kindly keep us in your prayers.
+
+Was'salam/Peace
+
+
+Iana Applications
+www.ianafinancial.org
+
+PS* Our communities have billions of dollars in banks being loaned to
+people at interest; if just a fraction would save a portion of their money
+with organizations like Iana, these funds could be loaned within our
+community interest-free.  Please help out and encourage family and friends
+to donate or lend even small amounts to Iana. The guide to good works is
+like the doer; we have US and Canadian accounts.  Pray that Allah guide,
+accept, and bless these efforts.  For more information
+email support-iana@ianafinancial.org <support-iana@ianafinancial.org> or
+visit www.ianafinancial.org/support-iana
+<http://www.ianafinancial.org/support-iana>*
+
+--000000000000501d9606496ca64a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div style=3D"font-size:inherit"><div style=3D"color:rgb(0,0,0);font-family=
+:-apple-system,sans-serif;font-size:inherit;font-style:normal;font-weight:4=
+00;letter-spacing:normal;text-indent:0px;text-transform:none;white-space:no=
+rmal;word-spacing:0px;text-decoration:none"><div dir=3D"ltr"><div dir=3D"lt=
+r"><div><div><div><div><div><div dir=3D"ltr"><div><div><div dir=3D"auto"><d=
+iv dir=3D"auto"><div dir=3D"auto"><div dir=3D"ltr"><div><div style=3D"text-=
+align:center"><span style=3D"color:rgb(29,28,29);font-family:&#39;slack-lat=
+o&#39;,&#39;applelogo&#39;,sans-serif;font-size:15px;background-color:rgb(2=
+48,248,248)">=EF=B7=BD</span></div></div><div><br></div><div>Salam/Peace</d=
+iv><div><br></div><div>We pray you and yours are well.=C2=A0=C2=A0<br></div=
+><div><br></div><div>You were listed as a=C2=A0reference=C2=A0for=C2=A0****=
+*=C2=A0for=C2=A0an interest-free loan from Iana Financial.</div><div><br></=
+div><div><div>Iana is entrusted with peoples&#39; gifts and savings, and we=
+ are required to be extra careful and cautious in choosing who to lend fund=
+s to.=C2=A0 It is extremely important that those awarded loans are very hon=
+est, highly competent and will do everything they can to diligently repay t=
+heir loan, inshaAllah, God-willing.</div></div><div><br></div><div><div><u>=
+Privacy</u><br></div><div>All of your information is kept private and confi=
+dential for the purposes of Iana; Iana volunteers sign confidentiality agre=
+ements and we do not share your information with anyone else.<br></div></di=
+v><div><br></div><div>Please answer the following questions to the best of =
+your knowledge and ability and as candidly as possible; if you&#39;ve alrea=
+dy provided a letter of=C2=A0reference, thank you and please kindly answer =
+the questions.<br></div><div><br></div><div>1.=C2=A0 =C2=A0 =C2=A0 What is =
+your full name and occupation?<br><br>2.=C2=A0 =C2=A0 =C2=A0 How long have =
+you known the applicant and in what capacity? i.e. Describe your relationsh=
+ip to the applicant.<br><br>3.=C2=A0 =C2=A0 =C2=A0 What has your experience=
+ been with the applicant in terms of character and conduct?=C2=A0 Please el=
+aborate and provide examples.<br></div><div><br></div><div>4.=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 Specifically, how reliable, competent, and trustworthy i=
+s the applicant?<br></div><div><br></div>5. =C2=A0 =C2=A0=C2=A0 How well do=
+es the applicant communicate?<br><div><div><br>6.=C2=A0 =C2=A0 =C2=A0 Would=
+ you personally lend the applicant money?=C2=A0 Please explain.<br><br>7.=
+=C2=A0 =C2=A0 =C2=A0 Would you please provide your phone number and address=
+ in case we need to reach you?</div><div><br></div><div>Many thanks and God=
+ reward you for your honesty and sincere advice.</div><div><br></div><div>K=
+indly keep us in your prayers.</div><div><br></div><div>Was&#39;salam/Peace=
+</div></div></div></div></div></div></div></div></div></div></div></div></d=
+iv></div></div></div></div><div style=3D"color:rgb(0,0,0);font-family:-appl=
+e-system,sans-serif;font-size:inherit;font-style:normal;font-weight:400;let=
+ter-spacing:normal;text-indent:0px;text-transform:none;white-space:normal;w=
+ord-spacing:0px;text-decoration:none"><font color=3D"#888888"><font color=
+=3D"#888888"><font color=3D"#888888"><br></font></font></font></div><div st=
+yle=3D"color:rgb(0,0,0);font-family:-apple-system,sans-serif;font-size:inhe=
+rit;font-style:normal;font-weight:400;letter-spacing:normal;text-indent:0px=
+;text-transform:none;white-space:normal;word-spacing:0px;text-decoration:no=
+ne"><font color=3D"#888888"><font color=3D"#888888"></font></font></div><di=
+v style=3D"color:rgb(0,0,0);font-family:-apple-system,sans-serif;font-size:=
+inherit;font-style:normal;font-weight:400;letter-spacing:normal;text-indent=
+:0px;text-transform:none;white-space:normal;word-spacing:0px;text-decoratio=
+n:none"><font color=3D"#888888"><font color=3D"#888888"><div><br></div><div=
+>Iana Applications</div><div><a href=3D"http://www.ianafinancial.org" style=
+=3D"color:rgb(66,133,244)">www.ianafinancial.org</a></div></font></font></d=
+iv><div style=3D"color:rgb(0,0,0);font-family:-apple-system,sans-serif;font=
+-size:inherit;font-style:normal;font-weight:400;letter-spacing:normal;text-=
+indent:0px;text-transform:none;white-space:normal;word-spacing:0px;text-dec=
+oration:none"><div><br></div><div>PS<i>=C2=A0Our communities have billions =
+of dollars in banks being loaned to people at interest; if just a fraction =
+would save a portion of their money with organizations like Iana, these fun=
+ds could be loaned within our community=C2=A0<u>interest-free</u>.=C2=A0 Pl=
+ease help out and encourage family and friends to donate or lend even small=
+ amounts to Iana.<b>=C2=A0<u>The guide to good works is like the doer</u>;=
+=C2=A0</b>we have US and Canadian accounts.<b>=C2=A0=C2=A0</b>Pray that All=
+ah guide, accept, and bless these efforts.<b>=C2=A0 For more information em=
+ail=C2=A0<a href=3D"mailto:support-iana@ianafinancial.org" style=3D"color:r=
+gb(66,133,244)">support-iana@ianafinancial.org</a>=C2=A0or visit=C2=A0<a hr=
+ef=3D"http://www.ianafinancial.org/support-iana" style=3D"color:rgb(66,133,=
+244)">www.ianafinancial.org/support-iana</a></b></i></div><div></div><div><=
+/div><div></div><div><div><div><div><table><tbody><tr><td><br></td></tr></t=
+body></table></div></div></div></div></div></div>
+
+--000000000000501d9606496ca64a--

@@ -1,0 +1,65 @@
+'use client';
+
+import Link from 'next/link';
+import { FileText, GraduationCap, Briefcase, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+
+interface ApplicationLink {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+export function PreliminaryApplicationCards() {
+  const preliminaryApplication: ApplicationLink = {
+    title: 'Preliminary Application',
+    href: '/apply/preliminary',
+    icon: <FileText className="size-5" />,
+  };
+
+  return (
+    <Card className="border-2 my-6">
+      <CardContent className="px-6 pb-6 pt-2">
+        <p className="text-lg font-semibold mb-4 text-left">Part 1: Preliminary Application</p>
+        <Button
+          asChild
+          variant="outline"
+          className="w-full justify-start h-auto p-4 bg-gray-50 hover:bg-gray-100 border-gray-300 text-left"
+        >
+          <Link href={preliminaryApplication.href} className="flex items-center gap-3 w-full">
+            <span className="text-gray-600 shrink-0">{preliminaryApplication.icon}</span>
+            <span className="flex-1 text-left">{preliminaryApplication.title}</span>
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function FinalApplicationCard() {
+  const finalApplication: ApplicationLink = {
+    title: 'Final Interest-Free Loan Application',
+    href: '/apply/final',
+    icon: <CheckCircle className="size-5" />,
+  };
+
+  return (
+    <Card className="border-2 my-6">
+      <CardContent className="px-6 pb-6 pt-2">
+        <p className="text-lg font-semibold mb-4 text-left">Part 2: Final Interest-Free Loan Application</p>
+        <Button
+          asChild
+          variant="outline"
+          className="w-full justify-start h-auto p-4 bg-gray-50 hover:bg-gray-100 border-gray-300 text-left"
+        >
+          <Link href={finalApplication.href} className="flex items-center gap-3 w-full">
+            <span className="text-gray-600 shrink-0">{finalApplication.icon}</span>
+            <span className="flex-1 text-left">{finalApplication.title}</span>
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+

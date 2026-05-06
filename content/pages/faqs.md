@@ -1,4 +1,4 @@
-<Button title="Back to Application Home" link="/applications" />
+<Button title="Back to Application Home" link="/start-applying" />
 
 
 ### Are there any fees?
