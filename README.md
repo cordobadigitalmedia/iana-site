@@ -1,38 +1,45 @@
-# IANA Financial - Static Site
+# IANA Financial
 
-A static website built with Next.js 15, serving content directly from markdown files.
+A Next.js 15 site. **Pages, home, and gallery** are edited in Sanity Studio at `/studio`. Blog posts and resources still live in markdown.
 
 ## Technologies
 
 - [Next.js 15](https://nextjs.org/docs)
+- [Sanity](https://www.sanity.io/) for pages (Vercel Marketplace)
 - [Shadcn UI](https://ui.shadcn.com/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [react-markdown](https://github.com/remarkjs/react-markdown) for markdown rendering
-- [gray-matter](https://github.com/jonschlinkert/gray-matter) for frontmatter parsing
 
 ## Structure
 
-- **Pages**: Static routes in `app/` directory, content in `content/pages/*.md`
-- **Posts**: Blog posts in `content/posts/*.md` with author references
-- **Resources**: Resource pages in `content/resources/*.md` and `*.json`
-- **Sitewide content**: 
-  - Header configuration: `content/header/header.json`
-  - Footer configuration: `content/footer/footer.json`
-  - Navigation: `content/nav/nav.md`
+- **Pages**: Sanity `page` documents, rendered by `app/[slug]/page.tsx`
+- **Home / Gallery**: Sanity singletons
+- **Studio**: `/studio` (Sanity login — Google or GitHub, not the git repo)
+- **Posts**: `content/posts/*.md`
+- **Resources**: `content/resources/*.md` and `*.json`
+- **Header / footer / nav**: `content/header`, `content/footer`, `content/nav`
 
-## Content Format
+Reserved slugs: `studio`, `api`, `blog`, `resources`, `gallery`, `admin`, `apply`, `contract`, `respond`.
 
-Pages use markdown with support for custom component tags:
-- `<Button title="..." link="..." />` - Renders a button component
-- `<Alert title="..." description="..." type="info" />` - Renders an alert component
-- `<Youtube id="..." />` - Embeds a YouTube video
-- `<Googlemap src="..." />` - Embeds a Google Map
+## Editing content
+
+1. Open `/studio` and sign in with a Sanity account (Google or GitHub).
+2. Invite IANA staff in [sanity.io/manage](https://www.sanity.io/manage) as Editors.
+3. Publish a page. The site revalidates about every 60 seconds, or immediately via the Sanity webhook to `/api/revalidate`.
 
 ## Develop locally
 
 ```bash
 pnpm install
+vercel env pull --yes
 pnpm run dev
+```
+
+Open [http://localhost:3000/studio](http://localhost:3000/studio). If Studio cannot reach the dataset from localhost, add `http://localhost:3000` as a CORS origin in the Sanity project settings.
+
+One-time content import (idempotent):
+
+```bash
+pnpm run import:sanity
 ```
 
 ## Build for production
@@ -41,12 +48,3 @@ pnpm run dev
 pnpm run build
 pnpm start
 ```
-
-## Deploy
-
-The site can be deployed to any static hosting service:
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
-- Any static hosting provider
-
-No CMS or database required - all content is in markdown files.
