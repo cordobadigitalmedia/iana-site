@@ -19,7 +19,26 @@ export function CoverSection({
   const bgColor = backgroundColor || "#ffffff"
 
   if (bgImage === "none") {
-    return null
+    if (!headline && !content) {
+      return null
+    }
+
+    return (
+      <section className="relative py-16" style={{ backgroundColor: bgColor }}>
+        <div className="flex flex-col items-center justify-center">
+          {headline && (
+            <h1 className="px-4 text-center text-4xl font-bold sm:text-5xl md:text-6xl">
+              {headline}
+            </h1>
+          )}
+          {content && (
+            <div className="prose py-2">
+              <MarkdownRenderer content={content} />
+            </div>
+          )}
+        </div>
+      </section>
+    )
   }
 
   return (
